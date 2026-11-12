@@ -44,7 +44,7 @@ internal fun IntegrationsScreen(data: AppSnapshot, onImportMoodle: (List<TaskIte
                 }
             }.start()
         }, enabled = !busy && baseUrl.startsWith("https://") && token.isNotBlank())
-        if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())
+        if (busy) PuntoPensando("Consultando Moodle…")
         if (message.isNotBlank()) Text(message, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp)
         if (token.isNotBlank()) TextButton(onClick = { SecureTokenStore.clear(context); token = ""; message = "Token eliminado." }) { Text("Desconectar") }
         Text("Requiere permisos para core_webservice_get_site_info, core_enrol_get_users_courses y mod_assign_get_assignments.", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp)

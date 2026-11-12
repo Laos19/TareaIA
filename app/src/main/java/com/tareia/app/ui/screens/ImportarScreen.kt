@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -71,8 +72,8 @@ internal fun ImportScreen(state: AppSnapshot, shared: IncomingShare?, onShareCon
             OutlinedButton(onClick = { picker.launch(arrayOf("application/pdf", "image/*", "text/plain")) }, modifier = Modifier.weight(1f)) { Text("Elegir archivo") }
             OutlinedButton(onClick = { camera.launch(null) }, modifier = Modifier.weight(1f)) { Text("Tomar foto") }
         }
-        if (isWorking) LinearProgressIndicator(Modifier.fillMaxWidth())
-        if (feedback.isNotBlank()) Text(feedback, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 13.sp)
+        if (isWorking) PuntoPensando(feedback.ifBlank { "Procesando…" })
+        else if (feedback.isNotBlank()) Text(feedback, color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
     }
     if (extractedText.isNotBlank()) {
         SurfaceCard {
@@ -117,7 +118,10 @@ internal fun ImportScreen(state: AppSnapshot, shared: IncomingShare?, onShareCon
 @Composable
 internal fun DraftEditor(draft: TaskDraft, courses: List<CourseItem>, onChange: (TaskDraft) -> Unit) {
     SurfaceCard {
-        Text("Propuesta detectada", fontWeight = FontWeight.SemiBold)
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            SectionTitle("Propuesta detectada")
+            SelloIA("Revisar")
+        }
         OutlinedTextField(draft.title, { onChange(draft.copy(title = it)) }, label = { Text("Actividad") }, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(draft.course, { onChange(draft.copy(course = it)) }, label = { Text("Curso (si no se reconoce, quedará sin clasificar)") },
             supportingText = { Text(courses.joinToString { it.name }.ifBlank { "Añade cursos en Más > Cursos" }) }, modifier = Modifier.fillMaxWidth())

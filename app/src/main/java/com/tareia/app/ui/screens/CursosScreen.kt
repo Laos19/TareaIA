@@ -3,11 +3,14 @@ package com.tareia.app.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.tareia.app.*
 import com.tareia.app.ui.components.*
+import com.tareia.app.ui.theme.Espacio
+import com.tareia.app.ui.theme.TareiaTheme
 
 // Cursos con prioridad y dificultad.
 
@@ -19,9 +22,19 @@ internal fun CoursesScreen(courses: List<CourseItem>, onSave: (CourseItem) -> Bo
     PageHeading("Cursos", "Organiza actividades y define dificultad y prioridad")
     AppButton("Agregar curso", { editing = null; dialog = true })
     if (feedback.isNotBlank()) Text(feedback, color = MaterialTheme.colorScheme.onSurfaceVariant)
-    courses.forEach { course -> SurfaceCard {
-        Text(course.name, fontWeight = FontWeight.SemiBold)
-        Text("Abreviatura: ${course.abbreviation} · Prioridad: ${course.priority}/5 · Dificultad: ${course.difficulty}/5", color = MaterialTheme.colorScheme.onSurfaceVariant)
+    if (courses.isEmpty()) SurfaceCard {
+        Text("Tu tabla está vacía. Cada curso que agregues será un elemento con su símbolo y su familia de color.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+    courses.forEachIndexed { index, course -> SurfaceCard {
+        Row(horizontalArrangement = Arrangement.spacedBy(Espacio.md), verticalAlignment = Alignment.Top) {
+            val familia = TareiaTheme.colores.familiaDe(course.name)
+            CeldaCurso(index + 1, simboloCurso(course.name, courses), course.name, pendientes = 0, familia = familia, lado = 72.dp)
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(Espacio.xs)) {
+                Text(course.name, style = MaterialTheme.typography.titleMedium)
+                Text("Familia: ${familia.nombre}", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Prioridad ${course.priority}/5 · Dificultad ${course.difficulty}/5", color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.bodySmall)
+            }
+        }
         Row {
             TextButton(onClick = { editing = course; dialog = true }) { Text("Editar") }
             TextButton(onClick = { onDelete(course) }) { Text("Eliminar a papelera") }

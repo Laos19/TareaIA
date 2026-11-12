@@ -27,6 +27,8 @@ import com.tareia.app.ui.navigation.*
 import com.tareia.app.ui.theme.*
 import java.time.LocalDate
 import java.util.Locale
+import androidx.credentials.exceptions.GetCredentialCancellationException
+import androidx.credentials.exceptions.NoCredentialException
 import kotlinx.coroutines.launch
 
 // Shell de la app: estado, navegación y reglas de negocio de cada destino.
@@ -121,6 +123,11 @@ internal fun TareIAApp(activity: ComponentActivity, incomingShare: IncomingShare
                                     save(data.copy(profile = profile))
                                     authenticated = true
                                 }
+                            } catch (e: GetCredentialCancellationException) {
+                                // Antes se mostraba el texto técnico «[16] Cancelled by user.»
+                                googleLoginMessage = "Cancelaste el inicio de sesión con Google."
+                            } catch (e: NoCredentialException) {
+                                googleLoginMessage = "No hay una cuenta de Google en este dispositivo. Agrégala en Ajustes o usa el acceso local."
                             } catch (e: Exception) {
                                 googleLoginMessage = e.localizedMessage ?: "No se pudo iniciar sesión con Google."
                             } finally {

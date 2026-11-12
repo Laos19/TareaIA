@@ -37,7 +37,7 @@ internal fun AuthScreen(
                 CeldaMarca(lado = 72.dp)
                 PageHeading("TARE·IA", "Accede con Google para administrar tus actividades académicas")
                 AppButton("Continuar con Google", onGoogleLogin, enabled = !googleBusy)
-                if (googleBusy) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                if (googleBusy) PuntoPensando("Conectando con Google…")
                 if (googleMessage.isNotBlank()) Text(googleMessage, color = MaterialTheme.colorScheme.error)
                 HorizontalDivider()
                 Text("Acceso local anterior (temporal)", color = MaterialTheme.colorScheme.onSurfaceVariant, style = MaterialTheme.typography.labelMedium)

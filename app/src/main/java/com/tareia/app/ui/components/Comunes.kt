@@ -58,6 +58,8 @@ internal fun AppButton(text: String, onClick: () -> Unit, modifier: Modifier = M
  */
 @Composable
 internal fun StatusBadge(status: String, modifier: Modifier = Modifier) {
+    // Lo pendiente de validar viene de IA o de una importación: lleva el sello IA.
+    if (status == "Pendiente de validar") { SelloIA("Por validar", modifier); return }
     val estados = TareiaTheme.colores.estados
     val color: Color = when (status) {
         "Completada" -> estados.exito

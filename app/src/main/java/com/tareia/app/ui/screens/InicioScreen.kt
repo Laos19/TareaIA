@@ -22,6 +22,8 @@ import com.tareia.app.ui.components.PageHeading
 import com.tareia.app.ui.components.SectionTitle
 import com.tareia.app.ui.components.SurfaceCard
 import com.tareia.app.ui.components.TaskCard
+import com.tareia.app.ui.components.CintaEntregas
+import com.tareia.app.ui.components.TablaCursos
 import com.tareia.app.ui.theme.EstiloCifras
 import com.tareia.app.ui.theme.Espacio
 import com.tareia.app.ui.util.formatMinute
@@ -48,10 +50,16 @@ internal fun DashboardScreen(data: AppSnapshot) {
         MetricCard("Cursos", data.courses.size, Modifier.weight(1f))
         MetricCard("Esta semana", thisWeek, Modifier.weight(1f))
     }
+    SectionTitle("Próximas dos semanas")
+    SurfaceCard { CintaEntregas(data.tasks) }
+    if (data.courses.isNotEmpty()) {
+        SectionTitle("Tu tabla de cursos")
+        TablaCursos(data.courses, data.tasks)
+    }
     SectionTitle("Próximas entregas")
     val dueSoon = pending.filter { it.dueDate.isNotBlank() }.sortedBy { it.dueDate }.take(6)
     if (dueSoon.isEmpty()) SurfaceCard { Text("No hay entregas próximas. Importa un apunte o registra una actividad.", color = MaterialTheme.colorScheme.onSurfaceVariant) }
-    dueSoon.forEach { TaskCard(it) }
+    dueSoon.forEach { TaskCard(it, data.courses) }
     SectionTitle("Sesiones planificadas")
     val sessions = data.sessions.sortedWith(compareBy<StudySession> { it.date }.thenBy { it.startMinute }).take(5)
     if (sessions.isEmpty()) SurfaceCard { Text("Aún no hay sesiones. Genera un plan desde la pestaña Plan.", color = MaterialTheme.colorScheme.onSurfaceVariant) }

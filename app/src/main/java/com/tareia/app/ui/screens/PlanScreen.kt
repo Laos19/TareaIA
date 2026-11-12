@@ -93,7 +93,7 @@ internal fun PlannerScreen(data: AppSnapshot, initialTaskId: String, onSaveTask:
         Text("Crear planificación por audio", fontWeight = FontWeight.SemiBold)
         Text("Dicta una instrucción o escribe los datos; la transcripción se puede corregir.", color = MaterialTheme.colorScheme.onSurfaceVariant)
         OutlinedButton(onClick = { if (hasMic) startVoice() else permission.launch(Manifest.permission.RECORD_AUDIO) }, enabled = !listening, modifier = Modifier.fillMaxWidth()) { Text(if (listening) "Escuchando…" else "Dictar") }
-        if (listening) LinearProgressIndicator(Modifier.fillMaxWidth())
+        if (listening) PuntoPensando("Escuchando… habla con naturalidad")
         OutlinedTextField(transcript, { transcript = it }, label = { Text("Transcripción") }, minLines = 2, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(title, { title = it }, label = { Text("Actividad") }, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(course, { course = it }, label = { Text("Curso") }, modifier = Modifier.fillMaxWidth())

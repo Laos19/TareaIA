@@ -59,8 +59,22 @@ Las fuentes van incluidas en `res/font` (no se descargan en tiempo de ejecución
 
 Capturas en `docs/marca/`.
 
+## Componentes firma (Fase 2)
+
+Código en `ui/components/`. Capturas `docs/marca/fase2-*.png`.
+
+| Componente | Archivo | Qué hace | Accesibilidad |
+|---|---|---|---|
+| **Celda de curso** | `CeldaCurso.kt` | Cada curso es un elemento: número (posición), símbolo (abreviatura o iniciales), nombre, pendientes y color de su familia. `TablaCursos` las acomoda en filas. | Se lee como «Curso N, nombre, X pendientes»; crece con la escala de fuente. |
+| **Símbolo de curso** | `CeldaCurso.kt` | Versión pequeña en cada tarjeta de actividad. | Decorativo (el nombre ya está al lado). |
+| **Cinta de entregas** | `CintaEntregas.kt` | Los próximos 14 días; hoy marcado con el resaltador y un punto por entrega coloreado por urgencia; aviso de vencidas. | TalkBack lee un resumen: «Próximos 14 días: 3 entregas. jueves 12: …». |
+| **Urgencia** | `Urgencia.kt` | Reglas puras: vencida · hoy/mañana · 2–3 días · normal. Se muestra en la tarjeta con texto, ícono y color. | Nunca solo color. |
+| **Tachado con marcador** | `Firma.kt` · `TextoTachable` | Al completar, un trazo de resaltador recorre el título línea a línea y queda tachado; vibración leve. | Respeta «Quitar animaciones» del sistema. |
+| **Sello IA** | `Firma.kt` · `SelloIA` | «IA · Por validar / Revisar» en color `sello` para todo lo sugerido por IA o importado. | Se lee «Sugerido automáticamente: …». |
+| **El punto que piensa** | `Firma.kt` · `PuntoPensando` | El «·» del logo late mientras la app trabaja (OCR, IA, Moodle, Google, dictado). Reemplaza las barras de progreso. | Progreso indeterminado + región en vivo; fijo si las animaciones están desactivadas. |
+
 ## Pendiente (próximas fases)
 
 - ~~**Fase 1:** dividir `MainActivity.kt`, eliminar alias y añadir navegación tipada.~~ Hecho (ver `AGENTS.md` › Estructura de la UI).
-- **Fase 2:** componentes firma (celda de curso por familia, cinta de entregas, tachado al completar, sello IA, «el punto que piensa»).
+- ~~**Fase 2:** componentes firma.~~ Hecho (ver «Componentes firma»).
 - **Fase 3:** pruebas de UI en Compose, TalkBack completo y auditoría (Impeccable / UX Heuristics).

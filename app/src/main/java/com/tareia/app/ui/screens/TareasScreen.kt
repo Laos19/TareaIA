@@ -37,13 +37,14 @@ internal fun TasksScreen(
     if (feedback.isNotBlank()) Text(feedback, color = MaterialTheme.colorScheme.onSurfaceVariant)
     val rows = data.tasks.filter { status == "Todas" || it.status == status }.sortedBy { it.dueDate }
     if (rows.isEmpty()) SurfaceCard { Text("No hay actividades en este filtro.", color = MaterialTheme.colorScheme.onSurfaceVariant) }
-    rows.forEach { task -> TaskCard(task,
+    // key: cada tarjeta conserva su propio estado (p. ej. la animación del tachado) al reordenarse.
+    rows.forEach { task -> key(task.id) { TaskCard(task, data.courses,
         onToggle = { onToggle(task) },
         onEdit = { editing = task; showEditor = true },
         onDelete = { onDelete(task) },
         onSync = { onSync(task) },
         onPlan = { onPlan(task) }
-    ) }
+    ) } }
     if (showEditor) TaskEditorDialog(editing, data.courses, onDismiss = { showEditor = false }, onSave = { task, replan ->
         val ok = if (editing == null) onAdd(task) else onEdit(task, replan)
         if (!ok) feedback = "Ya existe una actividad con el mismo título, curso y fecha."

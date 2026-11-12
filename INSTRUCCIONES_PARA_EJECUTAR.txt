@@ -25,6 +25,13 @@ VERSIONES
 - Firebase BOM: 35.1.0 (Firebase Auth)
 - Android compileSdk/targetSdk 35, minSdk 28
 
+PRUEBAS AUTOMÁTICAS
+  gradlew.bat :app:testDebugUnitTest           (20 pruebas JVM: reglas de urgencia, símbolos, horas, contraste WCAG)
+  gradlew.bat :app:connectedDebugAndroidTest   (8 pruebas de interfaz Compose; requiere emulador/dispositivo;
+                                                al terminar Gradle desinstala la app y borra sus datos locales)
+  python scripts/a11y/auditoria_a11y.py        (auditoría de accesibilidad de la pantalla visible vía adb)
+Detalle y resultados en docs/AUDITORIA_UI.md.
+
 VERIFICACIÓN REALIZADA
 - :app:assembleDebug compila sin errores.
 - Probado en emulador Android: registro e ingreso local con PIN (incluido PIN incorrecto),

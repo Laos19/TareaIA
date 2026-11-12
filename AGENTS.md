@@ -19,6 +19,7 @@ Android nativo, Kotlin 2.3.21, Jetpack Compose con Material 3, Gradle Wrapper 8.
 - `ui/components/` — piezas reutilizables (`PageHeading`, `SectionTitle`, `SurfaceCard`, `AppButton`, `StatusBadge`, `TaskCard`, `CeldaMarca`).
 - `ui/theme/` — tokens de marca (ver `docs/MARCA.md`). No usar colores literales en pantallas: `MaterialTheme.colorScheme.*` o `TareiaTheme.colores.*`.
 - Lógica de dominio y datos (`AppStore`, `TaskPlanner`, `CalendarRepository`, etc.) sigue en el paquete raíz.
+- Pruebas: `app/src/test` (JVM, incluye `ContrasteTest`: si cambias un color de la paleta y rompe WCAG AA, falla) y `app/src/androidTest` (Compose UI, semántica y áreas táctiles). Auditoría: `docs/AUDITORIA_UI.md`.
 
 ## Reglas de modificación
 - Si el pedido es de documentación, adopción de skills o compilación, no modificar archivos `app/src/main/**` (frontend, backend ni recursos) sin autorización expresa.

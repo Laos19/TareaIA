@@ -77,4 +77,4 @@ Código en `ui/components/`. Capturas `docs/marca/fase2-*.png`.
 
 - ~~**Fase 1:** dividir `MainActivity.kt`, eliminar alias y añadir navegación tipada.~~ Hecho (ver `AGENTS.md` › Estructura de la UI).
 - ~~**Fase 2:** componentes firma.~~ Hecho (ver «Componentes firma»).
-- **Fase 3:** pruebas de UI en Compose, TalkBack completo y auditoría (Impeccable / UX Heuristics).
+- ~~**Fase 3:** pruebas y auditoría.~~ Hecho: ver `docs/AUDITORIA_UI.md` (28 pruebas automáticas, contraste AA, 17 pantallas auditadas, evaluación heurística y pendientes priorizados).

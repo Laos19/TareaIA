@@ -31,7 +31,12 @@ internal fun AuthScreen(
     var pin by remember { mutableStateOf("") }
     var message by remember { mutableStateOf("") }
     // Desplazable: con letra grande o teclado abierto el formulario no cabe en pantalla.
-    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).imePadding(), contentAlignment = Alignment.Center) {
+    // safeDrawing: con targetSdk 35 la app es edge-to-edge; sin esto el logo quedaba bajo la
+    // barra de estado y el botón bajo la barra de navegación (incluye también el teclado).
+    Box(
+        Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).windowInsetsPadding(WindowInsets.safeDrawing),
+        contentAlignment = Alignment.Center,
+    ) {
         Column(Modifier.widthIn(max = 520.dp).verticalScroll(rememberScrollState()).padding(20.dp)) {
             SurfaceCard {
                 CeldaMarca(lado = 72.dp)

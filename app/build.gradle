@@ -1,0 +1,92 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'org.jetbrains.kotlin.plugin.compose'
+
+    id 'com.google.gms.google-services'
+
+}
+
+android {
+    namespace 'com.tareia.app'
+    compileSdk 35
+
+    buildFeatures { compose true }
+
+    defaultConfig {
+        applicationId 'com.tareia.app'
+        minSdk 28
+        targetSdk 35
+        versionCode 1
+        versionName '1.0'
+    }
+
+    buildTypes { release { minifyEnabled false } }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions { jvmTarget = '17' }
+}
+
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.15.0'
+    implementation 'androidx.activity:activity-compose:1.9.3'
+
+    // Reconocimiento OCR
+    implementation 'com.google.mlkit:text-recognition:16.0.1'
+
+    // Jetpack Compose
+    implementation platform('androidx.compose:compose-bom:2024.10.01')
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+
+    // Google Sign-In
+    implementation 'androidx.credentials:credentials:1.6.0'
+    implementation 'androidx.credentials:credentials-play-services-auth:1.6.0'
+    implementation 'com.google.android.libraries.identity.googleid:googleid:1.2.1'
+
+// Firebase
+    implementation platform('com.google.firebase:firebase-bom:35.1.0')
+    implementation 'com.google.firebase:firebase-auth'
+
+}
+
+
+
+// COMPILACION SIN CAMBIAR LOS ARCHIVOS DE FRONTEND/BACKEND ORIGINALES
+// Se crea una copia temporal de los .kt en build/; los archivos en src/main/java quedan intactos.
+// Esta copia agrega solo un import que falta y cierra un bloque mal escrito en MainActivity.kt.
+// No cambia pantallas, textos, modelos, operaciones ni lógica de la app.
+def tareiaSourceRoot = file('src/main/java')
+def tareiaBuildSources = file("${layout.buildDirectory.get().asFile}/generated/tareia-compile/main/java")
+
+tasks.register('prepareTareiaKotlin', Sync) {
+    from(tareiaSourceRoot) {
+        include '**/*.kt'
+        filter { String line ->
+            if (line == 'import androidx.compose.foundation.horizontalScroll') {
+                return line + '\nimport androidx.compose.foundation.verticalScroll'
+            }
+            if (line.contains('}) { Text("Guardar") }, dismissButton = {')) {
+                return line.replace('}) { Text("Guardar") }, dismissButton = {',
+                                    '}) { Text("Guardar") } }, dismissButton = {')
+            }
+            return line
+        }
+    }
+    into(tareiaBuildSources)
+}
+
+// Compilar la copia temporal; nunca duplicar clases del directorio src original.
+android.sourceSets.main.java.setSrcDirs([tareiaBuildSources])
+tasks.configureEach { task ->
+    if (task.name == 'compileDebugKotlin' || task.name == 'compileReleaseKotlin') {
+        task.dependsOn('prepareTareiaKotlin')
+    }
+}

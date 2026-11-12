@@ -1,0 +1,47 @@
+TARE·IA — RF01–RF27 | PROYECTO CONFIGURADO PARA ANDROID STUDIO
+==================================================================
+
+ABRIR Y EJECUTAR EN WINDOWS
+1) Extrae el ZIP en una carpeta NUEVA. No mezcles con proyectos antiguos.
+2) Abre Android Studio > File > Open > selecciona la carpeta TAREIA_v4 (la que contiene settings.gradle).
+3) Settings > Build, Execution, Deployment > Build Tools > Gradle > Gradle JDK: Java 17.
+4) Asegúrate de contar con Android SDK Platform 35 y conexión para bajar dependencias si faltan.
+5) File > Sync Project with Gradle Files. Selecciona tu emulador y ejecuta la configuración app (botón ▶).
+
+HALLAZGOS
+- El ZIP original carecía de gradlew, gradlew.bat, gradle/wrapper (wrapper completo).
+- Android Gradle Plugin 8.5.2 no es la versión recomendada para compileSdk/targetSdk 35.
+- Kotlin 1.9.24 y Compose Compiler 1.5.14 sí son compatibles entre sí.
+- MainActivity.kt original tiene un error de sintaxis en la línea 824 (bloque confirmButton sin cierre)
+  y utiliza verticalScroll sin importarlo. Sin corregirlos no se puede compilar ni aunque Gradle sincronice.
+
+FRONTEND Y BACKEND ORIGINALES INTACTOS
+Todos los archivos src/main/java/*.kt, AndroidManifest.xml y resources están IGUALES al ZIP original.
+Para permitir compilar sin alterar esos archivos, el build.gradle del módulo app:
+  A) crea una copia TEMPORAL de todos los .kt en app/build/generated/tareia-compile/main/java
+  B) añade SOLO el import de androidx.compose.foundation.verticalScroll
+  C) cierra SOLO el bloque de confirmButton del cuadro de apuntes
+  D) compila esa copia en lugar de los .kt originales (no altera comportamiento ni datos).
+La copia temporal se regenera automáticamente durante Build/Run, NO hay pasos manuales.
+Este es un puente de compilación, no un cambio en la interfaz ni en el backend entregados.
+
+VERSIONES
+- Java: Gradle JDK 17 (seleccionar en Android Studio; no se fija ruta de equipo)
+- Android Gradle Plugin: 8.6.1
+- Gradle wrapper: 8.7
+- Kotlin: 1.9.24
+- Compose compiler: 1.5.14
+- Compose BOM: 2024.10.01
+- Android compileSdk/targetSdk 35, minSdk 28
+
+LIMITES DE VERIFICACION
+Se verificó la estructura del ZIP, el XML, las versiones y la sintaxis Kotlin de los archivos
+copiados y corregidos temporalmente. No se pudo ejecutar :app:assembleDebug aquí por falta de
+Android SDK y acceso a repositorios Gradle. No hay garantía de ejecución hasta compilar en tu
+Android Studio. Los RF de Moodle/IA necesitan su configuración/credenciales y no se han probado.
+
+SI APARECE BUILD FAILED
+Con el proyecto abierto, abre Terminal (Alt+F12):
+  .\gradlew.bat :app:assembleDebug --stacktrace
+Envía las primeras líneas de ERROR y la sección * What went wrong.
+No aceptes una actualización automática a Gradle 9.x para esta configuración.

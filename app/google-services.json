@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "966268725855",
+    "project_id": "tareia-514506",
+    "storage_bucket": "tareia-514506.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:966268725855:android:287882c2def1eb72bb49ea",
+        "android_client_info": {
+          "package_name": "com.tareia.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "966268725855-rklbkmkcoekfkfoks7bap6hfjfukl058.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjGemqyQYWQpBGFX60V1icXGtST5cUCz0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "966268725855-gdlft25rqmc1g66eok0daupejn6aqe42.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

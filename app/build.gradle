@@ -56,37 +56,3 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth'
 
 }
-
-
-
-// COMPILACION SIN CAMBIAR LOS ARCHIVOS DE FRONTEND/BACKEND ORIGINALES
-// Se crea una copia temporal de los .kt en build/; los archivos en src/main/java quedan intactos.
-// Esta copia agrega solo un import que falta y cierra un bloque mal escrito en MainActivity.kt.
-// No cambia pantallas, textos, modelos, operaciones ni lógica de la app.
-def tareiaSourceRoot = file('src/main/java')
-def tareiaBuildSources = file("${layout.buildDirectory.get().asFile}/generated/tareia-compile/main/java")
-
-tasks.register('prepareTareiaKotlin', Sync) {
-    from(tareiaSourceRoot) {
-        include '**/*.kt'
-        filter { String line ->
-            if (line == 'import androidx.compose.foundation.horizontalScroll') {
-                return line + '\nimport androidx.compose.foundation.verticalScroll'
-            }
-            if (line.contains('}) { Text("Guardar") }, dismissButton = {')) {
-                return line.replace('}) { Text("Guardar") }, dismissButton = {',
-                                    '}) { Text("Guardar") } }, dismissButton = {')
-            }
-            return line
-        }
-    }
-    into(tareiaBuildSources)
-}
-
-// Compilar la copia temporal; nunca duplicar clases del directorio src original.
-android.sourceSets.main.java.setSrcDirs([tareiaBuildSources])
-tasks.configureEach { task ->
-    if (task.name == 'compileDebugKotlin' || task.name == 'compileReleaseKotlin') {
-        task.dependsOn('prepareTareiaKotlin')
-    }
-}

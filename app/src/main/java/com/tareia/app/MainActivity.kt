@@ -18,6 +18,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -180,7 +182,7 @@ private fun TareIAApp(activity: ComponentActivity, incomingShare: IncomingShare?
                 containerColor = Canvas,
                 topBar = {
                     TopAppBar(
-                        title = { Column { Text("TARE·IA", fontWeight = FontWeight.SemiBold); Text(data.profile.name, color = Muted, fontSize = 12.sp) } },
+                        title = { Column { Text("TARE·IA", fontWeight = FontWeight.SemiBold, fontSize = 20.sp, lineHeight = 22.sp); Text(data.profile.name, color = Muted, fontSize = 12.sp, lineHeight = 14.sp, maxLines = 1, overflow = TextOverflow.Ellipsis) } },
                         navigationIcon = { if (page !in mainPages) TextButton(onClick = { page = "Más" }) { Text("‹ Volver") } },
                         actions = { TextButton(onClick = {
                             authenticated = false
@@ -885,7 +887,7 @@ private fun NoteDialog(note: AcademicNote?, data: AppSnapshot, onDismiss: () -> 
                 title = title.trim(), content = content.trim(), courseId = course?.id.orEmpty(),
                 folder = if (course != null) course.name else folder.ifBlank { "Sin clasificar" }
             ))
-        }) { Text("Guardar") }, dismissButton = { TextButton(onClick = onDismiss) { Text("Cancelar") } })
+        }) { Text("Guardar") } }, dismissButton = { TextButton(onClick = onDismiss) { Text("Cancelar") } })
 }
 
 @Composable

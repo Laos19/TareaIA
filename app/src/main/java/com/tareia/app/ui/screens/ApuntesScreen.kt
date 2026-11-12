@@ -54,7 +54,7 @@ internal fun NoteDialog(note: AcademicNote?, data: AppSnapshot, onDismiss: () ->
         text = { Column(Modifier.heightIn(max = 520.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedTextField(title, { title = it }, label = { Text("Título") }, modifier = Modifier.fillMaxWidth())
             OutlinedTextField(content, { content = it }, label = { Text("Contenido") }, minLines = 3, modifier = Modifier.fillMaxWidth())
-            OutlinedTextField(courseName, { courseName = it }, label = { Text("Curso (opcional)") }, modifier = Modifier.fillMaxWidth())
+            CampoCurso(courseName, { courseName = it }, data.courses, etiqueta = "Curso (opcional)")
             OutlinedTextField(folder, { folder = it }, label = { Text("Carpeta") }, modifier = Modifier.fillMaxWidth())
             Text("Cursos: ${data.courses.joinToString { it.name }} · Carpetas: ${data.folders.joinToString()}", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 11.sp)
         } },

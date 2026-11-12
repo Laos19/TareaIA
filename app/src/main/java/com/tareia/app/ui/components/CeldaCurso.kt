@@ -67,15 +67,22 @@ internal fun CeldaCurso(
     }
 }
 
-/** Símbolo pequeño del curso para tarjetas y listas (decorativo: el nombre ya se lee al lado). */
+/**
+ * Símbolo pequeño del curso para tarjetas y listas (decorativo: el nombre ya se lee al lado).
+ * [fijo] = true lo mantiene en 28 dp sin escalar con la fuente, para huecos de tamaño fijo
+ * como el ícono de un campo de texto (48 dp).
+ */
 @Composable
-internal fun SimboloCurso(simbolo: String, familia: Familia, modifier: Modifier = Modifier) {
-    val escala = LocalDensity.current.fontScale.coerceIn(1f, 1.6f)
+internal fun SimboloCurso(simbolo: String, familia: Familia, modifier: Modifier = Modifier, fijo: Boolean = false) {
+    val densidad = LocalDensity.current
+    val escala = if (fijo) 1f else densidad.fontScale.coerceIn(1f, 1.6f)
+    val lado = if (fijo) 28.dp else 34.dp * escala
+    val texto = if (fijo) with(densidad) { 12.dp.toSp() } else 14.sp
     Box(
-        modifier.size(34.dp * escala).background(familia.contenedor, FormaCelda).clearAndSetSemantics { },
+        modifier.size(lado).background(familia.contenedor, FormaCelda).clearAndSetSemantics { },
         contentAlignment = Alignment.Center,
     ) {
-        Text(simbolo, fontFamily = Archivo, fontWeight = FontWeight.ExtraBold, fontSize = 14.sp, color = familia.contenido, maxLines = 1)
+        Text(simbolo, fontFamily = Archivo, fontWeight = FontWeight.ExtraBold, fontSize = texto, color = familia.contenido, maxLines = 1)
     }
 }
 

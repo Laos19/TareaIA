@@ -17,8 +17,8 @@
 ## 2. Resultados de las pruebas automáticas
 
 ```
-./gradlew :app:testDebugUnitTest            → 20 pruebas, 0 fallos
-./gradlew :app:connectedDebugAndroidTest    →  8 pruebas, 0 fallos (emulador)
+./gradlew :app:testDebugUnitTest            → 23 pruebas, 0 fallos
+./gradlew :app:connectedDebugAndroidTest    → 14 pruebas, 0 fallos (emulador)
 ```
 
 | Suite | Pruebas | Qué garantiza |
@@ -27,6 +27,8 @@
 | `SimboloCursoTest` | 5 | Abreviatura registrada, iniciales sin artículos, máximo 3 letras, nombre vacío |
 | `TiempoTest` | 4 | Formato HH:mm, rechazo de horas inválidas, ida y vuelta de todos los valores |
 | `ContrasteTest` | 5 | Todos los pares texto/fondo de la paleta (claro, oscuro, estados, familias) ≥ 4.5:1 |
+| `FechaLegibleTest` / `FechaCortaTest` | 3 | Formato de fecha en español (largo para TalkBack, corto para el campo) |
+| `CamposTest` (UI) | 6 | Fecha legible y anunciada; aceptar el selector **no corre la fecha un día** (UTC); cancelar no cambia; el curso se filtra al escribir y se elige de la lista; se avisa si el curso es nuevo |
 | `ComponentesTest` (UI) | 8 | Sello IA anunciado; el estado **no** es un botón falso; resumen de la cinta para TalkBack; «Completar» invoca la acción; celda de curso anunciada y pulsable; filas de «Más» navegan; «el punto que piensa» es progreso indeterminado; **todas las áreas táctiles ≥ 48 dp** |
 
 ### Contraste medido (WCAG 2.1)
@@ -69,13 +71,13 @@ Severidad: 0 = no es problema · 1 = cosmético · 2 = menor · 3 = grave · 4 =
 | 1. Visibilidad del estado | Antes: barras de progreso genéricas y sin texto. Ahora «el punto que piensa» con mensaje y anuncio para TalkBack. | 2 | ✅ Fase 2 |
 | 1. Visibilidad del estado | Las entregas próximas no mostraban urgencia. Ahora la cinta de 14 días y «Vence hoy», «Venció hace 2 días». | 3 | ✅ Fase 2 |
 | 2. Coincidencia con el mundo real | Al cancelar Google se mostraba «[16] Cancelled by user.». | 2 | ✅ Fase 2 |
-| 2. Coincidencia con el mundo real | Las fechas se escriben como texto `AAAA-MM-DD`, en lugar de usar un selector de fecha. | 3 | ⏳ Pendiente |
+| 2. Coincidencia con el mundo real | Las fechas se escribían como texto `AAAA-MM-DD`. Ahora `CampoFecha` usa el selector de Material y muestra «jue 26 de nov. 2026». | 3 | ✅ Corregido |
 | 3. Control y libertad | Antes, el botón Atrás cerraba la app desde cualquier pantalla. Ahora: herramienta → Más → Inicio. | 3 | ✅ Fase 1 |
 | 4. Consistencia y estándares | Estado como `AssistChip` vacío (TalkBack lo anunciaba como botón). Ahora es una etiqueta no interactiva. | 2 | ✅ Fase 1 |
 | 4. Consistencia y estándares | Mezcla de «Pendiente de validar» (filtros) y «Por validar» (sello). | 1 | ⏳ Pendiente |
-| 5. Prevención de errores | La fecha libre admite valores inválidos; se valida después, no se impiden. | 3 | ⏳ Pendiente (va junto con el selector de fecha) |
+| 5. Prevención de errores | La fecha libre admitía valores inválidos. Con el selector solo se pueden elegir fechas válidas; en Importar, si el OCR no detectó la fecha, se pide elegirla antes de guardar. | 3 | ✅ Corregido |
 | 6. Reconocer antes que recordar | Antes, en «Más» solo funcionaba el botón «Abrir». Ahora la fila completa, con ícono. | 2 | ✅ Fase 1 |
-| 6. Reconocer antes que recordar | El curso de una tarea se escribe a mano; los cursos existentes solo se listan como texto de ayuda. | 2 | ⏳ Pendiente (menú desplegable) |
+| 6. Reconocer antes que recordar | El curso se escribía a mano. Ahora `CampoCurso` es una lista desplegable con el símbolo de cada curso; escribir filtra la lista y sigue permitiendo un curso nuevo (con aviso). | 2 | ✅ Corregido |
 | 7. Flexibilidad y eficiencia | Las tarjetas de Inicio no abren la actividad; hay que ir a Tareas. | 1 | ⏳ Pendiente |
 | 8. Diseño estético y minimalista | Paleta gris sin jerarquía y sin identidad. Ahora el sistema «Tablero periódico» con tokens. | 2 | ✅ Fase 0 |
 | 8. Diseño estético y minimalista | Con letra grande, cada tarjeta muestra hasta 5 acciones en dos líneas, lo que genera ruido visual. | 1 | ⏳ Pendiente (menú «⋮» para acciones secundarias) |
@@ -88,6 +90,16 @@ Severidad: 0 = no es problema · 1 = cosmético · 2 = menor · 3 = grave · 4 =
 - **Color con significado:** el `sello` es exclusivo de la IA, el `lacre` y el `ámbar` marcan urgencia, y el resaltador queda para lo actual (hoy, pestaña activa, tachado). Ningún estado depende solo del color.
 - **Cinta de entregas:** en vertical se ven unos 8 de los 14 días. El desplazamiento horizontal se insinúa con el día cortado al borde. Se recomienda un degradado de borde o mostrar 7 días por página.
 - **Numeración de cursos:** el «número atómico» es la posición en la lista, y los cursos nuevos se agregan al inicio, así que los números cambian. Se recomienda guardar un número fijo al crear el curso.
+
+### Correcciones posteriores a la auditoría
+
+| Área | Cambio | Dónde |
+|---|---|---|
+| Fecha | `CampoFecha`: selector de Material. Guarda ISO-8601 sin cambiar el modelo y convierte en UTC para no correr la fecha. El título y la fecha grande del selector están en español; los meses siguen el idioma del dispositivo. | Tareas, Importar, Plan |
+| Curso | `CampoCurso`: lista desplegable editable con símbolos del tablero. | Tareas, Importar, Plan, Apuntes |
+| Letra grande | La fecha pasa a dos líneas y el símbolo del campo queda en 28 dp fijos (antes se desbordaba al 180 %). | `Campos.kt`, `CeldaCurso.kt` |
+
+Capturas: `docs/marca/campos-*.png`.
 
 ## 5. Verificación manual pendiente
 

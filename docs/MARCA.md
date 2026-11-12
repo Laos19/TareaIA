@@ -71,6 +71,7 @@ Código en `ui/components/`. Capturas `docs/marca/fase2-*.png`.
 | **Urgencia** | `Urgencia.kt` | Reglas puras: vencida · hoy/mañana · 2–3 días · normal. Se muestra en la tarjeta con texto, ícono y color. | Nunca solo color. |
 | **Tachado con marcador** | `Firma.kt` · `TextoTachable` | Al completar, un trazo de resaltador recorre el título línea a línea y queda tachado; vibración leve. | Respeta «Quitar animaciones» del sistema. |
 | **Sello IA** | `Firma.kt` · `SelloIA` | «IA · Por validar / Revisar» en color `sello` para todo lo sugerido por IA o importado. | Se lee «Sugerido automáticamente: …». |
+| **Campos de fecha y curso** | `Campos.kt` | Selector de fecha de Material (en vez de escribir `AAAA-MM-DD`) y lista desplegable de cursos con su símbolo. | La fecha se anuncia completa («Fecha límite: jueves, 26 de noviembre de 2026») y funciona como botón. |
 | **El punto que piensa** | `Firma.kt` · `PuntoPensando` | El «·» del logo late mientras la app trabaja (OCR, IA, Moodle, Google, dictado). Reemplaza las barras de progreso. | Progreso indeterminado + región en vivo; fijo si las animaciones están desactivadas. |
 
 ## Pendiente (próximas fases)

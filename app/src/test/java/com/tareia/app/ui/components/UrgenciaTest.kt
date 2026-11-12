@@ -53,3 +53,16 @@ class SimboloCursoTest {
 
     @Test fun nombreVacio() = assertEquals("?", simboloCurso("   ", emptyList()))
 }
+
+class FechaLegibleTest {
+    @Test fun formatoLargoEnEspanol() = assertEquals("jueves, 19 de noviembre de 2026", fechaLegible("2026-11-19"))
+
+    @Test fun invalidaOVaciaDevuelveNull() {
+        org.junit.Assert.assertNull(fechaLegible(""))
+        org.junit.Assert.assertNull(fechaLegible("19/11/2026"))
+    }
+}
+
+class FechaCortaTest {
+    @Test fun formatoCorto() = assertEquals("jue 19 de nov. 2026", fechaCorta("2026-11-19"))
+}

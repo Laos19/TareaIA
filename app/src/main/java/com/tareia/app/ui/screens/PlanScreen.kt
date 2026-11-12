@@ -96,8 +96,8 @@ internal fun PlannerScreen(data: AppSnapshot, initialTaskId: String, onSaveTask:
         if (listening) PuntoPensando("Escuchando… habla con naturalidad")
         OutlinedTextField(transcript, { transcript = it }, label = { Text("Transcripción") }, minLines = 2, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(title, { title = it }, label = { Text("Actividad") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(course, { course = it }, label = { Text("Curso") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(dueDate, { dueDate = it }, label = { Text("Fecha límite (AAAA-MM-DD)") }, modifier = Modifier.fillMaxWidth())
+        CampoCurso(course, { course = it }, data.courses)
+        CampoFecha(dueDate, { dueDate = it })
         AppButton("Proponer sesiones desde audio", {
             val task = TaskItem(title = title.trim(), course = course.trim(), dueDate = dueDate.trim(), source = "Audio")
             val generated = TaskPlanner.propose(task, data.courses.firstOrNull { it.name == course }, data.schedule, data.sessions)

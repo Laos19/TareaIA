@@ -123,9 +123,11 @@ internal fun DraftEditor(draft: TaskDraft, courses: List<CourseItem>, onChange: 
             SelloIA("Revisar")
         }
         OutlinedTextField(draft.title, { onChange(draft.copy(title = it)) }, label = { Text("Actividad") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(draft.course, { onChange(draft.copy(course = it)) }, label = { Text("Curso (si no se reconoce, quedará sin clasificar)") },
-            supportingText = { Text(courses.joinToString { it.name }.ifBlank { "Añade cursos en Más > Cursos" }) }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(draft.dueDate, { onChange(draft.copy(dueDate = it)) }, label = { Text("Fecha límite (AAAA-MM-DD)") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+        // Sin curso, la propuesta se guarda como «Pendiente de validar».
+        CampoCurso(draft.course, { onChange(draft.copy(course = it)) }, courses, etiqueta = "Curso (vacío = sin clasificar)")
+        CampoFecha(draft.dueDate, { onChange(draft.copy(dueDate = it)) })
+        if (runCatching { java.time.LocalDate.parse(draft.dueDate) }.isFailure)
+            Text("No se detectó la fecha: elígela para poder guardar esta propuesta.", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
         Text("Fuente: ${draft.source}", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }

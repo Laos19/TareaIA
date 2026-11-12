@@ -65,13 +65,13 @@ internal fun TaskEditorDialog(task: TaskItem?, courses: List<CourseItem>, onDism
         title = { Text(if (task == null) "Nueva actividad" else "Editar actividad") },
         text = { Column(Modifier.heightIn(max = 520.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedTextField(title, { title = it }, label = { Text("Título") }, singleLine = true, modifier = Modifier.fillMaxWidth())
-            OutlinedTextField(course, { course = it }, label = { Text("Curso") }, singleLine = true, supportingText = { Text(courses.joinToString { it.name }.ifBlank { "Configura cursos en Más > Cursos" }) }, modifier = Modifier.fillMaxWidth())
-            OutlinedTextField(date, { date = it }, label = { Text("Fecha límite (AAAA-MM-DD)") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+            CampoCurso(course, { course = it }, courses)
+            CampoFecha(date, { date = it })
             OutlinedTextField(details, { details = it }, label = { Text("Descripción (opcional)") }, minLines = 2, modifier = Modifier.fillMaxWidth())
             if (task != null && task.dueDate != date) Row(verticalAlignment = Alignment.CenterVertically) {
                 Checkbox(replan, { replan = it }); Text("Proponer una nueva planificación al guardar", fontSize = 13.sp)
             }
-            if (!validDate) Text("Escribe una fecha válida.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+            if (!validDate) Text("Elige una fecha límite.", color = MaterialTheme.colorScheme.error)
         } },
         confirmButton = { TextButton(enabled = title.isNotBlank() && validDate, onClick = {
             onSave((task ?: TaskItem(title = title.trim(), course = course.trim(), dueDate = date.trim())).copy(

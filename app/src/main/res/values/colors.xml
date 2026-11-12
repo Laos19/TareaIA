@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tokens de marca TARE·IA (espejo de ui/theme/Color.kt). Ver docs/MARCA.md -->
+<resources>
+    <color name="tinta">#1F2A44</color>
+    <color name="papel">#F6F3EC</color>
+    <color name="hoja">#FFFFFF</color>
+    <color name="resaltador">#FFD84D</color>
+    <color name="icono_fondo">#1F2A44</color>
+    <color name="icono_trazo">#F6F3EC</color>
+</resources>

@@ -17,8 +17,19 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.DocumentScanner
+import androidx.compose.material.icons.outlined.GridView
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.TaskAlt
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.tareia.app.ui.components.CeldaMarca
+import com.tareia.app.ui.theme.TareiaTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -48,6 +60,7 @@ class MainActivity : ComponentActivity() {
         private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
         incomingShare = shareFrom(intent)
         setContent { TareIAApp(this@MainActivity, incomingShare) { incomingShare = null } }
@@ -68,11 +81,20 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-private val Ink = Color(0xFF30363A)
-private val Muted = Color(0xFF687177)
-private val Accent = Color(0xFF59666C)
-private val Canvas = Color(0xFFF3F2EF)
-private val Taupe = Color(0xFF8E887E)
+// Alias de compatibilidad: leen los tokens del tema de marca (ui/theme) para que
+// claro/oscuro funcionen sin reescribir cada pantalla. Se eliminarán en la Fase 1.
+private val Ink: Color @Composable @ReadOnlyComposable get() = MaterialTheme.colorScheme.onBackground
+private val Muted: Color @Composable @ReadOnlyComposable get() = TareiaTheme.colores.grafito
+private val Canvas: Color @Composable @ReadOnlyComposable get() = MaterialTheme.colorScheme.background
+
+private data class Destino(val etiqueta: String, val icono: ImageVector)
+private val destinosPrincipales = listOf(
+    Destino("Inicio", Icons.Outlined.Home),
+    Destino("Tareas", Icons.Outlined.TaskAlt),
+    Destino("Importar", Icons.Outlined.DocumentScanner),
+    Destino("Plan", Icons.Outlined.CalendarMonth),
+    Destino("Más", Icons.Outlined.GridView),
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -126,12 +148,7 @@ private fun TareIAApp(activity: ComponentActivity, incomingShare: IncomingShare?
 
     LaunchedEffect(incomingShare) { if (incomingShare != null) page = "Importar" }
 
-    MaterialTheme(
-        colorScheme = lightColorScheme(primary = Accent, onPrimary = Color.White, secondary = Taupe,
-            background = Canvas, surface = Color.White, onSurface = Ink, onBackground = Ink,
-            outline = Color(0xFFE3E1DC)),
-        shapes = Shapes(medium = RoundedCornerShape(16.dp), large = RoundedCornerShape(20.dp))
-    ) {
+    TareiaTheme {
         if (!authenticated) {
             AuthScreen(data.profile,
                 onCreate = { profile -> save(data.copy(profile = profile)); authenticated = true },
@@ -194,10 +211,19 @@ private fun TareIAApp(activity: ComponentActivity, incomingShare: IncomingShare?
                     )
                 },
                 bottomBar = {
-                    NavigationBar(containerColor = Color.White) {
-                        mainPages.forEach { item -> NavigationBarItem(
-                            selected = page == item, onClick = { page = item }, icon = {},
-                            label = { Text(item, fontSize = 11.sp, maxLines = 1) }
+                    // Con letra muy grande (≥ 130 %) las etiquetas no caben en 5 destinos:
+                    // se muestran solo íconos y el nombre pasa a contentDescription (TalkBack).
+                    val soloIconos = LocalDensity.current.fontScale >= 1.3f
+                    NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
+                        destinosPrincipales.forEach { destino -> NavigationBarItem(
+                            selected = page == destino.etiqueta, onClick = { page = destino.etiqueta },
+                            icon = { Icon(destino.icono, contentDescription = if (soloIconos) destino.etiqueta else null) },
+                            label = if (soloIconos) null else ({ Text(destino.etiqueta, maxLines = 1, softWrap = false) }),
+                            colors = NavigationBarItemDefaults.colors(
+                                indicatorColor = TareiaTheme.colores.resaltador,
+                                selectedIconColor = Color(0xFF2B2100),
+                                selectedTextColor = MaterialTheme.colorScheme.onSurface,
+                            )
                         ) }
                     }
                 }
@@ -370,7 +396,7 @@ private fun PageHeading(title: String, subtitle: String = "") {
 
 @Composable
 private fun SurfaceCard(content: @Composable ColumnScope.() -> Unit) {
-    Card(colors = CardDefaults.cardColors(containerColor = Color.White)) {
+    Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp), content = content)
     }
 }
@@ -395,9 +421,10 @@ private fun AuthScreen(
     var semester by remember { mutableStateOf("") }
     var pin by remember { mutableStateOf("") }
     var message by remember { mutableStateOf("") }
-    MaterialTheme(colorScheme = lightColorScheme(primary = Accent, background = Canvas, surface = Color.White, onSurface = Ink)) {
-        BoxWithConstraints(Modifier.fillMaxSize().padding(20.dp), contentAlignment = Alignment.Center) {
+    TareiaTheme {
+        BoxWithConstraints(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background).padding(20.dp), contentAlignment = Alignment.Center) {
             SurfaceCard {
+                CeldaMarca(lado = 72.dp)
                 PageHeading("TARE·IA", "Accede con Google para administrar tus actividades académicas")
                 AppButton("Continuar con Google", onGoogleLogin, enabled = !googleBusy)
                 if (googleBusy) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
@@ -448,7 +475,7 @@ private fun DashboardScreen(data: AppSnapshot) {
 
 @Composable
 private fun MetricCard(label: String, value: String, modifier: Modifier = Modifier) {
-    Card(modifier, colors = CardDefaults.cardColors(containerColor = Color.White)) {
+    Card(modifier, colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(5.dp)) {
             Text(value, style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.SemiBold)
             Text(label, fontSize = 11.sp, color = Muted)

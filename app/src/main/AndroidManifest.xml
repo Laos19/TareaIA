@@ -8,7 +8,7 @@
     <queries>
         <intent><action android:name="android.speech.RecognitionService" /></intent>
     </queries>
-    <application android:theme="@style/AppTheme" android:label="TARE·IA" android:usesCleartextTraffic="false">
+    <application android:theme="@style/Theme.Tareia.Splash" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:label="TARE·IA" android:usesCleartextTraffic="false">
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

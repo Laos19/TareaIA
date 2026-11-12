@@ -17,6 +17,8 @@ data class TareiaColores(
     val grafito: Color,
     val linea: Color,
     val resaltador: Color,
+    /** Texto o ícono sobre el resaltador (contraste AA en claro y oscuro). */
+    val sobreResaltador: Color,
     val estados: EstadoColores,
     val familias: List<Familia>,
 ) {
@@ -25,8 +27,8 @@ data class TareiaColores(
         familias[Math.floorMod(curso.trim().lowercase().hashCode(), familias.size)]
 }
 
-private val ColoresClaro = TareiaColores(GrafitoClaro, LineaClaro, Resaltador, EstadosClaro, FamiliasClaro)
-private val ColoresOscuro = TareiaColores(GrafitoOscuro, LineaOscuro, Resaltador, EstadosOscuro, FamiliasOscuro)
+private val ColoresClaro = TareiaColores(GrafitoClaro, LineaClaro, Resaltador, SobreResaltador, EstadosClaro, FamiliasClaro)
+private val ColoresOscuro = TareiaColores(GrafitoOscuro, LineaOscuro, Resaltador, SobreResaltador, EstadosOscuro, FamiliasOscuro)
 
 private val EsquemaClaro = lightColorScheme(
     primary = TintaClaro, onPrimary = PapelClaro,

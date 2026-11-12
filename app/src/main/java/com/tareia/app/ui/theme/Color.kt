@@ -24,6 +24,7 @@ internal val LineaOscuro = Color(0xFF2C3446)
 
 // Firma: el «·» del logo. Solo para énfasis y marcas, nunca como color de texto.
 internal val Resaltador = Color(0xFFFFD84D)
+internal val SobreResaltador = Color(0xFF2B2100)
 
 /** Colores semánticos de estado (siempre acompañados de texto o ícono). */
 @Immutable

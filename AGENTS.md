@@ -11,6 +11,15 @@ Android nativo, Kotlin 2.3.21, Jetpack Compose con Material 3, Gradle Wrapper 8.
 5. `README_IMPLEMENTACION.md` — declaración de implementación previa; **no equivale a tests aprobados**.
 6. `docs/MARCA.md` — identidad visual «Tablero periódico» y tokens de `ui/theme`; toda UI nueva usa `TareiaTheme`, no colores literales.
 
+## Estructura de la UI (`app/src/main/java/com/tareia/app/`)
+- `MainActivity.kt` — solo la Activity: splash, intents compartidos y `setContent`.
+- `ui/TareiaApp.kt` — shell: estado de la app, reglas de negocio por destino, barra superior/inferior y botón Atrás.
+- `ui/navigation/Destino.kt` — enum con todos los destinos (etiqueta, ícono, si va en la barra inferior). Para añadir una pantalla: nuevo valor aquí + rama en el `when` del shell.
+- `ui/screens/` — una pantalla por archivo (`*Screen.kt`), sin acceso directo a `AppStore`: reciben datos y callbacks.
+- `ui/components/` — piezas reutilizables (`PageHeading`, `SectionTitle`, `SurfaceCard`, `AppButton`, `StatusBadge`, `TaskCard`, `CeldaMarca`).
+- `ui/theme/` — tokens de marca (ver `docs/MARCA.md`). No usar colores literales en pantallas: `MaterialTheme.colorScheme.*` o `TareiaTheme.colores.*`.
+- Lógica de dominio y datos (`AppStore`, `TaskPlanner`, `CalendarRepository`, etc.) sigue en el paquete raíz.
+
 ## Reglas de modificación
 - Si el pedido es de documentación, adopción de skills o compilación, no modificar archivos `app/src/main/**` (frontend, backend ni recursos) sin autorización expresa.
 - No implementar funciones de red o integrar credenciales sin consentimiento y configuración segura. No añadir keys/tokens reales al repositorio.

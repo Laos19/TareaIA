@@ -61,6 +61,6 @@ Capturas en `docs/marca/`.
 
 ## Pendiente (próximas fases)
 
-- **Fase 1:** dividir `MainActivity.kt` en pantallas y componentes, eliminar los alias `Ink`/`Muted`/`Canvas` y añadir navegación tipada.
+- ~~**Fase 1:** dividir `MainActivity.kt`, eliminar alias y añadir navegación tipada.~~ Hecho (ver `AGENTS.md` › Estructura de la UI).
 - **Fase 2:** componentes firma (celda de curso por familia, cinta de entregas, tachado al completar, sello IA, «el punto que piensa»).
 - **Fase 3:** pruebas de UI en Compose, TalkBack completo y auditoría (Impeccable / UX Heuristics).

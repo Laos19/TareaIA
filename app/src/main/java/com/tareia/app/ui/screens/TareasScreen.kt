@@ -30,7 +30,8 @@ internal fun TasksScreen(
     AppButton("Nueva actividad", { editing = null; showEditor = true })
     if (message.isNotBlank()) Text(message, color = MaterialTheme.colorScheme.onSurfaceVariant)
     Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        listOf("Todas", "Pendiente", "Pendiente de validar", "Completada").forEach { filter ->
+        // Filtros = estados del patrón State (EstadoActividad.nombre()).
+        listOf("Todas", "Pendiente de validar", "Confirmada", "Sincronizada", "Completada").forEach { filter ->
             FilterChip(selected = status == filter, onClick = { status = filter }, label = { Text(filter) })
         }
     }

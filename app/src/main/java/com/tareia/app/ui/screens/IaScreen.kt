@@ -8,12 +8,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.sp
 import com.tareia.app.*
+import com.tareia.app.ia.AiSettings
 import com.tareia.app.ui.components.*
 
 // Configuración del proveedor de IA.
 
 @Composable
-internal fun AiSettingsScreen() {
+/**
+ * Configuración del Proveedor B (API compatible con OpenAI). Al guardar o borrar la llave
+ * se avisa con onCambioProveedor para que Dependencias vuelva a elegir la fábrica de IA
+ * (patrón Abstract Factory).
+ */
+internal fun AiSettingsScreen(onCambioProveedor: () -> Unit = {}) {
     val context = LocalContext.current
     val current = remember { AiSettings.load(context) }
     var endpoint by remember { mutableStateOf(current.endpoint) }
@@ -23,7 +29,7 @@ internal fun AiSettingsScreen() {
     var message by remember { mutableStateOf("") }
     PageHeading("Proveedor de IA", "Opcional: extrae actividades desde texto reconocido")
     SurfaceCard {
-        Text("La extracción local continúa disponible sin configurar IA. Al invocar el análisis remoto, el texto del documento se envía al endpoint indicado.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text("Por defecto se usa Gemini (Google). Si completas estos datos, la app usa este proveedor para analizar apuntes y planificar con IA. La extracción local sigue disponible sin IA. Al invocar el análisis remoto, el texto del documento se envía al endpoint indicado.", color = MaterialTheme.colorScheme.onSurfaceVariant)
         OutlinedTextField(endpoint, { endpoint = it }, label = { Text("Endpoint HTTPS compatible con chat completions") }, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(model, { model = it }, label = { Text("Modelo") }, modifier = Modifier.fillMaxWidth())
         OutlinedTextField(apiKey, { apiKey = it }, label = { Text(if (hasKey) "Nueva API key (vacío conserva la actual)" else "API key") }, visualTransformation = PasswordVisualTransformation(), modifier = Modifier.fillMaxWidth())
@@ -35,10 +41,11 @@ internal fun AiSettingsScreen() {
                 AiSettings.save(context, endpoint.trim(), model.trim(), apiKey)
                 hasKey = AiSettings.load(context).apiKey.isNotBlank()
                 apiKey = ""
-                message = "Configuración guardada."
+                onCambioProveedor()
+                message = "Configuración guardada. Desde ahora se usa este proveedor."
             }
         })
-        OutlinedButton(onClick = { AiSettings.clearKey(context); hasKey = false; apiKey = ""; message = "API key eliminada." }, modifier = Modifier.fillMaxWidth(), enabled = hasKey) { Text("Eliminar API key") }
+        OutlinedButton(onClick = { AiSettings.clearKey(context); hasKey = false; apiKey = ""; onCambioProveedor(); message = "API key eliminada. Se vuelve a usar Gemini." }, modifier = Modifier.fillMaxWidth(), enabled = hasKey) { Text("Eliminar API key") }
         if (message.isNotBlank()) Text(message, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }

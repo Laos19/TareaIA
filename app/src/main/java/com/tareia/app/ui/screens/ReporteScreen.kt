@@ -33,7 +33,7 @@ internal fun ReportScreen(tasks: List<TaskItem>) {
     SurfaceCard {
         OutlinedTextField(course, { course = it }, label = { Text("Filtrar por curso (opcional)") }, modifier = Modifier.fillMaxWidth())
         Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-            listOf("Todas", "Pendiente", "Pendiente de validar", "Completada").forEach { FilterChip(status == it, { status = it }, label = { Text(it) }) }
+            listOf("Todas", "Pendiente de validar", "Confirmada", "Sincronizada", "Completada").forEach { FilterChip(status == it, { status = it }, label = { Text(it) }) }
         }
         Text("${filtered.size} actividad(es) incluidas", color = MaterialTheme.colorScheme.onSurfaceVariant)
         AppButton("Guardar PDF", { pending = filtered; create.launch("TARE-IA-reporte-${LocalDate.now()}.pdf") }, enabled = filtered.isNotEmpty())

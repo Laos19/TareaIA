@@ -1,33 +1,49 @@
 {
   "project_info": {
-    "project_number": "966268725855",
-    "project_id": "tareia-514506",
-    "storage_bucket": "tareia-514506.firebasestorage.app"
+    "project_number": "926704520240",
+    "project_id": "tare-ia",
+    "storage_bucket": "tare-ia.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:966268725855:android:287882c2def1eb72bb49ea",
+        "mobilesdk_app_id": "1:926704520240:android:6e3abb5e96658b5eb831f5",
         "android_client_info": {
           "package_name": "com.tareia.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "966268725855-rklbkmkcoekfkfoks7bap6hfjfukl058.apps.googleusercontent.com",
+          "client_id": "926704520240-2k0vfr03o3kvgurmo9v7okdns0uo521m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tareia.app",
+            "certificate_hash": "7e60f51dd0338f62f8824ed9d86c3e38ecceea27"
+          }
+        },
+        {
+          "client_id": "926704520240-ga4d5ngime7vjp4olsgnrh3gsbl35b1l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tareia.app",
+            "certificate_hash": "ce9f3d3e60f3ed1e30db32dd31fc24d2a8b4e43c"
+          }
+        },
+        {
+          "client_id": "926704520240-1ojgv8eq3ksh512abtja0nmqjlgm8tu3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBjGemqyQYWQpBGFX60V1icXGtST5cUCz0"
+          "current_key": "AIzaSyC7SwvG9QFTUcRCyZ49i4Rv0UbfRqyDz8k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "966268725855-gdlft25rqmc1g66eok0daupejn6aqe42.apps.googleusercontent.com",
+              "client_id": "926704520240-1ojgv8eq3ksh512abtja0nmqjlgm8tu3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -2,6 +2,13 @@ package com.tareia.app
 
 import java.util.UUID
 
+// =====================================================================================
+// MODELOS DE PANTALLA (capa de presentación, fuera del diagrama de clases).
+// Son datos simples que usan las pantallas de Compose. NO tienen reglas de negocio:
+// los objetos reales son los del paquete "dominio" (ActividadAcademica, Curso, ...).
+// La conversión entre ambos está en ui/ModelosPantalla.kt.
+// =====================================================================================
+
 data class TaskItem(
     val id: String = UUID.randomUUID().toString(),
     val title: String,
@@ -12,7 +19,9 @@ data class TaskItem(
     val externalId: String = "",
     val description: String = "",
     val calendarEventId: Long? = null,
-    val reminderEnabled: Boolean = true
+    val reminderEnabled: Boolean = true,
+    val googleEventId: String = "",
+    val googleCalendarAccount: String = ""
 )
 
 data class CourseItem(

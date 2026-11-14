@@ -18,7 +18,7 @@ import com.tareia.app.ui.components.*
 // Moodle (solo lectura), Aula Virtual y calendario.
 
 @Composable
-internal fun IntegrationsScreen(data: AppSnapshot, onImportMoodle: (List<TaskItem>) -> Int) {
+internal fun IntegrationsScreen(data: AppSnapshot, onImportMoodle: (List<TaskItem>) -> Int, onOpenCalendar: () -> Unit) {
     val context = LocalContext.current
     var baseUrl by remember { mutableStateOf(MoodleSettings.url(context)) }
     var token by remember { mutableStateOf(MoodleSettings.token(context)) }
@@ -57,10 +57,9 @@ internal fun IntegrationsScreen(data: AppSnapshot, onImportMoodle: (List<TaskIte
         Text("Para sincronizar datos automáticamente se necesitará la API del proveedor. Por ahora abre el portal sin guardar credenciales.", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
     }
     SurfaceCard {
-        Text("Calendario del dispositivo", fontWeight = FontWeight.SemiBold)
-        Text("La app usa el proveedor de calendarios Android. Si una cuenta Google está sincronizada en el dispositivo, el calendario seleccionado puede reflejar los eventos en Google Calendar.", color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Text("Calendario seleccionado: ${data.selectedCalendarId ?: "ninguno"}", color = MaterialTheme.colorScheme.onSurfaceVariant)
-        TextButton(onClick = { /* settings live in Permission Center for OS grants */ }) { Text("Permisos y selección en Más > Permisos") }
+        Text("Google Calendar · API REST", fontWeight = FontWeight.SemiBold)
+        Text("OAuth 2.0 conecta directamente la cuenta Google del estudiante para crear, actualizar y eliminar eventos. No depende de calendarios locales.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+        AppButton("Configurar Google Calendar", onOpenCalendar)
     }
 }
 

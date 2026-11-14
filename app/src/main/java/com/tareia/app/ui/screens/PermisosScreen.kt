@@ -19,7 +19,14 @@ import kotlinx.coroutines.launch
 // Centro de permisos.
 
 @Composable
-internal fun PermissionCenter(message: String, onMessage: (String) -> Unit) {
+internal fun PermissionCenter(
+    message: String,
+    onMessage: (String) -> Unit,
+    googleEmail: String?,
+    googleConnected: Boolean,
+    googleBusy: Boolean,
+    onConnectGoogle: () -> Unit
+) {
     val context = LocalContext.current
     val permissions = rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
         onMessage(if (result.values.all { it }) "Permisos concedidos." else "Algunos permisos fueron denegados; las funciones no relacionadas siguen disponibles.")
@@ -27,19 +34,20 @@ internal fun PermissionCenter(message: String, onMessage: (String) -> Unit) {
     val notificationPermission = if (Build.VERSION.SDK_INT >= 33) Manifest.permission.POST_NOTIFICATIONS else null
     PageHeading("Permisos", "TARE-IA solo solicita acceso al usar cada función")
     SurfaceCard {
-        Text("Calendario", fontWeight = FontWeight.SemiBold)
-        Text("Permite leer calendarios disponibles y añadir eventos al que selecciones.", color = MaterialTheme.colorScheme.onSurfaceVariant)
-        AppButton("Conectar calendarios", { permissions.launch(arrayOf(Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR)) })
-        if (CalendarRepository.hasPermissions(context)) {
-            val calendars = remember { runCatching { CalendarRepository.calendars(context) }.getOrDefault(emptyList()) }
-            if (calendars.isEmpty()) Text("No hay calendarios editables en el dispositivo.", color = MaterialTheme.colorScheme.onSurfaceVariant)
-            calendars.forEach { calendar ->
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("${calendar.name} · ${calendar.account}", Modifier.weight(1f), fontSize = 12.sp)
-                    TextButton(onClick = { onMessage("Para cambiar el calendario seleccionado, usa la pantalla de integraciones después de conceder acceso.") }) { Text("Disponible") }
-                }
-            }
+        Text("Google Calendar", fontWeight = FontWeight.SemiBold)
+        Text("Conecta directamente tu cuenta a Google Calendar mediante OAuth 2.0. No requiere permisos del calendario local ni tener la app Calendario instalada.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+        if (googleEmail.isNullOrBlank()) {
+            Text("Inicia sesión con Google (no con PIN local) para poder autorizar el calendario.", color = MaterialTheme.colorScheme.onSurfaceVariant)
+        } else {
+            Text("Cuenta: $googleEmail", color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
+        AppButton(
+            text = if (googleBusy) "Conectando…" else if (googleConnected) "Comprobar conexión" else "Conectar Google Calendar",
+            onClick = onConnectGoogle,
+            enabled = !googleBusy && !googleEmail.isNullOrBlank()
+        )
+        if (googleConnected) Text("Cuenta vinculada. Los eventos confirmados se guardan en el calendario principal de Google.", color = MaterialTheme.colorScheme.primary)
+        Text("La primera conexión puede solicitar tu consentimiento. Solo se pide permiso para administrar eventos (calendar.events).", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp)
     }
     SurfaceCard {
         Text("Notificaciones", fontWeight = FontWeight.SemiBold)

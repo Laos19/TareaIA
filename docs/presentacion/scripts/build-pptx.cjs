@@ -53,7 +53,7 @@ function base(n, sym, label, fam, eyebrow, title, criterio) {
   txt(s, eyebrow, { x: 0.67, y: 0.42, w: 10, h: 0.3, fontFace: M, fontSize: 12, color: K.grafito });
   txt(s, title, { x: 0.67, y: 0.72, w: 10.9, h: 1.0, fontFace: H, bold: true, fontSize: 30, color: K.tinta });
   if (criterio) {
-    const w = Math.min(10.5, 0.75 + criterio.length * 0.092);
+    const w = Math.min(10.9, 0.5 + (criterio.length + 10) * 0.1);
     s.addShape(RR(), { x: 0.67, y: 6.88, w, h: 0.34, rectRadius: 0.17, fill: { color: K.hoja }, line: { color: K.linea, width: 1 } });
     txt(s, [{ text: 'Rúbrica', options: { bold: true } }, { text: ' · ' + criterio }], { x: 0.82, y: 6.88, w: w - 0.2, h: 0.34, fontFace: M, fontSize: 10.5, valign: 'middle' });
   }
@@ -215,7 +215,7 @@ function logo(s, x, y) {
 /* 9 · Pruebas */
 {
   const s = base(9, 'Pu', 'pruebas', 'met', 'Pirámide de pruebas · resultados reales', 'Todo en verde, y las pruebas encontraron 3 defectos', 'Pruebas unitarias, mutación, integración, sistema, UI y aceptación + reportes');
-  const niveles = [['lan', 'Aceptación', '18 escenarios Cucumber', 0.52], ['hal', 'Interfaz', '16 Playwright + 14 Compose', 0.76], ['tra', 'Sistema', '11 con servidor HTTP real', 0.84],
+  const niveles = [['lan', 'Aceptación', '18 escenarios Cucumber', 0.64], ['hal', 'Interfaz', '16 Playwright + 14 Compose', 0.76], ['tra', 'Sistema', '11 con servidor HTTP real', 0.84],
     ['gas', 'Integración', '22 con PostgreSQL real', 0.92], ['met', 'Unitarias', '66 Vitest + 35 JVM Kotlin', 1], ['res', 'Mutación', 'Stryker 93,8 % · Pitest 68,4 %', 1]];
   const ancho = 6.7; const cx = 0.67 + ancho / 2;
   niveles.forEach((n, i) => {
@@ -296,7 +296,7 @@ function logo(s, x, y) {
   const s = base(14, 'Da', 'dashboard', 'lan', 'Dashboard de utilización', 'Así sabemos cómo se usa la app', 'Dashboard de utilización');
   s.addImage({ path: path.join(DIR, 'img/dash-escritorio-recorte.png'), x: 0.67, y: 1.45, w: 8.25, h: 5.3, altText: 'Dashboard de uso con indicadores y sesiones por día' });
   bullets(s, ['Solo para el rol admin', 'Estudiantes, sesiones, duración, actividades y errores', 'Gráficos por día con vista de tabla', 'Funciones y pantallas más usadas', 'Claro, oscuro y móvil'], { x: 9.2, y: 1.5, w: 3.5, h: 3.6 }, 17);
-  s.addImage({ path: path.join(DIR, 'img/dash-oscuro.png'), x: 9.2, y: 5.15, w: 3.45, h: 1.55, sizing: { type: 'crop', w: 3.45, h: 1.55, x: 0, y: 0 }, altText: 'Dashboard en modo oscuro' });
+  s.addImage({ path: path.join(DIR, 'img/dash-oscuro-recorte.png'), x: 9.2, y: 5.0, w: 3.45, h: 1.48, altText: 'Dashboard en modo oscuro' });
 }
 
 /* 15 · Reto */

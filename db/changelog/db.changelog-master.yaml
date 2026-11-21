@@ -1,0 +1,15 @@
+# Changelog maestro de TARE·IA (Liquibase).
+# Orden: extensiones → seguridad y sesiones → modelo académico → historial → telemetría y logs
+#        → funciones → triggers → vistas → índices → datos de demostración.
+databaseChangeLog:
+  - include: { file: sql/001-extensiones.sql, relativeToChangelogFile: true }
+  - include: { file: sql/002-seguridad.sql, relativeToChangelogFile: true }
+  - include: { file: sql/003-academico.sql, relativeToChangelogFile: true }
+  - include: { file: sql/004-planificacion.sql, relativeToChangelogFile: true }
+  - include: { file: sql/005-historial.sql, relativeToChangelogFile: true }
+  - include: { file: sql/006-telemetria.sql, relativeToChangelogFile: true }
+  - include: { file: sql/007-funciones.sql, relativeToChangelogFile: true }
+  - include: { file: sql/008-triggers.sql, relativeToChangelogFile: true }
+  - include: { file: sql/009-vistas.sql, relativeToChangelogFile: true }
+  - include: { file: sql/010-indices.sql, relativeToChangelogFile: true }
+  - include: { file: sql/900-datos-demo.sql, relativeToChangelogFile: true }

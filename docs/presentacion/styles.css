@@ -117,12 +117,12 @@
 .flujo { display: flex; align-items: stretch; gap: 0; }
 .flujo .paso { flex: 1; background: var(--hoja); border: 1.5px solid var(--linea); border-radius: 12px; padding: 10px 12px; position: relative; }
 .flujo .paso p { margin: 0; font-size: 16.5pt; line-height: 1.25; }
-.flujo .paso p.t { font-family: var(--titulo); font-weight: 800; font-size: 17pt; margin-bottom: 4px; }
-.flujo .flecha { align-self: center; font-family: var(--titulo); font-weight: 800; font-size: 20pt; padding: 0 6px; color: var(--grafito); }
+.flujo .paso p.t { white-space: nowrap; font-family: var(--titulo); font-weight: 800; font-size: 16pt; margin-bottom: 4px; }
+.flujo .flecha { align-self: center; font-family: var(--titulo); font-weight: 800; font-size: 20pt; padding: 0 4px; color: var(--grafito); }
 
 /* Tablero de celdas (patrones, integraciones) */
 .tabla-periodica { display: grid; gap: 14px; }
-.el { position: relative; border-radius: 10px; background: var(--f); color: var(--ft); padding: 10px 12px 10px 12px; box-sizing: border-box; border: 2px solid transparent; }
+.el { position: relative; border-radius: 10px; background: var(--f); color: var(--ft); padding: 12px 14px; box-sizing: border-box; border: 2px solid transparent; }
 .el p { color: inherit; margin: 0; }
 .el .z { font-family: var(--mono); font-size: 11pt; }
 .el .s { font-family: var(--titulo); font-weight: 800; font-size: 30pt; line-height: 1; margin: 2px 0 4px 0; }

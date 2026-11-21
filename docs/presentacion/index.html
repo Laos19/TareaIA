@@ -386,7 +386,7 @@
   <p class="eyebrow">Release y despliegue</p>
   <h2>Un merge a main termina en producción, solo</h2>
   <div class="flujo" style="margin-top:36px;">
-    <div class="paso"><p class="t">1 · Commit</p><p>Convencional: feat, fix…</p></div><span class="flecha">→</span>
+    <div class="paso"><p class="t">1 · Commit</p><p>feat, fix… (convencional)</p></div><span class="flecha">→</span>
     <div class="paso"><p class="t">2 · Versión</p><p>release-please y CHANGELOG</p></div><span class="flecha">→</span>
     <div class="paso"><p class="t">3 · Paquetes</p><p>APK, API, dashboard y MCP</p></div><span class="flecha">→</span>
     <div class="paso"><p class="t">4 · BD</p><p>Liquibase en producción</p></div><span class="flecha">→</span>
@@ -477,14 +477,14 @@
   <div class="celda" style="--f:var(--resaltador);--ft:var(--sobre-resaltador)"><p class="z">15</p><p class="s">Ia</p><p class="n">reto</p></div>
   <p class="eyebrow">Reto · integraciones</p>
   <h2>Pedían 3 integraciones: hicimos 5</h2>
-  <div class="tabla-periodica" style="grid-template-columns:repeat(5, 1fr); margin-top:14px;">
+  <div class="tabla-periodica" style="grid-template-columns:repeat(5, 1fr); margin-top:28px; grid-auto-rows:minmax(250px, auto);">
     <div class="el" style="--f:var(--alct);--ft:var(--alct-t)"><p class="z">1</p><p class="s">Fb</p><p class="n">Firebase Auth</p><p class="d">Entrar con Google; la API verifica el token</p></div>
     <div class="el" style="--f:var(--gas);--ft:var(--gas-t); border-color:var(--sello);"><p class="z">2</p><p class="s">Gm</p><p class="n">Gemini</p><p class="d">Lee apuntes y propone actividades y planes</p></div>
     <div class="el" style="--f:var(--tra);--ft:var(--tra-t)"><p class="z">3</p><p class="s">Gc</p><p class="n">Google Calendar</p><p class="d">Solo recibe lo que validaste (RN01)</p></div>
     <div class="el" style="--f:var(--alc);--ft:var(--alc-t)"><p class="z">4</p><p class="s">Mo</p><p class="n">Moodle UPT</p><p class="d">Trae tareas del aula virtual; nacen por validar</p></div>
     <div class="el" style="--f:var(--hal);--ft:var(--hal-t)"><p class="z">5</p><p class="s">Mc</p><p class="n">MCP + Claude Code</p><p class="d">Servidor MCP, skill y agente que consultan tus pendientes</p></div>
   </div>
-  <div class="card ia" style="margin-top:34px;">
+  <div class="card ia" style="margin-top:36px;">
     <p class="chico" style="margin:0;">Ejemplo: en Claude Code preguntas <em>«¿qué entrego esta semana?»</em> y el agente responde con tus pendientes por urgencia, usando la misma API, con una sesión de origen <code>mcp</code>.</p>
   </div>
   <p class="criterio"><b>Rúbrica</b> · Reto: integrar con 3 aplicaciones externas · plugin con skills y agente</p>
@@ -506,11 +506,11 @@
   <h2>Veámoslo funcionar</h2>
   <div class="grid2" style="margin-top:14px; grid-template-columns:1.4fr 1fr;">
     <ol>
-      <li class="grande">Entrar con Google en la app</li>
-      <li class="grande">Importar un apunte → <span class="sello">IA · Por validar</span></li>
-      <li class="grande">Validar y enviar a Calendar</li>
-      <li class="grande">Ver el uso en el dashboard</li>
-      <li class="grande">Un workflow en verde en Actions</li>
+      <li class="grande" style="margin-bottom:14px;">Entrar con Google en la app</li>
+      <li class="grande" style="margin-bottom:14px;">Importar un apunte → <span class="sello">IA · Por validar</span></li>
+      <li class="grande" style="margin-bottom:14px;">Validar y enviar a Calendar</li>
+      <li class="grande" style="margin-bottom:14px;">Ver el uso en el dashboard</li>
+      <li class="grande" style="margin-bottom:14px;">Un workflow en verde en Actions</li>
     </ol>
     <div class="card">
       <h3>Dashboard (demo)</h3>
@@ -536,7 +536,7 @@
   <div class="grid2" style="margin-top:24px;">
     <div class="card">
       <h3>Conclusiones</h3>
-      <ul class="chico">
+      <ul class="chico" style="line-height:1.5;">
         <li>Las pruebas pagaron: <strong>3 defectos reales</strong> antes de producción.</li>
         <li>La mutación midió si las pruebas sirven, no solo si existen.</li>
         <li>«La IA propone, tú decides» se cumple en app, API y BD.</li>
@@ -545,7 +545,7 @@
     </div>
     <div class="card">
       <h3>Trabajo futuro</h3>
-      <ul class="chico">
+      <ul class="chico" style="line-height:1.5;">
         <li>Piloto con estudiantes de la UPT para medir el uso real.</li>
         <li>Subir Pitest de 68,4 % a 75 % o más.</li>
         <li>Pruebas Compose en más dispositivos.</li>

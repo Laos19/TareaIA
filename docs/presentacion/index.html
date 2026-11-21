@@ -51,7 +51,7 @@
   <div class="celda" style="--f:var(--alc);--ft:var(--alc-t)"><p class="z">2</p><p class="s">Pr</p><p class="n">problema</p></div>
   <p class="eyebrow">El problema</p>
   <h2>Las tareas están en todas partes, menos en tu calendario</h2>
-  <div class="grid3" style="margin-top:28px;">
+  <div class="grid3" style="margin-top:34px;">
     <div class="card">
       <p class="cifra" style="color:var(--lacre);">1</p>
       <h3>Información dispersa</h3>
@@ -68,7 +68,7 @@
       <p class="chico">Sin un plan de estudio, el cambio constante de tarea cansa y lleva a postergar.</p>
     </div>
   </div>
-  <div class="card ia" style="margin-top:26px;">
+  <div class="card ia" style="margin-top:34px;">
     <p class="grande" style="margin:0;">¿Y si la IA lee las tareas por ti… <span class="res">pero tú confirmas</span> antes de que algo llegue a tu calendario?</p>
   </div>
   <p class="mini suave" style="margin-top:14px;">Base: FD02 Documento de Visión, §2.2 «Definición del problema».</p>
@@ -113,7 +113,7 @@
 <section id="app">
   <div class="celda" style="--f:var(--tra);--ft:var(--tra-t)"><p class="z">4</p><p class="s">Ap</p><p class="n">la app</p></div>
   <p class="eyebrow">La solución</p>
-  <h2>Del apunte a una actividad con fecha, <span class="res">validada por ti</span></h2>
+  <h2>Del apunte a la fecha, <span class="res">validada por ti</span></h2>
   <div style="display:grid; grid-template-columns:repeat(3, 1fr) 1.15fr; gap:22px; margin-top:6px; align-items:start;">
     <div><img class="captura" src="img/app-fase2-inicio-cinta-tabla.png" alt="Pantalla de inicio: cinta de los próximos 14 días y tabla de cursos con forma de tabla periódica" style="height:392px;"><p class="pie">Inicio: próximos 14 días</p></div>
     <div><img class="captura" src="img/app-fase2-sello-ia.png" alt="Actividad sugerida por la IA con el sello IA · Por validar" style="height:392px;"><p class="pie">Lo de la IA trae sello</p></div>
@@ -218,17 +218,17 @@
 
 <!-- 7 · BASE DE DATOS Y NUBE -->
 <section id="bd">
-  <div class="celda" style="--f:var(--gas);--ft:var(--gas-t)"><p class="z">7</p><p class="s">Bd</p><p class="n">base de datos</p></div>
+  <div class="celda" style="--f:var(--gas);--ft:var(--gas-t)"><p class="z">7</p><p class="s">Bd</p><p class="n">datos</p></div>
   <p class="eyebrow">Base de datos y nube</p>
   <h2>Las reglas importantes también viven en PostgreSQL</h2>
-  <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:14px; margin-top:10px;">
+  <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:14px; margin-top:20px;">
     <div class="card" style="text-align:center; padding:12px;"><p class="cifra">11</p><p class="chico" style="margin:0;">tablas</p></div>
     <div class="card" style="text-align:center; padding:12px;"><p class="cifra">6</p><p class="chico" style="margin:0;">vistas</p></div>
     <div class="card" style="text-align:center; padding:12px;"><p class="cifra">7</p><p class="chico" style="margin:0;">funciones</p></div>
     <div class="card" style="text-align:center; padding:12px;"><p class="cifra">7</p><p class="chico" style="margin:0;">triggers</p></div>
     <div class="card" style="text-align:center; padding:12px;"><p class="cifra">11</p><p class="chico" style="margin:0;">changesets</p></div>
   </div>
-  <div class="card" style="margin-top:18px;">
+  <div class="card" style="margin-top:26px;">
     <h3>El patrón State, repetido en un trigger</h3>
     <div class="estados" style="margin:8px 0 10px 0;">
       <span class="estado ia">Pendiente de validar</span><span class="f">→</span>
@@ -238,7 +238,7 @@
     </div>
     <p class="chico" style="margin:0;"><code>fn_actividad_transicion</code> rechaza los saltos inválidos, aunque alguien escriba directo en la BD.</p>
   </div>
-  <div class="grid2" style="margin-top:16px;">
+  <div class="grid2" style="margin-top:26px;">
     <p class="chico" style="margin:0;"><strong>Liquibase:</strong> cada cambio en SQL con su <em>rollback</em>; se aplica solo en producción al publicar.</p>
     <p class="chico" style="margin:0;"><strong>Vistas para el dashboard:</strong> <code>mv_uso_diario</code> (materializada), uso por función y por pantalla.</p>
   </div>
@@ -255,7 +255,7 @@
 
 <!-- 8 · REQUISITOS NO FUNCIONALES -->
 <section id="rnf">
-  <div class="celda" style="--f:var(--gas);--ft:var(--gas-t)"><p class="z">8</p><p class="s">Nf</p><p class="n">no funcionales</p></div>
+  <div class="celda" style="--f:var(--gas);--ft:var(--gas-t)"><p class="z">8</p><p class="s">Nf</p><p class="n">rnf</p></div>
   <p class="eyebrow">Requisitos no funcionales</p>
   <h2>Sesiones, historial, caché, logs y telemetría</h2>
   <table style="margin-top:10px;">
@@ -286,10 +286,10 @@
   <h2>Todo en verde, y las pruebas encontraron 3 defectos</h2>
   <div style="display:grid; grid-template-columns:1.25fr 1fr; gap:28px; margin-top:8px;">
     <div class="piramide">
-      <div class="nivel" style="width:46%; background:var(--lan); color:var(--lan-t);"><p><b>Aceptación</b><br>18 escenarios Cucumber</p></div>
-      <div class="nivel" style="width:62%; background:var(--hal); color:var(--hal-t);"><p><b>Interfaz</b> · 16 Playwright + 14 Compose</p></div>
-      <div class="nivel" style="width:74%; background:var(--tra); color:var(--tra-t);"><p><b>Sistema</b> · 11 con servidor HTTP real</p></div>
-      <div class="nivel" style="width:86%; background:var(--gas); color:var(--gas-t);"><p><b>Integración</b> · 22 con PostgreSQL real</p></div>
+      <div class="nivel" style="width:52%; background:var(--lan); color:var(--lan-t);"><p><b>Aceptación</b><br>18 escenarios Cucumber</p></div>
+      <div class="nivel" style="width:76%; background:var(--hal); color:var(--hal-t);"><p><b>Interfaz</b> · 16 Playwright + 14 Compose</p></div>
+      <div class="nivel" style="width:84%; background:var(--tra); color:var(--tra-t);"><p><b>Sistema</b> · 11 con servidor HTTP real</p></div>
+      <div class="nivel" style="width:92%; background:var(--gas); color:var(--gas-t);"><p><b>Integración</b> · 22 con PostgreSQL real</p></div>
       <div class="nivel" style="width:100%; background:var(--met); color:var(--met-t);"><p><b>Unitarias</b> · 66 Vitest + 35 JVM Kotlin</p></div>
       <div class="nivel" style="width:100%; background:var(--resaltador); color:var(--sobre-resaltador);"><p><b>Mutación</b> · Stryker 93,8 % · Pitest 68,4 %</p></div>
     </div>
@@ -315,7 +315,7 @@
   <div class="celda" style="--f:var(--hal);--ft:var(--hal-t)"><p class="z">10</p><p class="s">Sq</p><p class="n">estático</p></div>
   <p class="eyebrow">Análisis estático automatizado</p>
   <h2>Tres herramientas, tres miradas distintas</h2>
-  <div class="grid3" style="margin-top:14px;">
+  <div class="grid3" style="margin-top:24px;">
     <div class="card">
       <h3>SonarQube Cloud</h3>
       <p class="chico"><strong>Revisa:</strong> bugs, vulnerabilidades, <em>security hotspots</em>, código duplicado y cobertura.</p>
@@ -332,7 +332,7 @@
       <p class="chico" style="margin:0;"><strong>Reporte:</strong> SARIF en Code Scanning y resumen del job.</p>
     </div>
   </div>
-  <div class="card" style="margin-top:20px; padding:12px 20px;">
+  <div class="card" style="margin-top:30px; padding:14px 22px;">
     <p class="chico" style="margin:0;">Corren en <strong>cada push y pull request</strong> a <code>main</code>: <code>sonarqube.yml</code> · <code>semgrep.yml</code> · <code>snyk.yml</code></p>
   </div>
   <p class="criterio"><b>Rúbrica</b> · SonarQube (bugs, vulnerabilidades, hotspots) · Semgrep + Snyk con reporte</p>
@@ -350,7 +350,7 @@
   <div class="celda" style="--f:var(--gas);--ft:var(--gas-t)"><p class="z">11</p><p class="s">Tf</p><p class="n">terraform</p></div>
   <p class="eyebrow">Infraestructura como código</p>
   <h2>La nube se crea con Terraform y cuesta <span class="res">USD 0</span></h2>
-  <div style="display:grid; grid-template-columns:1.15fr 1fr; gap:26px; margin-top:12px;">
+  <div style="display:grid; grid-template-columns:1.15fr 1fr; gap:26px; margin-top:22px;">
     <div>
       <div class="capa" style="--f:var(--gas);--ft:var(--gas-t)"><b>Neon</b> · PostgreSQL 16</div>
       <div class="capa" style="--f:var(--tra);--ft:var(--tra-t)"><b>Render</b> · API (web service) + dashboard (sitio estático)</div>
@@ -385,15 +385,15 @@
   <div class="celda" style="--f:var(--alct);--ft:var(--alct-t)"><p class="z">12</p><p class="s">Rl</p><p class="n">release</p></div>
   <p class="eyebrow">Release y despliegue</p>
   <h2>Un merge a main termina en producción, solo</h2>
-  <div class="flujo" style="margin-top:22px;">
+  <div class="flujo" style="margin-top:36px;">
     <div class="paso"><p class="t">1 · Commit</p><p>Convencional: feat, fix…</p></div><span class="flecha">→</span>
     <div class="paso"><p class="t">2 · Versión</p><p>release-please y CHANGELOG</p></div><span class="flecha">→</span>
-    <div class="paso"><p class="t">3 · Artefactos</p><p>APK, API, dashboard y MCP</p></div><span class="flecha">→</span>
+    <div class="paso"><p class="t">3 · Paquetes</p><p>APK, API, dashboard y MCP</p></div><span class="flecha">→</span>
     <div class="paso"><p class="t">4 · BD</p><p>Liquibase en producción</p></div><span class="flecha">→</span>
     <div class="paso"><p class="t">5 · Deploy</p><p>Hooks de Render</p></div><span class="flecha">→</span>
     <div class="paso" style="border-color:var(--exito);"><p class="t">6 · Smoke</p><p><code>/api/health</code> responde</p></div>
   </div>
-  <div class="grid3" style="margin-top:28px;">
+  <div class="grid3" style="margin-top:44px;">
     <div class="card"><h3>API</h3><p class="mini" style="margin:0;">tareia-api.onrender.com</p></div>
     <div class="card"><h3>Swagger</h3><p class="mini" style="margin:0;">tareia-api.onrender.com/api/docs</p></div>
     <div class="card"><h3>Dashboard</h3><p class="mini" style="margin:0;">tareia-dashboard.onrender.com</p></div>
@@ -411,10 +411,10 @@
 
 <!-- 13 · DOCUMENTACIÓN AUTOMÁTICA -->
 <section id="docs">
-  <div class="celda" style="--f:var(--alct);--ft:var(--alct-t)"><p class="z">13</p><p class="s">Dc</p><p class="n">documentación</p></div>
+  <div class="celda" style="--f:var(--alct);--ft:var(--alct-t)"><p class="z">13</p><p class="s">Dc</p><p class="n">docs</p></div>
   <p class="eyebrow">Documentación automática</p>
   <h2>La documentación se genera desde el código</h2>
-  <div class="grid2" style="margin-top:16px;">
+  <div class="grid2" style="margin-top:30px;">
     <div class="card">
       <h3><code>docs.yml</code> · README</h3>
       <ul class="chico">
@@ -432,7 +432,7 @@
       </ul>
     </div>
   </div>
-  <div class="card marca" style="margin-top:22px; padding:14px 22px;">
+  <div class="card marca" style="margin-top:36px; padding:18px 26px;">
     <p class="grande" style="margin:0;">laos19.github.io/TareaIA</p>
   </div>
   <p class="criterio"><b>Rúbrica</b> · README con diccionario, ER, clases, componentes y despliegue · GitHub Pages</p>
@@ -449,7 +449,7 @@
   <div class="celda" style="--f:var(--lan);--ft:var(--lan-t)"><p class="z">14</p><p class="s">Da</p><p class="n">dashboard</p></div>
   <p class="eyebrow">Dashboard de utilización</p>
   <h2>Así sabemos cómo se usa la app</h2>
-  <div style="display:grid; grid-template-columns:2.1fr 1fr; gap:26px; margin-top:4px; align-items:start;">
+  <div style="display:grid; grid-template-columns:2.3fr 1fr; gap:24px; margin-top:4px; align-items:start;">
     <img class="captura" src="img/dash-escritorio-recorte.png" alt="Dashboard de uso: indicadores de estudiantes, sesiones, duración media, actividades y errores; gráfico de sesiones por día" style="width:100%;">
     <div>
       <ul class="chico">
@@ -459,7 +459,7 @@
         <li>Funciones y pantallas más usadas</li>
         <li>Claro, oscuro y móvil</li>
       </ul>
-      <img class="captura" src="img/dash-oscuro.png" alt="El mismo dashboard en modo oscuro" style="width:100%; margin-top:8px;">
+      <img class="captura" src="img/dash-oscuro.png" alt="El mismo dashboard en modo oscuro" style="width:100%; height:150px; object-fit:cover; object-position:top; margin-top:8px;">
     </div>
   </div>
   <p class="criterio"><b>Rúbrica</b> · Dashboard de utilización</p>
@@ -484,7 +484,7 @@
     <div class="el" style="--f:var(--alc);--ft:var(--alc-t)"><p class="z">4</p><p class="s">Mo</p><p class="n">Moodle UPT</p><p class="d">Trae tareas del aula virtual; nacen por validar</p></div>
     <div class="el" style="--f:var(--hal);--ft:var(--hal-t)"><p class="z">5</p><p class="s">Mc</p><p class="n">MCP + Claude Code</p><p class="d">Servidor MCP, skill y agente que consultan tus pendientes</p></div>
   </div>
-  <div class="card ia" style="margin-top:24px;">
+  <div class="card ia" style="margin-top:34px;">
     <p class="chico" style="margin:0;">Ejemplo: en Claude Code preguntas <em>«¿qué entrego esta semana?»</em> y el agente responde con tus pendientes por urgencia, usando la misma API, con una sesión de origen <code>mcp</code>.</p>
   </div>
   <p class="criterio"><b>Rúbrica</b> · Reto: integrar con 3 aplicaciones externas · plugin con skills y agente</p>
@@ -530,10 +530,10 @@
 
 <!-- 17 · CONCLUSIONES -->
 <section id="conclusiones">
-  <div class="celda" style="--f:var(--nom);--ft:var(--nom-t)"><p class="z">17</p><p class="s">Co</p><p class="n">conclusiones</p></div>
+  <div class="celda" style="--f:var(--nom);--ft:var(--nom-t)"><p class="z">17</p><p class="s">Co</p><p class="n">cierre</p></div>
   <p class="eyebrow">Conclusiones y trabajo futuro</p>
   <h2>Lo que aprendimos y lo que sigue</h2>
-  <div class="grid2" style="margin-top:14px;">
+  <div class="grid2" style="margin-top:24px;">
     <div class="card">
       <h3>Conclusiones</h3>
       <ul class="chico">

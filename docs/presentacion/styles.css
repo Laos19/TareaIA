@@ -43,8 +43,8 @@
   line-height: 1.08; margin: 0 0 16px 0; font-weight: 800;
 }
 .reveal h1 { font-size: 72pt; }
-.reveal h2 { font-size: 30pt; max-width: 1000px; }
-.reveal h3 { font-size: 17pt; font-weight: 700; margin-bottom: 8px; }
+.reveal h2 { font-size: 32pt; max-width: 1020px; }
+.reveal h3 { font-size: 20pt; font-weight: 700; margin-bottom: 10px; }
 .reveal p, .reveal li, .reveal td, .reveal th { font-size: 18pt; line-height: 1.35; color: var(--tinta); }
 .reveal p { margin: 0 0 10px 0; }
 .reveal ul, .reveal ol { margin: 0 0 0 1.1em; padding: 0; }
@@ -52,9 +52,9 @@
 .reveal code, .reveal .mono { font-family: var(--mono); font-size: 0.88em; }
 .reveal a { color: var(--tinta); text-decoration-color: var(--resaltador); text-decoration-thickness: 3px; }
 
-.chico { font-size: 15pt !important; }
-.mini { font-size: 12.5pt !important; }
-.grande { font-size: 22pt !important; }
+.chico { font-size: 19pt !important; }
+.mini { font-size: 14.5pt !important; }
+.grande { font-size: 24pt !important; }
 .suave { color: var(--grafito) !important; }
 
 /* Resaltador: el énfasis de la marca */
@@ -100,24 +100,24 @@
 .sello::before { content: "● "; }
 
 /* Etiquetas */
-.tag { display: inline-block; background: var(--hoja); border: 1.5px solid var(--tinta); border-radius: 999px; padding: 2px 12px; font-size: 13pt; font-weight: 700; margin: 0 6px 6px 0; }
+.tag { display: inline-block; background: var(--hoja); border: 1.5px solid var(--tinta); border-radius: 999px; padding: 3px 14px; font-size: 15pt; font-weight: 700; margin: 0 6px 6px 0; }
 
 /* Tablas */
 .reveal table { border-collapse: collapse; width: 100%; margin: 0; }
-.reveal th { font-family: var(--titulo); font-size: 14pt; font-weight: 700; text-align: left; border-bottom: 2.5px solid var(--tinta); padding: 6px 10px; }
-.reveal td { font-size: 15pt; padding: 8px 10px; border-bottom: 1px solid var(--linea); vertical-align: top; line-height: 1.3; }
+.reveal th { font-family: var(--titulo); font-size: 16pt; font-weight: 700; text-align: left; border-bottom: 2.5px solid var(--tinta); padding: 6px 10px; }
+.reveal td { font-size: 18.5pt; padding: 10px 10px; border-bottom: 1px solid var(--linea); vertical-align: top; line-height: 1.3; }
 .reveal td:first-child { font-weight: 700; white-space: nowrap; }
-.reveal td code { font-size: 12.5pt; }
+.reveal td code { font-size: 15pt; }
 
 /* Capturas */
 .captura { display: block; max-width: 100%; border-radius: 14px; border: 2px solid var(--tinta); box-shadow: 0 6px 0 var(--linea); }
-.pie { font-size: 13pt !important; text-align: center; margin-top: 10px !important; }
+.pie { font-size: 15pt !important; text-align: center; margin-top: 10px !important; }
 
 /* Flujo horizontal de pasos */
 .flujo { display: flex; align-items: stretch; gap: 0; }
 .flujo .paso { flex: 1; background: var(--hoja); border: 1.5px solid var(--linea); border-radius: 12px; padding: 10px 12px; position: relative; }
-.flujo .paso p { margin: 0; font-size: 14.5pt; line-height: 1.25; }
-.flujo .paso p.t { font-family: var(--titulo); font-weight: 800; font-size: 15.5pt; margin-bottom: 4px; }
+.flujo .paso p { margin: 0; font-size: 16.5pt; line-height: 1.25; }
+.flujo .paso p.t { font-family: var(--titulo); font-weight: 800; font-size: 17pt; margin-bottom: 4px; }
 .flujo .flecha { align-self: center; font-family: var(--titulo); font-weight: 800; font-size: 20pt; padding: 0 6px; color: var(--grafito); }
 
 /* Tablero de celdas (patrones, integraciones) */
@@ -126,26 +126,27 @@
 .el p { color: inherit; margin: 0; }
 .el .z { font-family: var(--mono); font-size: 11pt; }
 .el .s { font-family: var(--titulo); font-weight: 800; font-size: 30pt; line-height: 1; margin: 2px 0 4px 0; }
-.el .n { font-weight: 700; font-size: 15pt; }
-.el .d { font-size: 12.5pt; line-height: 1.25; margin-top: 4px; }
+.el .n { font-weight: 700; font-size: 16.5pt; line-height:1.15; }
+.el .d { font-size: 15pt; line-height: 1.25; margin-top: 4px; }
 
 /* Pirámide de pruebas */
-.piramide { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.piramide { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.piramide .nivel { padding: 9px 12px !important; }
 .piramide .nivel { box-sizing: border-box; border-radius: 8px; padding: 6px 12px; text-align: center; color: var(--tinta); }
-.piramide .nivel p { margin: 0; font-size: 14.5pt; line-height: 1.2; }
-.piramide .nivel p b { font-family: var(--titulo); font-size: 16pt; }
+.piramide .nivel p { margin: 0; font-size: 17.5pt; line-height: 1.2; }
+.piramide .nivel p b { font-family: var(--titulo); font-size: 18.5pt; }
 
 /* Estados (patrón State) */
 .estados { display: flex; align-items: center; flex-wrap: nowrap; gap: 6px; }
-.estado { border-radius: 999px; padding: 4px 12px; font-weight: 700; font-size: 13.5pt; border: 2px solid var(--tinta); background: var(--hoja); white-space: nowrap; }
+.estado { border-radius: 999px; padding: 5px 14px; font-weight: 700; font-size: 16pt; border: 2px solid var(--tinta); background: var(--hoja); white-space: nowrap; }
 .estado.ia { border-color: var(--sello); color: var(--sello); }
 .estados .f { font-weight: 800; color: var(--grafito); }
 
 /* Diagrama de arquitectura */
-.capa { border-radius: 10px; padding: 7px 12px; margin-bottom: 6px; font-size: 14pt; line-height: 1.25; background: var(--f, var(--hoja)); color: var(--ft, var(--tinta)); }
+.capa { border-radius: 10px; padding: 9px 14px; margin-bottom: 8px; font-size: 17pt; line-height: 1.25; background: var(--f, var(--hoja)); color: var(--ft, var(--tinta)); }
 .capa b { font-family: var(--titulo); }
 .col-arq { background: var(--hoja); border: 1.5px solid var(--linea); border-radius: 16px; padding: 14px 16px; }
-.col-arq h3 { font-size: 16pt; }
+.col-arq h3 { font-size: 19pt; }
 
 /* Portada y cierre */
 .fondo-tinta { background: var(--tinta); height: 100%; width: 100%; position: relative; padding: 56px 72px; box-sizing: border-box; overflow: hidden; }
@@ -167,5 +168,6 @@
 .tablero .t.vacia { background: transparent; border: 2px dashed #46506A; }
 
 /* Número de diapositiva */
+.reveal .slide-number a { text-decoration: none; color: inherit; }
 .reveal .slide-number { background: transparent; color: var(--grafito); font-family: var(--mono); font-size: 12pt; right: 48px; bottom: 22px; }
 .reveal .progress { color: var(--resaltador); height: 5px; }

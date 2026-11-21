@@ -18,6 +18,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
     fs.mkdirSync(out, { recursive: true });
     await p.goto(url, { waitUntil: 'networkidle' });
     await p.evaluate(() => document.fonts.ready);
+    await p.evaluate(() => Reveal.configure({ transition: 'none' }));
     const total = await p.evaluate(() => Reveal.getTotalSlides());
     for (let i = 0; i < total; i++) {
       await p.evaluate((n) => Reveal.slide(n), i);

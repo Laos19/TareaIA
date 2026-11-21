@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.auth.FirebaseAuth
+import com.tareia.app.remoto.Nube
 import com.tareia.app.*
 import com.tareia.app.aplicacion.Dependencias
 import com.tareia.app.dominio.ActividadAcademica
@@ -449,6 +450,14 @@ internal fun TareIAApp(activity: ComponentActivity, incomingShare: IncomingShare
         refrescar()
     }
 
+    // Telemetría: cada pantalla visitada; al volver a Inicio se respalda en la nube (como mucho cada 2 min)
+    LaunchedEffect(page, authenticated) {
+        if (authenticated) {
+            Nube.registrar("pantalla_vista", page.name)
+            if (page == Destino.Inicio) Nube.sincronizar(dep)
+        }
+    }
+
     // Procesar el contenido compartido desde la raíz: no se pierde si se cambia de pestaña.
     LaunchedEffect(incomingShare, authenticated) {
         if (incomingShare != null && authenticated) {
@@ -497,6 +506,8 @@ internal fun TareIAApp(activity: ComponentActivity, incomingShare: IncomingShare
                                     guardarPerfil(profile)
                                     authenticated = true
                                     googleCalendarConnectedEmail = ""
+                                    // Sesión en la API: respaldo en la nube, telemetría y logs
+                                    Nube.iniciarSesion(googleUser, dep)
                                 }
                             } catch (e: GetCredentialCancellationException) {
                                 // Antes se mostraba el texto técnico «[16] Cancelled by user.»
@@ -522,6 +533,7 @@ internal fun TareIAApp(activity: ComponentActivity, incomingShare: IncomingShare
                         title = { Column { Text("TARE·IA", fontWeight = FontWeight.SemiBold, fontSize = 20.sp, lineHeight = 22.sp); Text(data.profile.name, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp, lineHeight = 14.sp, maxLines = 1, overflow = TextOverflow.Ellipsis) } },
                         navigationIcon = { if (!page.principal) IconButton(onClick = { page = Destino.Mas }) { Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Volver a Más") } },
                         actions = { TextButton(onClick = {
+                            Nube.cerrarSesion()
                             authenticated = false
                             page = Destino.Inicio
                             FirebaseAuth.getInstance().signOut()

@@ -13,6 +13,7 @@ import com.google.firebase.FirebaseApp
 import android.util.Log
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import com.tareia.app.remoto.Nube
 class MainActivity : ComponentActivity() {
     var incomingShare by mutableStateOf<IncomingShare?>(null)
         private set
@@ -28,9 +29,18 @@ class MainActivity : ComponentActivity() {
         // Inicializar Firebase App Check
         AppCheckInitializer.initialize()
 
+        // Conexión con la API de TARE·IA (sesión, respaldo, telemetría y logs en segundo plano)
+        Nube.iniciar(this)
+
         incomingShare = shareFrom(intent)
 
         setContent { TareIAApp(this@MainActivity, incomingShare) { incomingShare = null } }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // Al pasar a segundo plano se envían los eventos y logs pendientes
+        Nube.vaciarEnSegundoPlano()
     }
 
     override fun onNewIntent(intent: Intent) {

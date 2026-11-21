@@ -1,0 +1,5 @@
+// Proyecto JVM auxiliar: compila el dominio Kotlin puro de la app Android (sin SDK de Android)
+// para ejecutar sus pruebas unitarias y las pruebas de mutación con Pitest en CI.
+pluginManagement { repositories { gradlePluginPortal(); mavenCentral() } }
+dependencyResolutionManagement { repositories { mavenCentral() } }
+rootProject.name = 'tareia-verificacion-jvm'

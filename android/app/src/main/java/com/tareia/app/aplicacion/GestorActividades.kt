@@ -10,6 +10,11 @@ class GestorActividades(
     private val alertas: GestorAlertas,
     private val gestorCursos: GestorCursos
 ) {
+    /** Observador de uso (telemetría). Opcional: si es null no se avisa a nadie. */
+    var observador: ObservadorUso? = null
+
+    private fun avisar(evento: String, datos: Map<String, Any> = emptyMap()) = observador?.alOcurrir(evento, datos)
+
     // Resultado de guardar varias propuestas a la vez
     data class ResultadoRegistro(val guardadas: List<ActividadAcademica>, val duplicadas: Int)
 
@@ -22,6 +27,7 @@ class GestorActividades(
         if (detector.esDuplicada(a)) return null
         alertas.programarPorDefecto(a)
         actividades.guardar(a)
+        avisar("actividad_creada", mapOf("origen" to a.origen.name))
         return a
     }
 
@@ -40,6 +46,7 @@ class GestorActividades(
             actividades.guardar(a)
             guardadas += a
         }
+        if (guardadas.isNotEmpty()) avisar("actividad_creada", mapOf("origen" to "IA", "cantidad" to guardadas.size, "duplicadas" to duplicadas))
         return ResultadoRegistro(guardadas, duplicadas)
     }
 
@@ -57,6 +64,7 @@ class GestorActividades(
             actividades.guardar(a)
             nuevas++
         }
+        avisar("moodle_importado", mapOf("nuevas" to nuevas))
         return nuevas
     }
 
@@ -76,6 +84,7 @@ class GestorActividades(
     fun confirmar(a: ActividadAcademica) {
         a.confirmar()
         actividades.guardar(a)
+        avisar("actividad_confirmada", mapOf("origen" to a.origen.name))
     }
 
     // STATE - una actividad pendiente de validar no se puede completar
@@ -83,6 +92,7 @@ class GestorActividades(
         a.completar()
         alertas.cancelar(a)
         actividades.guardar(a)
+        avisar("actividad_completada", mapOf("tipo" to a.tipo.name))
     }
 
     // Deshace "Completar"

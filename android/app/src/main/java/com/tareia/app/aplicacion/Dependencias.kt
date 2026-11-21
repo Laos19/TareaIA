@@ -1,5 +1,7 @@
 package com.tareia.app.aplicacion
 
+import com.tareia.app.remoto.Nube
+
 import android.content.Context
 import com.tareia.app.dominio.ClasificadorContenido
 import com.tareia.app.dominio.DetectorDuplicados
@@ -37,7 +39,10 @@ class Dependencias(context: Context) {
     // Gestores
     val gestorAlertas = GestorAlertas(AlarmManagerNotificaciones(appContext))
     val gestorCursos = GestorCursos(cursoRepo)
-    val gestorActividades = GestorActividades(actividadRepo, DetectorDuplicados(actividadRepo), gestorAlertas, gestorCursos)
+    val gestorActividades = GestorActividades(actividadRepo, DetectorDuplicados(actividadRepo), gestorAlertas, gestorCursos).apply {
+        // OBSERVER: cada acción del estudiante se registra como evento de uso (sin datos personales)
+        observador = ObservadorUso { evento, datos -> Nube.registrar(evento, datos = datos) }
+    }
     val gestorIngesta = GestorIngesta(appContext, contenidoRepo, cursoRepo, ClasificadorContenido())
     var gestorAnalisisIA = GestorAnalisisIA(fabricaIA, cursoRepo)
         private set

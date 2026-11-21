@@ -50,35 +50,34 @@
 <section id="problema">
   <div class="celda" style="--f:var(--alc);--ft:var(--alc-t)"><p class="z">2</p><p class="s">Pr</p><p class="n">problema</p></div>
   <p class="eyebrow">El problema</p>
-  <h2>Las tareas están en todas partes, menos en tu calendario</h2>
-  <div class="grid3" style="margin-top:34px;">
+  <h2>Tareas por todas partes, menos en tu calendario</h2>
+  <p class="chico" style="margin-top:4px;">Llegan por Moodle, PDF, apuntes y capturas; el estudiante <strong>copia cada fecha a mano</strong>, olvida entregas y estudia a última hora.</p>
+  <div class="grid3" style="margin-top:18px;">
     <div class="card">
-      <p class="cifra" style="color:var(--lacre);">1</p>
-      <h3>Información dispersa</h3>
-      <p class="chico">Aula virtual (Moodle), grupos de mensajería, PDF del sílabo y fotos de la pizarra.</p>
+      <p class="cifra" style="color:var(--lacre);">80–95<small>&nbsp;%</small></p>
+      <p class="chico">de universitarios procrastina, según los estudios que recoge un metaanálisis</p>
+      <p class="mini suave" style="margin:0;">Steel (2007) · cita estudios previos</p>
     </div>
     <div class="card">
-      <p class="cifra" style="color:var(--lacre);">2</p>
-      <h3>Copia manual de fechas</h3>
-      <p class="chico">Pasar cada fecha al calendario a mano produce errores, duplicados y olvidos.</p>
+      <p class="cifra" style="color:var(--lacre);">38&nbsp;529</p>
+      <p class="chico">estudiantes en 33 estudios: a más procrastinación, <strong>menor rendimiento</strong></p>
+      <p class="mini suave" style="margin:0;">Kim y Seo (2015), metaanálisis</p>
     </div>
     <div class="card">
-      <p class="cifra" style="color:var(--lacre);">3</p>
-      <h3>Planificar cuesta</h3>
-      <p class="chico">Sin un plan de estudio, el cambio constante de tarea cansa y lleva a postergar.</p>
+      <p class="cifra" style="color:var(--tinta);">98,4<small>&nbsp;%</small></p>
+      <p class="chico">de peruanos con estudios universitarios usa internet; 90 % de usuarios, por celular</p>
+      <p class="mini suave" style="margin:0;">INEI (2024b), III trimestre 2024</p>
     </div>
   </div>
-  <div class="card ia" style="margin-top:34px;">
+  <div class="card ia" style="margin-top:20px; padding:14px 22px;">
     <p class="grande" style="margin:0;">¿Y si la IA lee las tareas por ti… <span class="res">pero tú confirmas</span> antes de que algo llegue a tu calendario?</p>
   </div>
-  <p class="mini suave" style="margin-top:14px;">Base: FD02 Documento de Visión, §2.2 «Definición del problema».</p>
   <p class="criterio"><b>Rúbrica</b> · Problemática detallada con fuentes</p>
   <aside class="notes">
-    (≈75 s) El problema. Un estudiante de la UPT recibe tareas por muchos lados: el aula virtual, que es Moodle; el grupo de WhatsApp del curso; el sílabo en PDF; una foto de la pizarra. Nada de eso llega solo a su calendario.
-    Entonces tiene que copiar las fechas a mano. Ahí aparecen los errores: una fecha mal escrita, la misma tarea registrada dos veces o, lo peor, una tarea olvidada.
-    Y aunque tenga todo anotado, falta el plan: cuándo estudio para cada cosa. Cambiar todo el tiempo de una tarea a otra cansa y termina en postergar.
-    Nuestra propuesta: que la inteligencia artificial lea las tareas por el estudiante, pero que nada llegue al calendario sin que él lo confirme. Esa idea, «la IA propone, la persona decide», es una regla de negocio que van a ver repetida en la app, en la API y en la base de datos.
-    [COMPLETAR CON FUENTES: agregar 2 o 3 datos con cita APA (por ejemplo, estudios sobre procrastinación académica o uso de aulas virtuales en universidades peruanas) cuando esté listo docs/investigacion/problema-y-objetivos.md. No decir cifras sin fuente.]
+    (≈85 s) El problema. Un estudiante de la UPT recibe tareas por muchos lados: el aula virtual, que es Moodle; el sílabo en PDF; sus apuntes; una captura del grupo del curso. Nada de eso llega solo a su calendario, así que copia cada fecha a mano, y ahí aparecen los olvidos y el estudio de última hora.
+    Tres datos con fuente. Primero: el metaanálisis de Steel, de 2007, recoge estudios según los cuales entre el 80 y el 95 % de los universitarios procrastina; aclaro que esa cifra la toma de estudios anteriores. Segundo: otro metaanálisis, de Kim y Seo, con 33 estudios y más de 38 mil participantes, encontró que a más procrastinación, menor rendimiento académico. Tercero, para elegir la plataforma: según el INEI, el 98,4 % de los peruanos con educación universitaria usa internet, y el 90 % de los usuarios entra desde el celular. Por eso es una app Android.
+    Un hallazgo que guió el diseño: Garzón y Gil, en 2017, vieron que tener herramientas de gestión del tiempo no basta; lo que ayuda es fijar metas y prioridades. Por eso TARE·IA no es otra agenda: reduce el trabajo de registrar y ordena por urgencia.
+    Nuestra idea: la IA lee las tareas, pero nada llega al calendario sin que el estudiante lo confirme. Las referencias completas, en APA, están en docs/investigacion/problema-y-objetivos.md.
   </aside>
 </section>
 
@@ -88,24 +87,25 @@
   <p class="eyebrow">Objetivos SMART · semestre 2026-II</p>
   <h2>Cada objetivo tiene un indicador y una forma de medirlo</h2>
   <table style="margin-top:14px;">
-    <thead><tr><th>Objetivo</th><th>Indicador</th><th>Meta</th><th>Resultado</th></tr></thead>
+    <thead><tr><th>ID</th><th>Indicador</th><th>Meta</th><th>Resultado</th></tr></thead>
     <tbody>
-      <tr><td>Validación humana</td><td>Actividades de IA o Moodle que llegan a Calendar sin validar</td><td>0</td><td style="color:var(--exito); font-weight:700;">0 · HU-03 + trigger</td></tr>
-      <tr><td>Sin duplicados</td><td>Actividades repetidas (título + curso + fecha)</td><td>0</td><td style="color:var(--exito); font-weight:700;">0 · HU-02</td></tr>
-      <tr><td>Calidad de pruebas</td><td>Mutantes eliminados: API · dominio Kotlin</td><td>≥ 60 % · ≥ 50 %</td><td style="color:var(--exito); font-weight:700;">93,8 % · 68,4 %</td></tr>
-      <tr><td>Costo</td><td>Gasto mensual de infraestructura</td><td>USD 0</td><td style="color:var(--exito); font-weight:700;">USD 0</td></tr>
-      <tr><td>Uso real</td><td>Sesiones por semana y % de actividades creadas por IA o Moodle</td><td>medir en piloto</td><td style="color:var(--ambar); font-weight:700;">instrumentado</td></tr>
+      <tr><td>OS-1</td><td>% de actividades que llegan por IA o Moodle</td><td>≥ 50 %</td><td style="color:var(--ambar); font-weight:700;">se mide en el piloto</td></tr>
+      <tr><td>OS-4</td><td>Actividades sincronizadas con Calendar sin validar</td><td>0</td><td style="color:var(--exito); font-weight:700;">0 · trigger + HU-03</td></tr>
+      <tr><td>OS-5</td><td>Duplicados (título + curso + fecha normalizados)</td><td>0</td><td style="color:var(--exito); font-weight:700;">0 · HU-02</td></tr>
+      <tr><td>OS-8</td><td>Puntaje de mutación: API · dominio Kotlin</td><td>≥ 60 % · ≥ 50 %</td><td style="color:var(--exito); font-weight:700;">93,8 % · 68,4 %</td></tr>
+      <tr><td>OS-11</td><td>Costo mensual de infraestructura</td><td>USD 0</td><td style="color:var(--exito); font-weight:700;">USD 0</td></tr>
     </tbody>
   </table>
+  <p class="mini suave" style="margin-top:12px;">También: OS-3 ≥ 80 % completadas antes de su fecha · OI-3 SUS ≥ 70 · lista completa en docs/investigacion y FD01.</p>
   <p class="criterio"><b>Rúbrica</b> · Objetivos de investigación y de solución medibles</p>
   <aside class="notes">
-    (≈80 s) Nuestros objetivos son medibles: cada uno tiene indicador, meta y un instrumento que lo mide.
-    Uno: validación humana. Ninguna actividad que venga de la IA o de Moodle puede llegar a Google Calendar sin que el estudiante la confirme. Lo comprueba la historia de usuario HU-03 en Cucumber y, además, un trigger en la base de datos que rechaza ese salto.
-    Dos: cero duplicados, con la misma tarea normalizada por título, curso y fecha. Lo prueba la HU-02.
-    Tres: calidad de las pruebas. No basta con tener pruebas; medimos con pruebas de mutación si detectan errores. La meta era 60 % en la API y 50 % en el dominio Kotlin; logramos 93,8 y 68,4 %.
-    Cuatro: costo cero, que cumplimos con capas gratuitas.
-    Y cinco, el uso real. Aquí soy honesta: la telemetría y el dashboard ya están listos para medirlo, pero el piloto con estudiantes todavía no se hizo, por eso aparece en ámbar como «instrumentado».
-    [Ajustar los códigos OS/OI a los del FD01 final.]
+    (≈85 s) El objetivo general: en 16 semanas, desarrollar, probar y documentar TARE·IA, logrando que al menos la mitad de las actividades lleguen por IA o Moodle y que el 80 % de las completadas se cierren antes de su fecha, con calidad verificada por pruebas de mutación y análisis estático.
+    Cada objetivo específico tiene indicador, meta e instrumento. OS-1: que la mayoría de actividades no se escriban a mano; se mide con la vista v_origen_actividades, pero el valor real sale del piloto, por eso está en ámbar.
+    OS-4: que la IA nunca cree eventos sin permiso. Lo garantiza un trigger en la base y lo comprueba la historia HU-03 en Cucumber: cero casos.
+    OS-5: cero duplicados. Aquí las pruebas encontraron un defecto real, que vamos a ver más adelante.
+    OS-8: pruebas que detecten defectos. La meta era 60 % de mutación en la API y 50 % en el dominio Kotlin; logramos 93,8 y 68,4 %.
+    OS-11: costo cero, cumplido con capas gratuitas.
+    Abajo quedan los que dependen del piloto con estudiantes, como el SUS de usabilidad mayor o igual a 70. Somos honestos: la instrumentación está lista, la medición todavía no.
   </aside>
 </section>
 
@@ -226,7 +226,7 @@
     <div class="card" style="text-align:center; padding:12px;"><p class="cifra">6</p><p class="chico" style="margin:0;">vistas</p></div>
     <div class="card" style="text-align:center; padding:12px;"><p class="cifra">7</p><p class="chico" style="margin:0;">funciones</p></div>
     <div class="card" style="text-align:center; padding:12px;"><p class="cifra">7</p><p class="chico" style="margin:0;">triggers</p></div>
-    <div class="card" style="text-align:center; padding:12px;"><p class="cifra">11</p><p class="chico" style="margin:0;">changesets</p></div>
+    <div class="card" style="text-align:center; padding:12px;"><p class="cifra">20</p><p class="chico" style="margin:0;">changesets</p></div>
   </div>
   <div class="card" style="margin-top:26px;">
     <h3>El patrón State, repetido en un trigger</h3>
@@ -239,15 +239,15 @@
     <p class="chico" style="margin:0;"><code>fn_actividad_transicion</code> rechaza los saltos inválidos, aunque alguien escriba directo en la BD.</p>
   </div>
   <div class="grid2" style="margin-top:26px;">
-    <p class="chico" style="margin:0;"><strong>Liquibase:</strong> cada cambio en SQL con su <em>rollback</em>; se aplica solo en producción al publicar.</p>
+    <p class="chico" style="margin:0;"><strong>Liquibase:</strong> 20 changesets en 11 archivos SQL, cada uno con <em>rollback</em>; se aplica solo al publicar.</p>
     <p class="chico" style="margin:0;"><strong>Vistas para el dashboard:</strong> <code>mv_uso_diario</code> (materializada), uso por función y por pantalla.</p>
   </div>
   <p class="criterio"><b>Rúbrica</b> · Código fuente y BD en GitHub · Diccionario de datos y ER</p>
   <aside class="notes">
-    (≈80 s) La base de datos es PostgreSQL 16, alojada en Neon. Tiene 11 tablas, 6 vistas, 7 funciones y 7 triggers, y el esquema se construye con 11 changesets de Liquibase.
+    (≈80 s) La base de datos es PostgreSQL 16, alojada en Neon. Tiene 11 tablas, 6 vistas, 7 funciones y 7 triggers, y el esquema se construye con 20 changesets de Liquibase repartidos en 11 archivos SQL.
     La decisión más importante: las reglas críticas no viven solo en la app. El patrón State que vieron en Kotlin está repetido en un trigger. Si alguien intenta pasar una actividad de Pendiente de validar directo a Sincronizada, aunque sea escribiendo SQL a mano, la función fn_actividad_transicion lo rechaza. Así cumplimos la regla RN01: nada va a Calendar sin validar.
     Otro trigger, fn_registrar_historial, guarda el antes y el después de cada cambio; lo vemos en requisitos no funcionales.
-    Liquibase: cada changeset es un archivo SQL con su rollback, y se aplica automáticamente en producción cuando publicamos una versión.
+    Liquibase: cada changeset tiene su rollback, y se aplica automáticamente en producción cuando publicamos una versión.
     Y las vistas alimentan el dashboard; la de uso diario es materializada, para que el tablero cargue rápido.
     El diccionario de datos y el diagrama entidad-relación se generan solos desde la base real.
   </aside>
@@ -264,7 +264,7 @@
       <tr><td>Sesiones</td><td>Token de Google → JWT de 7 días; fila en <code>sesion</code>; se cierra al salir o tras 30 min sin uso</td><td>HU-01 · tabla <code>sesion</code></td></tr>
       <tr><td>Historial</td><td>Trigger guarda el antes y el después (JSONB) de cada cambio</td><td><code>/actividades/{id}/historial</code></td></tr>
       <tr><td>Caché</td><td>Caché con TTL del dashboard, vista materializada y caché HTTP de 5 MB en la app</td><td>cabecera <code>x-cache</code> · <code>/api/health</code></td></tr>
-      <tr><td>Logs</td><td>JSON estructurado (pino) sin contraseñas ni tokens; la app sube sus errores enmascarados</td><td>tabla <code>log_cliente</code></td></tr>
+      <tr><td>Logs</td><td>JSON (pino) sin contraseñas ni tokens; la app sube sus errores y la API enmascara correos y tokens</td><td>tabla <code>log_cliente</code></td></tr>
       <tr><td>Telemetría</td><td>Eventos de uso en lotes de 20, sin datos personales</td><td>dashboard de uso</td></tr>
     </tbody>
   </table>
@@ -274,7 +274,7 @@
     Sesiones: al entrar con Google, la app cambia el token de Firebase por un JWT de nuestra API, válido 7 días. Cada inicio abre una fila en la tabla sesion, con el origen, el dispositivo y la versión. Se cierra al salir o después de 30 minutos sin actividad. En el teléfono, el token se guarda cifrado con el Android Keystore.
     Historial: un trigger guarda el estado anterior y el nuevo, en JSON, de cada alta, cambio o borrado. Se consulta en el endpoint de historial de cada actividad.
     Caché: el dashboard usa una caché en memoria con tiempo de vida; la respuesta trae la cabecera x-cache con HIT o MISS, y el endpoint de salud muestra aciertos y fallos. Además, la vista materializada y una caché HTTP de 5 megas en la app.
-    Logs: en formato JSON, ocultando contraseñas y tokens. La app sube sus advertencias y errores con los correos enmascarados.
+    Logs: en formato JSON, ocultando contraseñas y tokens. La app sube sus advertencias y errores por lotes, y la API, al recibirlos, enmascara correos y tokens antes de guardarlos en log_cliente.
     Telemetría: la app junta eventos de uso en una cola y los envía en lotes de 20, sin datos personales. Con eso se alimenta el dashboard.
   </aside>
 </section>
@@ -287,7 +287,7 @@
   <div style="display:grid; grid-template-columns:1.25fr 1fr; gap:28px; margin-top:8px;">
     <div class="piramide">
       <div class="nivel" style="width:52%; background:var(--lan); color:var(--lan-t);"><p><b>Aceptación</b><br>18 escenarios Cucumber</p></div>
-      <div class="nivel" style="width:76%; background:var(--hal); color:var(--hal-t);"><p><b>Interfaz</b> · 16 Playwright + 14 Compose</p></div>
+      <div class="nivel" style="width:76%; background:var(--hal); color:var(--hal-t);"><p><b>Interfaz</b> · 16 Playwright + 16 Compose</p></div>
       <div class="nivel" style="width:84%; background:var(--tra); color:var(--tra-t);"><p><b>Sistema</b> · 11 con servidor HTTP real</p></div>
       <div class="nivel" style="width:92%; background:var(--gas); color:var(--gas-t);"><p><b>Integración</b> · 22 con PostgreSQL real</p></div>
       <div class="nivel" style="width:100%; background:var(--met); color:var(--met-t);"><p><b>Unitarias</b> · 66 Vitest + 35 JVM Kotlin</p></div>
@@ -304,7 +304,7 @@
   <aside class="notes">
     (≈90 s) Esta es la pirámide de pruebas, con números reales.
     En la base, 66 pruebas unitarias de la API con Vitest y 35 pruebas JVM del dominio Kotlin. Encima, 22 de integración contra un PostgreSQL real, no simulado, y 11 de sistema que levantan el servidor HTTP y revisan CORS, cabeceras de seguridad, límite de peticiones y Swagger. En total, 99 pruebas de la API.
-    Interfaz: 8 pruebas de Playwright en dos dispositivos, escritorio y un Pixel 7, que dan 16; y 14 pruebas de Compose en el emulador. Arriba, aceptación: 18 escenarios en Cucumber, escritos en español, sobre 5 historias de usuario.
+    Interfaz: 8 pruebas de Playwright en dos dispositivos, escritorio y un Pixel 7, que dan 16; y 16 pruebas de Compose en el emulador. Arriba, aceptación: 18 escenarios en Cucumber, escritos en español, sobre 5 historias de usuario.
     Y debajo de todo, la mutación: Stryker cambia el código de la API a propósito y nuestras pruebas detectaron el 93,8 % de esos cambios. Pitest, en el dominio Kotlin, el 68,4 %.
     Lo más valioso: las pruebas encontraron tres defectos reales. El historial fallaba al borrar un usuario en cascada; un correo con mayúsculas chocaba con el mismo usuario de Google; y los duplicados no se detectaban si el título tenía espacios repetidos. Los tres se corrigieron y quedaron con su prueba.
   </aside>
@@ -494,7 +494,7 @@
     Dos, Gemini, a través de Firebase AI Logic: lee los apuntes y propone actividades y planes de estudio. Gracias al patrón Abstract Factory, se puede cambiar a otro proveedor compatible.
     Tres, Google Calendar: solo recibe actividades que el estudiante validó.
     Cuatro, Moodle de la UPT: la app trae las tareas del aula virtual, y entran como pendientes de validar.
-    Y cinco, el servidor MCP, con siete herramientas como actividades_pendientes o plan_semanal, más la skill tareia y el agente coach-academico de Claude Code. Desde el editor puedes preguntar «¿qué entrego esta semana?» y el agente responde con tus pendientes ordenados por urgencia. Usa la misma API, y su sesión queda registrada con origen mcp, así que también aparece en el dashboard.
+    Y cinco, el servidor MCP, con siete herramientas como actividades_pendientes o plan_semanal, más la skill tareia y el agente coach-academico de Claude Code. Desde el editor puedes preguntar «¿qué entrego esta semana?» y el agente responde con tus pendientes ordenados por urgencia. Usa la misma API, y su sesión queda registrada con origen mcp, así que también aparece en el dashboard. El servidor MCP tiene sus propias 14 pruebas automatizadas.
     [Si hay tiempo, mostrarlo en vivo: guion-demo.md, paso opcional.]
   </aside>
 </section>

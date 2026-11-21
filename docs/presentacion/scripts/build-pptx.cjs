@@ -101,30 +101,31 @@ function logo(s, x, y) {
 
 /* 2 · Problema */
 {
-  const s = base(2, 'Pr', 'problema', 'alc', 'El problema', 'Las tareas están en todas partes, menos en tu calendario', 'Problemática detallada con fuentes');
-  [['Información dispersa', 'Aula virtual (Moodle), grupos de mensajería, PDF del sílabo y fotos de la pizarra.'],
-    ['Copia manual de fechas', 'Pasar cada fecha al calendario a mano produce errores, duplicados y olvidos.'],
-    ['Planificar cuesta', 'Sin un plan de estudio, el cambio constante de tarea cansa y lleva a postergar.']].forEach((c, i) => {
-    const x = 0.67 + i * 4.06; card(s, x, 1.95, 3.85, 2.35);
-    txt(s, String(i + 1), { x: x + 0.22, y: 2.08, w: 1, h: 0.6, fontFace: H, bold: true, fontSize: 40, color: K.lacre });
-    txt(s, c[0], { x: x + 0.22, y: 2.72, w: 3.4, h: 0.4, fontFace: H, bold: true, fontSize: 18 });
-    txt(s, c[1], { x: x + 0.22, y: 3.15, w: 3.45, h: 1.1, fontSize: 17 });
+  const s = base(2, 'Pr', 'problema', 'alc', 'El problema', 'Tareas por todas partes, menos en tu calendario', 'Problemática detallada con fuentes');
+  txt(s, [{ text: 'Llegan por Moodle, PDF, apuntes y capturas; el estudiante ' }, { text: 'copia cada fecha a mano', options: { bold: true } }, { text: ', olvida entregas y estudia a última hora.' }], { x: 0.67, y: 1.55, w: 11.2, h: 0.65, fontSize: 18 });
+  [['80–95 %', K.lacre, 'de universitarios procrastina, según los estudios que recoge un metaanálisis', 'Steel (2007) · cita estudios previos'],
+    ['38 529', K.lacre, 'estudiantes en 33 estudios: a más procrastinación, menor rendimiento', 'Kim y Seo (2015), metaanálisis'],
+    ['98,4 %', K.tinta, 'de peruanos con estudios universitarios usa internet; 90 % de usuarios, por celular', 'INEI (2024b), III trimestre 2024']].forEach((c, i) => {
+    const x = 0.67 + i * 4.06; card(s, x, 2.4, 3.85, 2.45);
+    txt(s, c[0], { x: x + 0.22, y: 2.52, w: 3.4, h: 0.7, fontFace: H, bold: true, fontSize: 38, color: c[1] });
+    txt(s, c[2], { x: x + 0.22, y: 3.25, w: 3.45, h: 1.05, fontSize: 17 });
+    txt(s, c[3], { x: x + 0.22, y: 4.38, w: 3.45, h: 0.35, fontSize: 13, color: K.grafito });
   });
-  card(s, 0.67, 4.6, 12.0, 1.05, { line: K.sello, lw: 2 });
-  txt(s, [{ text: '¿Y si la IA lee las tareas por ti… ' }, { text: 'pero tú confirmas', options: { highlight: K.res } }, { text: ' antes de que algo llegue a tu calendario?' }], { x: 0.9, y: 4.6, w: 11.6, h: 1.05, fontSize: 22, valign: 'middle' });
-  txt(s, 'Base: FD02 Documento de Visión, §2.2 «Definición del problema».', { x: 0.67, y: 5.85, w: 10, h: 0.3, fontSize: 13, color: K.grafito });
+  card(s, 0.67, 5.1, 12.0, 1.0, { line: K.sello, lw: 2 });
+  txt(s, [{ text: '¿Y si la IA lee las tareas por ti… ' }, { text: 'pero tú confirmas', options: { highlight: K.res } }, { text: ' antes de que algo llegue a tu calendario?' }], { x: 0.9, y: 5.1, w: 11.6, h: 1.0, fontSize: 22, valign: 'middle' });
 }
 
 /* 3 · Objetivos */
 {
   const s = base(3, 'Ob', 'objetivos', 'alc', 'Objetivos SMART · semestre 2026-II', 'Cada objetivo tiene un indicador y una forma de medirlo', 'Objetivos de investigación y de solución medibles');
-  tabla(s, ['Objetivo', 'Indicador', 'Meta', 'Resultado'], [
-    ['Validación humana', 'Actividades de IA o Moodle que llegan a Calendar sin validar', '0', '0 · HU-03 + trigger'],
-    ['Sin duplicados', 'Actividades repetidas (título + curso + fecha)', '0', '0 · HU-02'],
-    ['Calidad de pruebas', 'Mutantes eliminados: API · dominio Kotlin', '≥ 60 % · ≥ 50 %', '93,8 % · 68,4 %'],
-    ['Costo', 'Gasto mensual de infraestructura', 'USD 0', 'USD 0'],
-    ['Uso real', 'Sesiones por semana y % de actividades creadas por IA o Moodle', 'medir en piloto', 'instrumentado']],
-  { x: 0.67, y: 1.95, w: 12.0, colW: [2.4, 5.6, 1.8, 2.2] }, 17, { 3: (t) => (t === 'instrumentado' ? K.ambar : K.exito) });
+  tabla(s, ['ID', 'Indicador', 'Meta', 'Resultado'], [
+    ['OS-1', '% de actividades que llegan por IA o Moodle', '≥ 50 %', 'se mide en el piloto'],
+    ['OS-4', 'Actividades sincronizadas con Calendar sin validar', '0', '0 · trigger + HU-03'],
+    ['OS-5', 'Duplicados (título + curso + fecha normalizados)', '0', '0 · HU-02'],
+    ['OS-8', 'Puntaje de mutación: API · dominio Kotlin', '≥ 60 % · ≥ 50 %', '93,8 % · 68,4 %'],
+    ['OS-11', 'Costo mensual de infraestructura', 'USD 0', 'USD 0']],
+  { x: 0.67, y: 1.95, w: 12.0, colW: [1.2, 6.2, 2.0, 2.6] }, 18, { 3: (t) => (t.startsWith('se mide') ? K.ambar : K.exito) });
+  txt(s, 'También: OS-3 ≥ 80 % completadas antes de su fecha · OI-3 SUS ≥ 70 · lista completa en docs/investigacion y FD01.', { x: 0.67, y: 5.75, w: 12, h: 0.4, fontSize: 14, color: K.grafito });
 }
 
 /* 4 · La app */
@@ -180,7 +181,7 @@ function logo(s, x, y) {
 /* 7 · Base de datos */
 {
   const s = base(7, 'Bd', 'datos', 'gas', 'Base de datos y nube', 'Las reglas importantes también viven en PostgreSQL', 'Código fuente y BD en GitHub · Diccionario de datos y ER');
-  [['11', 'tablas'], ['6', 'vistas'], ['7', 'funciones'], ['7', 'triggers'], ['11', 'changesets']].forEach((c, i) => {
+  [['11', 'tablas'], ['6', 'vistas'], ['7', 'funciones'], ['7', 'triggers'], ['20', 'changesets']].forEach((c, i) => {
     const x = 0.67 + i * 2.43; card(s, x, 1.85, 2.25, 1.15);
     txt(s, c[0], { x, y: 1.92, w: 2.25, h: 0.65, fontFace: H, bold: true, fontSize: 40, align: 'center' });
     txt(s, c[1], { x, y: 2.58, w: 2.25, h: 0.35, fontSize: 17, align: 'center' });
@@ -196,7 +197,7 @@ function logo(s, x, y) {
     if (i < 3) { txt(s, '→', { x, y: 3.85, w: 0.4, h: 0.42, fontSize: 18, bold: true, color: K.grafito, align: 'center', valign: 'middle' }); x += 0.4; }
   });
   txt(s, [{ text: 'fn_actividad_transicion', options: { fontFace: M } }, { text: ' rechaza los saltos inválidos, aunque alguien escriba directo en la BD.' }], { x: 0.9, y: 4.45, w: 11.5, h: 0.4, fontSize: 17 });
-  txt(s, [{ text: 'Liquibase: ', options: { bold: true } }, { text: 'cada cambio en SQL con su rollback; se aplica solo en producción al publicar.' }], { x: 0.67, y: 5.3, w: 5.8, h: 0.9, fontSize: 18 });
+  txt(s, [{ text: 'Liquibase: ', options: { bold: true } }, { text: '20 changesets en 11 archivos SQL, cada uno con rollback; se aplica solo al publicar.' }], { x: 0.67, y: 5.3, w: 5.8, h: 0.9, fontSize: 18 });
   txt(s, [{ text: 'Vistas para el dashboard: ', options: { bold: true } }, { text: 'mv_uso_diario', options: { fontFace: M } }, { text: ' (materializada), uso por función y por pantalla.' }], { x: 6.9, y: 5.3, w: 5.8, h: 0.9, fontSize: 18 });
 }
 
@@ -207,7 +208,7 @@ function logo(s, x, y) {
     ['Sesiones', 'Token de Google → JWT de 7 días; fila en sesion; se cierra al salir o tras 30 min sin uso', 'HU-01 · tabla sesion'],
     ['Historial', 'Trigger guarda el antes y el después (JSONB) de cada cambio', '/actividades/{id}/historial'],
     ['Caché', 'Caché con TTL del dashboard, vista materializada y caché HTTP de 5 MB en la app', 'cabecera x-cache · /api/health'],
-    ['Logs', 'JSON estructurado (pino) sin contraseñas ni tokens; la app sube sus errores enmascarados', 'tabla log_cliente'],
+    ['Logs', 'JSON (pino) sin contraseñas ni tokens; la app sube sus errores y la API enmascara correos y tokens', 'tabla log_cliente'],
     ['Telemetría', 'Eventos de uso en lotes de 20, sin datos personales', 'dashboard de uso']],
   { x: 0.67, y: 1.6, w: 12.0, colW: [1.9, 6.6, 3.5] }, 17);
 }
@@ -215,7 +216,7 @@ function logo(s, x, y) {
 /* 9 · Pruebas */
 {
   const s = base(9, 'Pu', 'pruebas', 'met', 'Pirámide de pruebas · resultados reales', 'Todo en verde, y las pruebas encontraron 3 defectos', 'Pruebas unitarias, mutación, integración, sistema, UI y aceptación + reportes');
-  const niveles = [['lan', 'Aceptación', '18 escenarios Cucumber', 0.64], ['hal', 'Interfaz', '16 Playwright + 14 Compose', 0.76], ['tra', 'Sistema', '11 con servidor HTTP real', 0.84],
+  const niveles = [['lan', 'Aceptación', '18 escenarios Cucumber', 0.64], ['hal', 'Interfaz', '16 Playwright + 16 Compose', 0.76], ['tra', 'Sistema', '11 con servidor HTTP real', 0.84],
     ['gas', 'Integración', '22 con PostgreSQL real', 0.92], ['met', 'Unitarias', '66 Vitest + 35 JVM Kotlin', 1], ['res', 'Mutación', 'Stryker 93,8 % · Pitest 68,4 %', 1]];
   const ancho = 6.7; const cx = 0.67 + ancho / 2;
   niveles.forEach((n, i) => {

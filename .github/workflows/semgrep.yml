@@ -40,7 +40,7 @@ jobs:
       - name: Reporte de hallazgos
         if: always()
         run: |
-          python3 - <<'PY' | tee "$REPORTS/reporte-semgrep.md" >> "$GITHUB_STEP_SUMMARY"
+          python3 - <<'PY' | tee "$REPORTS/reporte-semgrep.md" | tee -a "$GITHUB_STEP_SUMMARY"
           import json, collections
           d = json.load(open("reports/semgrep.json"))
           res = d.get("results", [])
@@ -55,7 +55,8 @@ jobs:
               print("✅ Sin hallazgos de severidad ERROR: análisis superado.\n")
           if res:
               print("| Severidad | Regla | Archivo | Mensaje |\n|---|---|---|---|")
-              for r in res[:100]:
+              orden = {"ERROR": 0, "WARNING": 1, "INFO": 2}
+              for r in sorted(res, key=lambda r: orden.get(r["extra"]["severity"], 3))[:100]:
                   msg = r["extra"]["message"].replace("|", "\\|").replace("\n", " ")[:160]
                   print(f"| {r['extra']['severity']} | `{r['check_id'].split('.')[-1]}` | `{r['path']}:{r['start']['line']}` | {msg} |")
           PY

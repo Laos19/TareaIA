@@ -10,6 +10,10 @@ mock_provider "neon" {
   }
 }
 
+variables {
+  project_name = "tareia"
+}
+
 run "postgres_16_con_nombres_del_proyecto" {
   command = apply
 

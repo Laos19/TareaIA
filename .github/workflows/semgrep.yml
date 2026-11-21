@@ -1,0 +1,79 @@
+name: "Calidad: Semgrep"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 6 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: semgrep-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  semgrep:
+    name: Semgrep (SAST + secretos)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    container:
+      image: semgrep/semgrep:latest
+    env:
+      REPORTS: reports
+    steps:
+      - uses: actions/checkout@v4
+      - name: Escaneo
+        id: scan
+        run: |
+          mkdir -p "$REPORTS"
+          semgrep scan \
+            --config p/default --config p/kotlin --config p/typescript --config p/react \
+            --config p/nodejs --config p/secrets --config p/terraform --config p/sql-injection \
+            --metrics off --json --output "$REPORTS/semgrep.json" \
+            --sarif-output "$REPORTS/semgrep.sarif" || true
+      - name: Reporte de hallazgos
+        if: always()
+        run: |
+          python3 - <<'PY' | tee "$REPORTS/reporte-semgrep.md" >> "$GITHUB_STEP_SUMMARY"
+          import json, collections
+          d = json.load(open("reports/semgrep.json"))
+          res = d.get("results", [])
+          sev = collections.Counter(r["extra"]["severity"] for r in res)
+          print("## 🛡️ Semgrep — reporte de hallazgos\n")
+          print(f"Reglas: p/default, p/kotlin, p/typescript, p/react, p/nodejs, p/secrets, p/terraform, p/sql-injection · archivos analizados: {len(d.get('paths', {}).get('scanned', []))}\n")
+          print("| Severidad | Hallazgos |\n|---|---:|")
+          for s in ("ERROR", "WARNING", "INFO"):
+              print(f"| {s} | {sev.get(s, 0)} |")
+          print()
+          if sev.get("ERROR", 0) == 0:
+              print("✅ Sin hallazgos de severidad ERROR: análisis superado.\n")
+          if res:
+              print("| Severidad | Regla | Archivo | Mensaje |\n|---|---|---|---|")
+              for r in res[:100]:
+                  msg = r["extra"]["message"].replace("|", "\\|").replace("\n", " ")[:160]
+                  print(f"| {r['extra']['severity']} | `{r['check_id'].split('.')[-1]}` | `{r['path']}:{r['start']['line']}` | {msg} |")
+          PY
+      - name: Subir SARIF a Code Scanning
+        if: always() && github.event_name != 'pull_request'
+        uses: github/codeql-action/upload-sarif@v3
+        continue-on-error: true
+        with:
+          sarif_file: reports/semgrep.sarif
+          category: semgrep
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reporte-semgrep
+          path: reports/
+          retention-days: 30
+      - name: Fallar si hay hallazgos ERROR
+        run: |
+          n=$(python3 -c "import json;print(sum(1 for r in json.load(open('reports/semgrep.json'))['results'] if r['extra']['severity']=='ERROR'))")
+          echo "Hallazgos ERROR: $n"
+          [ "$n" = "0" ]

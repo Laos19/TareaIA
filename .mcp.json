@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "tareia": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["integrations/mcp/dist/index.js"],
+      "env": {
+        "TAREIA_API_URL": "${TAREIA_API_URL:-https://tareia-api.onrender.com}",
+        "TAREIA_EMAIL": "${TAREIA_EMAIL:-}",
+        "TAREIA_PASSWORD": "${TAREIA_PASSWORD:-}",
+        "TAREIA_TOKEN": "${TAREIA_TOKEN:-}"
+      }
+    }
+  }
+}

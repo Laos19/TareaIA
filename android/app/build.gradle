@@ -46,6 +46,27 @@ android {
 
 // Las pruebas de mutación (Pitest) del dominio se ejecutan en android/verificacion-jvm (JVM pura).
 
+// Documentación de cada clase, método y propiedad: ./gradlew -Pdocs :app:dokkaGeneratePublicationHtml
+if (project.hasProperty('docs')) {
+    apply plugin: 'org.jetbrains.dokka'
+    dokka {
+        moduleName.set('TARE·IA — app Android')
+        dokkaSourceSets.configureEach {
+            includes.from('../../docs/api/README-dokka.md')
+            documentedVisibilities.set([
+                org.jetbrains.dokka.gradle.engine.parameters.VisibilityModifier.Public,
+                org.jetbrains.dokka.gradle.engine.parameters.VisibilityModifier.Internal,
+                org.jetbrains.dokka.gradle.engine.parameters.VisibilityModifier.Protected,
+            ])
+            sourceLink {
+                localDirectory.set(file('src/main/java'))
+                remoteUrl('https://github.com/Laos19/TareaIA/blob/main/android/app/src/main/java')
+                remoteLineSuffix.set('#L')
+            }
+        }
+    }
+}
+
 
 dependencies {
     implementation 'androidx.core:core-ktx:1.15.0'

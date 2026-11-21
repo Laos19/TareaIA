@@ -21,7 +21,8 @@
     "docs:diagrams": "node scripts/docs/build-diagrams.mjs",
     "docs:api": "typedoc",
     "dev:api": "npm run dev -w backend",
-    "dev:dashboard": "npm run dev -w dashboard"
+    "dev:dashboard": "npm run dev -w dashboard",
+    "docs:diccionario": "node scripts/docs/build-diccionario.mjs"
   },
   "repository": {
     "type": "git",
@@ -32,6 +33,7 @@
   },
   "devDependencies": {
     "typedoc": "^0.28.20",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "pg": "^8.23.1"
   }
 }

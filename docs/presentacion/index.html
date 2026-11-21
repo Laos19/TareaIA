@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TARE·IA · Exposición</title>
+  <meta name="description" content="Exposición del proyecto TARE·IA · SI-784 Calidad y Pruebas de Software · UPT · Adriana Rafaela Laos González y Antony Piero Solorzano Zegarra">
+  <!-- reveal.js 5.1.0 servido desde la copia local de vendor/: la exposición funciona sin internet -->
+  <link rel="stylesheet" href="vendor/reveal.js-5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="vendor/reveal.js-5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- 1 · PORTADA -->
+<section id="portada" class="portada" data-background-color="#1F2A44">
+  <div class="fondo-tinta">
+    <p class="eyebrow" style="color:#C9CDD6; font-size:13pt;">Universidad Privada de Tacna · Facultad de Ingeniería · EPIS<br>SI-784 Calidad y Pruebas de Software · Proyecto de Unidad II</p>
+    <div style="display:flex; align-items:center; gap:30px; margin-top:44px;">
+      <div class="logo" aria-hidden="true"><p class="z">27</p><p class="s">T<span class="punto">·</span></p><p class="n">TARE·IA</p></div>
+      <h1 style="margin:0;">TARE<span class="punto">·</span>IA</h1>
+    </div>
+    <p style="font-size:22pt; max-width:700px; line-height:1.3; margin-top:26px;">Asistente académico Android que convierte apuntes, PDF y tareas del aula virtual en actividades con fecha, planes de estudio y recordatorios.</p>
+    <p style="font-size:16pt; margin-top:36px; margin-bottom:4px;"><strong>Adriana Rafaela Laos González</strong> <span class="suave">· 2023077474</span></p>
+    <p style="font-size:16pt;"><strong>Antony Piero Solorzano Zegarra</strong> <span class="suave">· 2023078696</span></p>
+    <p class="suave" style="font-size:15pt; margin-top:14px;">Docente: Ing. Patrick Cuadros Quiroga · Tacna, noviembre de 2026</p>
+    <div class="tablero" aria-hidden="true">
+      <div class="t" style="--f:var(--alc);--ft:var(--alc-t)"><p class="z">1</p><p class="s">Pr</p><p class="n">problema</p></div>
+      <div class="t vacia"></div>
+      <div class="t" style="--f:var(--tra);--ft:var(--tra-t)"><p class="z">5</p><p class="s">Ar</p><p class="n">arquitectura</p></div>
+      <div class="t" style="--f:var(--met);--ft:var(--met-t)"><p class="z">9</p><p class="s">Pu</p><p class="n">pruebas</p></div>
+      <div class="t" style="--f:var(--hal);--ft:var(--hal-t)"><p class="z">10</p><p class="s">Sq</p><p class="n">estático</p></div>
+      <div class="t vacia"></div>
+      <div class="t vacia"></div>
+      <div class="t" style="--f:var(--gas);--ft:var(--gas-t)"><p class="z">11</p><p class="s">Tf</p><p class="n">terraform</p></div>
+      <div class="t" style="--f:var(--resaltador);--ft:var(--sobre-resaltador)"><p class="z">15</p><p class="s">Ia</p><p class="n">reto</p></div>
+    </div>
+  </div>
+  <aside class="notes">
+    (≈60 s) Buenos días, profesor Cuadros y compañeros. Somos Adriana Laos y Antony Solorzano, y presentamos TARE·IA, nuestro proyecto de la Unidad II de Calidad y Pruebas de Software.
+    TARE·IA es una app Android que ayuda al estudiante a no perder tareas. Le das una foto de tus apuntes, un PDF o las tareas del aula virtual, y la app las convierte en actividades con fecha, arma un plan de estudio y las manda a tu Google Calendar.
+    Pero en este curso lo importante no es solo la app: es cómo comprobamos que funciona. Por eso la mayor parte de la exposición trata de pruebas, análisis estático, infraestructura y automatización.
+    El diseño que ven es la identidad de la app: un tablero con forma de tabla periódica. Cada diapositiva tiene su celda arriba a la derecha y, abajo a la izquierda, el criterio de la rúbrica que cubre. Así puede seguir la evaluación punto por punto.
+  </aside>
+</section>
+
+<!-- 2 · PROBLEMA -->
+<section id="problema">
+  <div class="celda" style="--f:var(--alc);--ft:var(--alc-t)"><p class="z">2</p><p class="s">Pr</p><p class="n">problema</p></div>
+  <p class="eyebrow">El problema</p>
+  <h2>Las tareas están en todas partes, menos en tu calendario</h2>
+  <div class="grid3" style="margin-top:28px;">
+    <div class="card">
+      <p class="cifra" style="color:var(--lacre);">1</p>
+      <h3>Información dispersa</h3>
+      <p class="chico">Aula virtual (Moodle), grupos de mensajería, PDF del sílabo y fotos de la pizarra.</p>
+    </div>
+    <div class="card">
+      <p class="cifra" style="color:var(--lacre);">2</p>
+      <h3>Copia manual de fechas</h3>
+      <p class="chico">Pasar cada fecha al calendario a mano produce errores, duplicados y olvidos.</p>
+    </div>
+    <div class="card">
+      <p class="cifra" style="color:var(--lacre);">3</p>
+      <h3>Planificar cuesta</h3>
+      <p class="chico">Sin un plan de estudio, el cambio constante de tarea cansa y lleva a postergar.</p>
+    </div>
+  </div>
+  <div class="card ia" style="margin-top:26px;">
+    <p class="grande" style="margin:0;">¿Y si la IA lee las tareas por ti… <span class="res">pero tú confirmas</span> antes de que algo llegue a tu calendario?</p>
+  </div>
+  <p class="mini suave" style="margin-top:14px;">Base: FD02 Documento de Visión, §2.2 «Definición del problema».</p>
+  <p class="criterio"><b>Rúbrica</b> · Problemática detallada con fuentes</p>
+  <aside class="notes">
+    (≈75 s) El problema. Un estudiante de la UPT recibe tareas por muchos lados: el aula virtual, que es Moodle; el grupo de WhatsApp del curso; el sílabo en PDF; una foto de la pizarra. Nada de eso llega solo a su calendario.
+    Entonces tiene que copiar las fechas a mano. Ahí aparecen los errores: una fecha mal escrita, la misma tarea registrada dos veces o, lo peor, una tarea olvidada.
+    Y aunque tenga todo anotado, falta el plan: cuándo estudio para cada cosa. Cambiar todo el tiempo de una tarea a otra cansa y termina en postergar.
+    Nuestra propuesta: que la inteligencia artificial lea las tareas por el estudiante, pero que nada llegue al calendario sin que él lo confirme. Esa idea, «la IA propone, la persona decide», es una regla de negocio que van a ver repetida en la app, en la API y en la base de datos.
+    [COMPLETAR CON FUENTES: agregar 2 o 3 datos con cita APA (por ejemplo, estudios sobre procrastinación académica o uso de aulas virtuales en universidades peruanas) cuando esté listo docs/investigacion/problema-y-objetivos.md. No decir cifras sin fuente.]
+  </aside>
+</section>
+
+<!-- 3 · OBJETIVOS -->
+<section id="objetivos">
+  <div class="celda" style="--f:var(--alc);--ft:var(--alc-t)"><p class="z">3</p><p class="s">Ob</p><p class="n">objetivos</p></div>
+  <p class="eyebrow">Objetivos SMART · semestre 2026-II</p>
+  <h2>Cada objetivo tiene un indicador y una forma de medirlo</h2>
+  <table style="margin-top:14px;">
+    <thead><tr><th>Objetivo</th><th>Indicador</th><th>Meta</th><th>Resultado</th></tr></thead>
+    <tbody>
+      <tr><td>Validación humana</td><td>Actividades de IA o Moodle que llegan a Calendar sin validar</td><td>0</td><td style="color:var(--exito); font-weight:700;">0 · HU-03 + trigger</td></tr>
+      <tr><td>Sin duplicados</td><td>Actividades repetidas (título + curso + fecha)</td><td>0</td><td style="color:var(--exito); font-weight:700;">0 · HU-02</td></tr>
+      <tr><td>Calidad de pruebas</td><td>Mutantes eliminados: API · dominio Kotlin</td><td>≥ 60 % · ≥ 50 %</td><td style="color:var(--exito); font-weight:700;">93,8 % · 68,4 %</td></tr>
+      <tr><td>Costo</td><td>Gasto mensual de infraestructura</td><td>USD 0</td><td style="color:var(--exito); font-weight:700;">USD 0</td></tr>
+      <tr><td>Uso real</td><td>Sesiones por semana y % de actividades creadas por IA o Moodle</td><td>medir en piloto</td><td style="color:var(--ambar); font-weight:700;">instrumentado</td></tr>
+    </tbody>
+  </table>
+  <p class="criterio"><b>Rúbrica</b> · Objetivos de investigación y de solución medibles</p>
+  <aside class="notes">
+    (≈80 s) Nuestros objetivos son medibles: cada uno tiene indicador, meta y un instrumento que lo mide.
+    Uno: validación humana. Ninguna actividad que venga de la IA o de Moodle puede llegar a Google Calendar sin que el estudiante la confirme. Lo comprueba la historia de usuario HU-03 en Cucumber y, además, un trigger en la base de datos que rechaza ese salto.
+    Dos: cero duplicados, con la misma tarea normalizada por título, curso y fecha. Lo prueba la HU-02.
+    Tres: calidad de las pruebas. No basta con tener pruebas; medimos con pruebas de mutación si detectan errores. La meta era 60 % en la API y 50 % en el dominio Kotlin; logramos 93,8 y 68,4 %.
+    Cuatro: costo cero, que cumplimos con capas gratuitas.
+    Y cinco, el uso real. Aquí soy honesta: la telemetría y el dashboard ya están listos para medirlo, pero el piloto con estudiantes todavía no se hizo, por eso aparece en ámbar como «instrumentado».
+    [Ajustar los códigos OS/OI a los del FD01 final.]
+  </aside>
+</section>
+
+<!-- 4 · LA APP -->
+<section id="app">
+  <div class="celda" style="--f:var(--tra);--ft:var(--tra-t)"><p class="z">4</p><p class="s">Ap</p><p class="n">la app</p></div>
+  <p class="eyebrow">La solución</p>
+  <h2>Del apunte a una actividad con fecha, <span class="res">validada por ti</span></h2>
+  <div style="display:grid; grid-template-columns:repeat(3, 1fr) 1.15fr; gap:22px; margin-top:6px; align-items:start;">
+    <div><img class="captura" src="img/app-fase2-inicio-cinta-tabla.png" alt="Pantalla de inicio: cinta de los próximos 14 días y tabla de cursos con forma de tabla periódica" style="height:392px;"><p class="pie">Inicio: próximos 14 días</p></div>
+    <div><img class="captura" src="img/app-fase2-sello-ia.png" alt="Actividad sugerida por la IA con el sello IA · Por validar" style="height:392px;"><p class="pie">Lo de la IA trae sello</p></div>
+    <div><img class="captura" src="img/app-tareas-oscuro.png" alt="Lista de actividades en modo oscuro" style="height:392px;"><p class="pie">Modo oscuro y letra al 180 %</p></div>
+    <div>
+      <ol style="margin-top:8px;">
+        <li class="chico"><strong>Entra</strong> una foto, PDF, texto o tarea de Moodle</li>
+        <li class="chico"><strong>La IA propone</strong> título, curso y fecha <span class="sello">IA</span></li>
+        <li class="chico"><strong>Tú validas</strong> o corriges</li>
+        <li class="chico"><strong>Se planifica</strong> y va a Google Calendar</li>
+      </ol>
+      <p class="mini suave" style="margin-top:14px;">Kotlin 2.3 · Jetpack Compose · Material 3 · Android 9+</p>
+    </div>
+  </div>
+  <p class="criterio"><b>Rúbrica</b> · Código fuente en GitHub · Presentación</p>
+  <aside class="notes">
+    (≈75 s) Esta es la app. Es Android nativa, hecha en Kotlin con Jetpack Compose.
+    A la izquierda, la pantalla de inicio: arriba una cinta con los próximos 14 días, con un punto por cada entrega y su urgencia; abajo, la tabla de cursos. Cada curso es un elemento de la tabla periódica, con su número y su símbolo.
+    Al centro, lo más importante: cuando la IA sugiere una actividad, llega con este sello verde «IA · Por validar». Ese color, el sello, está reservado solo para lo que propone la IA.
+    A la derecha, el modo oscuro. También probamos la letra al 180 % para personas con baja visión.
+    El flujo es de cuatro pasos: entra el material, la IA propone, tú validas y recién ahí se planifica y se envía a Google Calendar.
+    En la demo lo van a ver funcionando.
+  </aside>
+</section>
+
+<!-- 5 · ARQUITECTURA -->
+<section id="arquitectura">
+  <div class="celda" style="--f:var(--tra);--ft:var(--tra-t)"><p class="z">5</p><p class="s">Ar</p><p class="n">arquitectura</p></div>
+  <p class="eyebrow">Arquitectura por capas</p>
+  <h2>Tres piezas, cada una con capas separadas</h2>
+  <div style="display:grid; grid-template-columns:1.1fr auto 1fr auto 1fr; gap:10px; margin-top:12px; align-items:stretch;">
+    <div class="col-arq">
+      <h3>App Android</h3>
+      <div class="capa" style="--f:var(--tra);--ft:var(--tra-t)"><b>ui/</b> pantallas Compose</div>
+      <div class="capa" style="--f:var(--met);--ft:var(--met-t)"><b>aplicacion/</b> gestores (casos de uso)</div>
+      <div class="capa" style="--f:var(--nom);--ft:var(--nom-t)"><b>dominio/</b> entidades y reglas</div>
+      <div class="capa" style="--f:var(--hal);--ft:var(--hal-t)"><b>ia/ · infraestructura/ · remoto/</b></div>
+    </div>
+    <p style="align-self:center; font-size:26pt; color:var(--grafito); margin:0;">→</p>
+    <div class="col-arq">
+      <h3>API REST</h3>
+      <p class="mini suave" style="margin-bottom:8px;">Node 22 · Fastify 5 · TypeScript</p>
+      <div class="capa" style="--f:var(--tra);--ft:var(--tra-t)"><b>rutas</b> + JWT + Swagger</div>
+      <div class="capa" style="--f:var(--met);--ft:var(--met-t)"><b>servicios</b></div>
+      <div class="capa" style="--f:var(--nom);--ft:var(--nom-t)"><b>repositorios</b></div>
+    </div>
+    <p style="align-self:center; font-size:26pt; color:var(--grafito); margin:0;">→</p>
+    <div class="col-arq">
+      <h3>Datos y uso</h3>
+      <div class="capa" style="--f:var(--gas);--ft:var(--gas-t)"><b>PostgreSQL 16</b> en Neon</div>
+      <div class="capa" style="--f:var(--gas);--ft:var(--gas-t)"><b>Liquibase</b> versiona el esquema</div>
+      <div class="capa" style="--f:var(--lan);--ft:var(--lan-t)"><b>Dashboard</b> React + Vite</div>
+      <div class="capa" style="--f:var(--alct);--ft:var(--alct-t)"><b>Servidor MCP</b></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px; padding:12px 20px;">
+    <p class="chico" style="margin:0;"><strong>Servicios externos:</strong> Firebase Authentication · Gemini (Firebase AI Logic) · Google Calendar · Moodle UPT · ML Kit OCR (en el teléfono)</p>
+  </div>
+  <p class="criterio"><b>Rúbrica</b> · FD04 · README con diagrama de componentes y despliegue</p>
+  <aside class="notes">
+    (≈80 s) La arquitectura tiene tres piezas.
+    Primero la app Android, separada en capas: la interfaz en Compose; la capa de aplicación con los gestores, que son los casos de uso; el dominio, con las entidades y las reglas de negocio, que no depende de Android; y abajo la infraestructura: la base local cifrada, la IA y la conexión remota. La inyección de dependencias es manual, en una clase Dependencias, sin frameworks.
+    Segundo, la API REST en Node con Fastify y TypeScript. También en capas: rutas, servicios y repositorios. Tiene autenticación con JWT y documentación Swagger.
+    Tercero, los datos: PostgreSQL 16 en Neon, con el esquema versionado por Liquibase. De ahí leen el dashboard de uso, hecho en React, y el servidor MCP del reto.
+    Abajo, los servicios externos: Firebase para el inicio de sesión con Google, Gemini para la IA, Google Calendar, Moodle de la UPT y el OCR de ML Kit, que corre dentro del teléfono.
+    Los diagramas de componentes y despliegue están en el README y se generan solos.
+  </aside>
+</section>
+
+<!-- 6 · PATRONES -->
+<section id="patrones">
+  <div class="celda" style="--f:var(--tra);--ft:var(--tra-t)"><p class="z">6</p><p class="s">Pa</p><p class="n">patrones</p></div>
+  <p class="eyebrow">Patrones de diseño</p>
+  <h2>Nueve patrones, cada uno resuelve un problema real</h2>
+  <div class="tabla-periodica" style="grid-template-columns:repeat(5, 1fr); margin-top:6px;">
+    <div class="el" style="--f:var(--met);--ft:var(--met-t)"><p class="z">C1</p><p class="s">Bu</p><p class="n">Builder</p><p class="d">Manual con fecha nace Confirmada; IA nace por validar</p></div>
+    <div class="el" style="--f:var(--met);--ft:var(--met-t)"><p class="z">C2</p><p class="s">Pr</p><p class="n">Prototype</p><p class="d">Clona el plan como propuesta antes de confirmar</p></div>
+    <div class="el" style="--f:var(--met);--ft:var(--met-t)"><p class="z">C3</p><p class="s">Af</p><p class="n">Abstract Factory</p><p class="d">Gemini u otro proveedor de IA</p></div>
+    <div class="el" style="--f:var(--met);--ft:var(--met-t)"><p class="z">C4</p><p class="s">Si</p><p class="n">Singleton</p><p class="d">Una sola base local cifrada</p></div>
+    <div class="el" style="--f:var(--tra);--ft:var(--tra-t)"><p class="z">E1</p><p class="s">Fa</p><p class="n">Facade</p><p class="d">«Nube» oculta API, sesión y colas</p></div>
+    <div class="el" style="--f:var(--hal);--ft:var(--hal-t)"><p class="z">B1</p><p class="s">St</p><p class="n">State</p><p class="d">Pendiente → Confirmada → Sincronizada → Completada</p></div>
+    <div class="el" style="--f:var(--hal);--ft:var(--hal-t)"><p class="z">B2</p><p class="s">Sg</p><p class="n">Strategy</p><p class="d">Plan con IA; si falla, plan local por prioridad</p></div>
+    <div class="el" style="--f:var(--hal);--ft:var(--hal-t)"><p class="z">B3</p><p class="s">Ob</p><p class="n">Observer</p><p class="d">Cada evento de uso avisa a la telemetría</p></div>
+    <div class="el" style="--f:var(--nom);--ft:var(--nom-t)"><p class="z">A1</p><p class="s">Re</p><p class="n">Repository</p><p class="d">Interfaz en dominio, implementación local o remota</p></div>
+    <div style="align-self:center;">
+      <p class="mini" style="margin-bottom:6px;"><span class="tag" style="background:var(--met);color:var(--met-t);border-color:var(--met-t)">creacional</span></p>
+      <p class="mini" style="margin-bottom:6px;"><span class="tag" style="background:var(--tra);color:var(--tra-t);border-color:var(--tra-t)">estructural</span></p>
+      <p class="mini" style="margin-bottom:6px;"><span class="tag" style="background:var(--hal);color:var(--hal-t);border-color:var(--hal-t)">comportamiento</span></p>
+      <p class="mini" style="margin:0;"><span class="tag" style="background:var(--nom);color:var(--nom-t);border-color:var(--nom-t)">arquitectura</span></p>
+    </div>
+  </div>
+  <p class="criterio"><b>Rúbrica</b> · FD04 · Diagrama de clases en el README</p>
+  <aside class="notes">
+    (≈90 s) Usamos nueve patrones, y cada uno resuelve algo concreto. Los agrupamos como familias de la tabla periódica, por color.
+    Creacionales, en verde. Builder: una actividad creada a mano con fecha nace Confirmada; una que viene de la IA o de Moodle nace Pendiente de validar. Esa es la regla RN09. Prototype: el plan de estudio se clona como propuesta; si el estudiante la confirma, el plan anterior queda como Reemplazado y no se pierde. Abstract Factory: fabrica los servicios de IA, con Gemini o con otro proveedor compatible. Singleton: hay una sola base de datos local cifrada.
+    Estructural, en azul: Facade. La clase Nube esconde la API, la sesión y las colas de envío detrás de una interfaz simple.
+    De comportamiento, en lila. State: la actividad pasa de Pendiente de validar a Confirmada, Sincronizada y Completada, y no puede saltarse pasos. Strategy: planifica con IA, y si la IA falla cambia en ejecución a una planificación local por prioridad. Observer: cada evento de uso avisa al observador de telemetría.
+    Y Repository, de arquitectura: las interfaces viven en el dominio y la implementación puede ser local o remota.
+    Todos tienen pruebas en PatronesTest.
+  </aside>
+</section>
+
+<!-- 7 · BASE DE DATOS Y NUBE -->
+<section id="bd">
+  <div class="celda" style="--f:var(--gas);--ft:var(--gas-t)"><p class="z">7</p><p class="s">Bd</p><p class="n">base de datos</p></div>
+  <p class="eyebrow">Base de datos y nube</p>
+  <h2>Las reglas importantes también viven en PostgreSQL</h2>
+  <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:14px; margin-top:10px;">
+    <div class="card" style="text-align:center; padding:12px;"><p class="cifra">11</p><p class="chico" style="margin:0;">tablas</p></div>
+    <div class="card" style="text-align:center; padding:12px;"><p class="cifra">6</p><p class="chico" style="margin:0;">vistas</p></div>
+    <div class="card" style="text-align:center; padding:12px;"><p class="cifra">7</p><p class="chico" style="margin:0;">funciones</p></div>
+    <div class="card" style="text-align:center; padding:12px;"><p class="cifra">7</p><p class="chico" style="margin:0;">triggers</p></div>
+    <div class="card" style="text-align:center; padding:12px;"><p class="cifra">11</p><p class="chico" style="margin:0;">changesets</p></div>
+  </div>
+  <div class="card" style="margin-top:18px;">
+    <h3>El patrón State, repetido en un trigger</h3>
+    <div class="estados" style="margin:8px 0 10px 0;">
+      <span class="estado ia">Pendiente de validar</span><span class="f">→</span>
+      <span class="estado">Confirmada</span><span class="f">→</span>
+      <span class="estado">Sincronizada</span><span class="f">→</span>
+      <span class="estado">Completada</span>
+    </div>
+    <p class="chico" style="margin:0;"><code>fn_actividad_transicion</code> rechaza los saltos inválidos, aunque alguien escriba directo en la BD.</p>
+  </div>
+  <div class="grid2" style="margin-top:16px;">
+    <p class="chico" style="margin:0;"><strong>Liquibase:</strong> cada cambio en SQL con su <em>rollback</em>; se aplica solo en producción al publicar.</p>
+    <p class="chico" style="margin:0;"><strong>Vistas para el dashboard:</strong> <code>mv_uso_diario</code> (materializada), uso por función y por pantalla.</p>
+  </div>
+  <p class="criterio"><b>Rúbrica</b> · Código fuente y BD en GitHub · Diccionario de datos y ER</p>
+  <aside class="notes">
+    (≈80 s) La base de datos es PostgreSQL 16, alojada en Neon. Tiene 11 tablas, 6 vistas, 7 funciones y 7 triggers, y el esquema se construye con 11 changesets de Liquibase.
+    La decisión más importante: las reglas críticas no viven solo en la app. El patrón State que vieron en Kotlin está repetido en un trigger. Si alguien intenta pasar una actividad de Pendiente de validar directo a Sincronizada, aunque sea escribiendo SQL a mano, la función fn_actividad_transicion lo rechaza. Así cumplimos la regla RN01: nada va a Calendar sin validar.
+    Otro trigger, fn_registrar_historial, guarda el antes y el después de cada cambio; lo vemos en requisitos no funcionales.
+    Liquibase: cada changeset es un archivo SQL con su rollback, y se aplica automáticamente en producción cuando publicamos una versión.
+    Y las vistas alimentan el dashboard; la de uso diario es materializada, para que el tablero cargue rápido.
+    El diccionario de datos y el diagrama entidad-relación se generan solos desde la base real.
+  </aside>
+</section>
+
+<!-- 8 · REQUISITOS NO FUNCIONALES -->
+<section id="rnf">
+  <div class="celda" style="--f:var(--gas);--ft:var(--gas-t)"><p class="z">8</p><p class="s">Nf</p><p class="n">no funcionales</p></div>
+  <p class="eyebrow">Requisitos no funcionales</p>
+  <h2>Sesiones, historial, caché, logs y telemetría</h2>
+  <table style="margin-top:10px;">
+    <thead><tr><th>Requisito</th><th>Cómo lo hicimos</th><th>Dónde se ve</th></tr></thead>
+    <tbody>
+      <tr><td>Sesiones</td><td>Token de Google → JWT de 7 días; fila en <code>sesion</code>; se cierra al salir o tras 30 min sin uso</td><td>HU-01 · tabla <code>sesion</code></td></tr>
+      <tr><td>Historial</td><td>Trigger guarda el antes y el después (JSONB) de cada cambio</td><td><code>/actividades/{id}/historial</code></td></tr>
+      <tr><td>Caché</td><td>Caché con TTL del dashboard, vista materializada y caché HTTP de 5 MB en la app</td><td>cabecera <code>x-cache</code> · <code>/api/health</code></td></tr>
+      <tr><td>Logs</td><td>JSON estructurado (pino) sin contraseñas ni tokens; la app sube sus errores enmascarados</td><td>tabla <code>log_cliente</code></td></tr>
+      <tr><td>Telemetría</td><td>Eventos de uso en lotes de 20, sin datos personales</td><td>dashboard de uso</td></tr>
+    </tbody>
+  </table>
+  <p class="criterio"><b>Rúbrica</b> · Aspectos no funcionales (semanas 2–6)</p>
+  <aside class="notes">
+    (≈90 s) La rúbrica pide cinco aspectos no funcionales. Los resumimos en esta tabla.
+    Sesiones: al entrar con Google, la app cambia el token de Firebase por un JWT de nuestra API, válido 7 días. Cada inicio abre una fila en la tabla sesion, con el origen, el dispositivo y la versión. Se cierra al salir o después de 30 minutos sin actividad. En el teléfono, el token se guarda cifrado con el Android Keystore.
+    Historial: un trigger guarda el estado anterior y el nuevo, en JSON, de cada alta, cambio o borrado. Se consulta en el endpoint de historial de cada actividad.
+    Caché: el dashboard usa una caché en memoria con tiempo de vida; la respuesta trae la cabecera x-cache con HIT o MISS, y el endpoint de salud muestra aciertos y fallos. Además, la vista materializada y una caché HTTP de 5 megas en la app.
+    Logs: en formato JSON, ocultando contraseñas y tokens. La app sube sus advertencias y errores con los correos enmascarados.
+    Telemetría: la app junta eventos de uso en una cola y los envía en lotes de 20, sin datos personales. Con eso se alimenta el dashboard.
+  </aside>
+</section>
+
+<!-- 9 · PRUEBAS -->
+<section id="pruebas">
+  <div class="celda" style="--f:var(--met);--ft:var(--met-t)"><p class="z">9</p><p class="s">Pu</p><p class="n">pruebas</p></div>
+  <p class="eyebrow">Pirámide de pruebas · resultados reales</p>
+  <h2>Todo en verde, y las pruebas encontraron 3 defectos</h2>
+  <div style="display:grid; grid-template-columns:1.25fr 1fr; gap:28px; margin-top:8px;">
+    <div class="piramide">
+      <div class="nivel" style="width:46%; background:var(--lan); color:var(--lan-t);"><p><b>Aceptación</b><br>18 escenarios Cucumber</p></div>
+      <div class="nivel" style="width:62%; background:var(--hal); color:var(--hal-t);"><p><b>Interfaz</b> · 16 Playwright + 14 Compose</p></div>
+      <div class="nivel" style="width:74%; background:var(--tra); color:var(--tra-t);"><p><b>Sistema</b> · 11 con servidor HTTP real</p></div>
+      <div class="nivel" style="width:86%; background:var(--gas); color:var(--gas-t);"><p><b>Integración</b> · 22 con PostgreSQL real</p></div>
+      <div class="nivel" style="width:100%; background:var(--met); color:var(--met-t);"><p><b>Unitarias</b> · 66 Vitest + 35 JVM Kotlin</p></div>
+      <div class="nivel" style="width:100%; background:var(--resaltador); color:var(--sobre-resaltador);"><p><b>Mutación</b> · Stryker 93,8 % · Pitest 68,4 %</p></div>
+    </div>
+    <div>
+      <div class="card alerta" style="padding:10px 16px; margin-bottom:10px;"><p class="chico" style="margin:0;"><strong>1.</strong> El historial fallaba al borrar un usuario en cascada.</p></div>
+      <div class="card alerta" style="padding:10px 16px; margin-bottom:10px;"><p class="chico" style="margin:0;"><strong>2.</strong> Un correo con mayúsculas o cambiado chocaba con el mismo usuario de Google.</p></div>
+      <div class="card alerta" style="padding:10px 16px; margin-bottom:10px;"><p class="chico" style="margin:0;"><strong>3.</strong> Los duplicados no se detectaban si había espacios repetidos.</p></div>
+      <p class="mini suave">API: 66 + 22 + 11 = <strong>99 pruebas</strong>. Cada defecto quedó con su prueba de regresión.</p>
+    </div>
+  </div>
+  <p class="criterio"><b>Rúbrica</b> · Pruebas unitarias, mutación, integración, sistema, UI y aceptación + reportes</p>
+  <aside class="notes">
+    (≈90 s) Esta es la pirámide de pruebas, con números reales.
+    En la base, 66 pruebas unitarias de la API con Vitest y 35 pruebas JVM del dominio Kotlin. Encima, 22 de integración contra un PostgreSQL real, no simulado, y 11 de sistema que levantan el servidor HTTP y revisan CORS, cabeceras de seguridad, límite de peticiones y Swagger. En total, 99 pruebas de la API.
+    Interfaz: 8 pruebas de Playwright en dos dispositivos, escritorio y un Pixel 7, que dan 16; y 14 pruebas de Compose en el emulador. Arriba, aceptación: 18 escenarios en Cucumber, escritos en español, sobre 5 historias de usuario.
+    Y debajo de todo, la mutación: Stryker cambia el código de la API a propósito y nuestras pruebas detectaron el 93,8 % de esos cambios. Pitest, en el dominio Kotlin, el 68,4 %.
+    Lo más valioso: las pruebas encontraron tres defectos reales. El historial fallaba al borrar un usuario en cascada; un correo con mayúsculas chocaba con el mismo usuario de Google; y los duplicados no se detectaban si el título tenía espacios repetidos. Los tres se corrigieron y quedaron con su prueba.
+  </aside>
+</section>
+
+<!-- 10 · ANÁLISIS ESTÁTICO -->
+<section id="estatico">
+  <div class="celda" style="--f:var(--hal);--ft:var(--hal-t)"><p class="z">10</p><p class="s">Sq</p><p class="n">estático</p></div>
+  <p class="eyebrow">Análisis estático automatizado</p>
+  <h2>Tres herramientas, tres miradas distintas</h2>
+  <div class="grid3" style="margin-top:14px;">
+    <div class="card">
+      <h3>SonarQube Cloud</h3>
+      <p class="chico"><strong>Revisa:</strong> bugs, vulnerabilidades, <em>security hotspots</em>, código duplicado y cobertura.</p>
+      <p class="chico" style="margin:0;"><strong>Reporte:</strong> <em>quality gate</em> en cada PR y panel en SonarCloud.</p>
+    </div>
+    <div class="card">
+      <h3>Semgrep</h3>
+      <p class="chico"><strong>Revisa:</strong> patrones inseguros en Kotlin, TypeScript, React, Terraform, inyección SQL y secretos.</p>
+      <p class="chico" style="margin:0;"><strong>Reporte:</strong> SARIF en GitHub Code Scanning.</p>
+    </div>
+    <div class="card">
+      <h3>Snyk</h3>
+      <p class="chico"><strong>Revisa:</strong> librerías vulnerables de npm y Gradle, el código propio (Snyk Code) e IaC.</p>
+      <p class="chico" style="margin:0;"><strong>Reporte:</strong> SARIF en Code Scanning y resumen del job.</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:20px; padding:12px 20px;">
+    <p class="chico" style="margin:0;">Corren en <strong>cada push y pull request</strong> a <code>main</code>: <code>sonarqube.yml</code> · <code>semgrep.yml</code> · <code>snyk.yml</code></p>
+  </div>
+  <p class="criterio"><b>Rúbrica</b> · SonarQube (bugs, vulnerabilidades, hotspots) · Semgrep + Snyk con reporte</p>
+  <aside class="notes">
+    (≈75 s) El análisis estático revisa el código sin ejecutarlo. Usamos tres herramientas porque miran cosas diferentes.
+    SonarQube Cloud mide la calidad general: bugs, vulnerabilidades, los security hotspots, que son partes del código que una persona debe revisar, código duplicado y cobertura de pruebas. Su reporte es el quality gate: si no se cumple, el pull request queda marcado.
+    Semgrep busca patrones inseguros con reglas: para Kotlin, TypeScript, React, Node, Terraform, inyección SQL y secretos olvidados en el código. Su reporte sale en formato SARIF y aparece en la pestaña de seguridad de GitHub, Code Scanning.
+    Snyk se enfoca en las dependencias: avisa si alguna librería de npm o de Gradle tiene una vulnerabilidad conocida. También revisa nuestro código y la infraestructura como código.
+    Las tres corren solas en cada push y pull request. [Mostrar en vivo la pestaña Security del repositorio y el panel de SonarCloud con los números del día; no decir cifras de memoria.]
+  </aside>
+</section>
+
+<!-- 11 · TERRAFORM Y COSTOS -->
+<section id="terraform">
+  <div class="celda" style="--f:var(--gas);--ft:var(--gas-t)"><p class="z">11</p><p class="s">Tf</p><p class="n">terraform</p></div>
+  <p class="eyebrow">Infraestructura como código</p>
+  <h2>La nube se crea con Terraform y cuesta <span class="res">USD 0</span></h2>
+  <div style="display:grid; grid-template-columns:1.15fr 1fr; gap:26px; margin-top:12px;">
+    <div>
+      <div class="capa" style="--f:var(--gas);--ft:var(--gas-t)"><b>Neon</b> · PostgreSQL 16</div>
+      <div class="capa" style="--f:var(--tra);--ft:var(--tra-t)"><b>Render</b> · API (web service) + dashboard (sitio estático)</div>
+      <div class="capa" style="--f:var(--hal);--ft:var(--hal-t)"><b>HCP Terraform</b> · guarda el estado</div>
+      <h3 style="margin-top:18px;">Pruebas de la infraestructura</h3>
+      <p class="chico">fmt → validate → tflint → <strong>terraform test</strong> con proveedores simulados → checkov → plan / apply</p>
+    </div>
+    <div class="card">
+      <h3>Reporte de costos (USD/mes)</h3>
+      <table>
+        <tbody>
+          <tr><td>Producción actual</td><td style="text-align:right; font-weight:700; color:var(--exito);">0,00</td></tr>
+          <tr><td>Referencia AWS</td><td style="text-align:right;">≈ 38</td></tr>
+          <tr><td>Referencia Azure</td><td style="text-align:right;">≈ 38</td></tr>
+        </tbody>
+      </table>
+      <p class="mini suave" style="margin:10px 0 0 0;">Capas gratuitas: 0,5 GB de BD; la API duerme tras 15 min sin tráfico. Referencias calculadas con Infracost.</p>
+    </div>
+  </div>
+  <p class="criterio"><b>Rúbrica</b> · Terraform con reporte de tests y de costos</p>
+  <aside class="notes">
+    (≈80 s) Toda la nube se crea con Terraform, nada se configura a mano.
+    Tenemos dos módulos: uno para la base de datos en Neon y otro para Render, donde viven la API y el dashboard. El estado de Terraform se guarda en HCP Terraform.
+    La infraestructura también se prueba. En cada pull request corren formato, validación, tflint, y terraform test con proveedores simulados, que comprueba las salidas sin crear nada real. Luego checkov revisa seguridad, y recién en main se hace el plan y el apply.
+    El reporte de costos: hoy pagamos cero dólares al mes, porque usamos capas gratuitas. Tiene límites, y los decimos: medio giga de base de datos, y la API se duerme después de 15 minutos sin uso, así que la primera petición tarda.
+    Para comparar, calculamos con Infracost una arquitectura equivalente en AWS y en Azure: unos 38 dólares al mes cada una. Así el equipo sabe cuánto costaría crecer.
+  </aside>
+</section>
+
+<!-- 12 · RELEASE Y DESPLIEGUE -->
+<section id="release">
+  <div class="celda" style="--f:var(--alct);--ft:var(--alct-t)"><p class="z">12</p><p class="s">Rl</p><p class="n">release</p></div>
+  <p class="eyebrow">Release y despliegue</p>
+  <h2>Un merge a main termina en producción, solo</h2>
+  <div class="flujo" style="margin-top:22px;">
+    <div class="paso"><p class="t">1 · Commit</p><p>Convencional: feat, fix…</p></div><span class="flecha">→</span>
+    <div class="paso"><p class="t">2 · Versión</p><p>release-please y CHANGELOG</p></div><span class="flecha">→</span>
+    <div class="paso"><p class="t">3 · Artefactos</p><p>APK, API, dashboard y MCP</p></div><span class="flecha">→</span>
+    <div class="paso"><p class="t">4 · BD</p><p>Liquibase en producción</p></div><span class="flecha">→</span>
+    <div class="paso"><p class="t">5 · Deploy</p><p>Hooks de Render</p></div><span class="flecha">→</span>
+    <div class="paso" style="border-color:var(--exito);"><p class="t">6 · Smoke</p><p><code>/api/health</code> responde</p></div>
+  </div>
+  <div class="grid3" style="margin-top:28px;">
+    <div class="card"><h3>API</h3><p class="mini" style="margin:0;">tareia-api.onrender.com</p></div>
+    <div class="card"><h3>Swagger</h3><p class="mini" style="margin:0;">tareia-api.onrender.com/api/docs</p></div>
+    <div class="card"><h3>Dashboard</h3><p class="mini" style="margin:0;">tareia-dashboard.onrender.com</p></div>
+  </div>
+  <p class="criterio"><b>Rúbrica</b> · Release + despliegue · Contribuciones</p>
+  <aside class="notes">
+    (≈70 s) El despliegue está automatizado de punta a punta en release.yml.
+    Todo empieza con commits convencionales: feat para una función nueva, fix para una corrección. Con eso, release-please calcula la siguiente versión y escribe el CHANGELOG.
+    Al publicar la versión se generan los artefactos: el APK de Android, la API, el dashboard y el paquete del servidor MCP, y se adjuntan en GitHub Releases.
+    Después se aplican los cambios de Liquibase en la base de producción, se llaman los deploy hooks de Render y, al final, una prueba de humo consulta el endpoint de salud. Si no responde, el workflow falla y nos enteramos.
+    Abajo están las direcciones de producción: la API, su documentación Swagger y el dashboard. [Confirmar las URLs con terraform output antes de exponer.]
+    Los commits convencionales también sirven para ver las contribuciones de cada integrante en el historial.
+  </aside>
+</section>
+
+<!-- 13 · DOCUMENTACIÓN AUTOMÁTICA -->
+<section id="docs">
+  <div class="celda" style="--f:var(--alct);--ft:var(--alct-t)"><p class="z">13</p><p class="s">Dc</p><p class="n">documentación</p></div>
+  <p class="eyebrow">Documentación automática</p>
+  <h2>La documentación se genera desde el código</h2>
+  <div class="grid2" style="margin-top:16px;">
+    <div class="card">
+      <h3><code>docs.yml</code> · README</h3>
+      <ul class="chico">
+        <li>Diccionario de datos desde la BD real</li>
+        <li>Diagramas Mermaid: ER, clases, componentes y despliegue</li>
+        <li>El README se actualiza solo</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3><code>pages.yml</code> · GitHub Pages</h3>
+      <ul class="chico">
+        <li><strong>Dokka:</strong> cada clase, método y propiedad de Kotlin</li>
+        <li><strong>TypeDoc:</strong> la API y el dashboard en TypeScript</li>
+        <li>Reportes de pruebas, esta presentación y los PDF</li>
+      </ul>
+    </div>
+  </div>
+  <div class="card marca" style="margin-top:22px; padding:14px 22px;">
+    <p class="grande" style="margin:0;">laos19.github.io/TareaIA</p>
+  </div>
+  <p class="criterio"><b>Rúbrica</b> · README con diccionario, ER, clases, componentes y despliegue · GitHub Pages</p>
+  <aside class="notes">
+    (≈70 s) Si la documentación se escribe a mano, se desactualiza. Por eso la generamos desde el código.
+    El workflow docs.yml lee la base de datos real y produce el diccionario de datos; también genera los diagramas en Mermaid: entidad-relación, clases, componentes y despliegue. Con eso se actualiza el README, que es lo que pide la rúbrica.
+    El workflow pages.yml publica en GitHub Pages. Para Kotlin usamos Dokka, que documenta cada clase, método y propiedad de la app. Para TypeScript, TypeDoc, que documenta la API y el dashboard. Además se publican los reportes de pruebas, de mutación, esta presentación y los documentos en PDF.
+    Todo queda en esta dirección: laos19.github.io/TareaIA. Si gustan, al final la abrimos y buscamos cualquier clase.
+  </aside>
+</section>
+
+<!-- 14 · DASHBOARD -->
+<section id="dashboard">
+  <div class="celda" style="--f:var(--lan);--ft:var(--lan-t)"><p class="z">14</p><p class="s">Da</p><p class="n">dashboard</p></div>
+  <p class="eyebrow">Dashboard de utilización</p>
+  <h2>Así sabemos cómo se usa la app</h2>
+  <div style="display:grid; grid-template-columns:2.1fr 1fr; gap:26px; margin-top:4px; align-items:start;">
+    <img class="captura" src="img/dash-escritorio-recorte.png" alt="Dashboard de uso: indicadores de estudiantes, sesiones, duración media, actividades y errores; gráfico de sesiones por día" style="width:100%;">
+    <div>
+      <ul class="chico">
+        <li>Solo para el rol <strong>admin</strong></li>
+        <li>Estudiantes, sesiones, duración, actividades y errores</li>
+        <li>Gráficos por día con <strong>vista de tabla</strong></li>
+        <li>Funciones y pantallas más usadas</li>
+        <li>Claro, oscuro y móvil</li>
+      </ul>
+      <img class="captura" src="img/dash-oscuro.png" alt="El mismo dashboard en modo oscuro" style="width:100%; margin-top:8px;">
+    </div>
+  </div>
+  <p class="criterio"><b>Rúbrica</b> · Dashboard de utilización</p>
+  <aside class="notes">
+    (≈75 s) El dashboard de utilización está hecho en React y solo lo puede ver un usuario con rol administrador.
+    Arriba, los indicadores: cuántos estudiantes, cuántas sesiones en los últimos siete días, la duración media de una sesión, cuántas actividades se crearon y cuántos errores reportó la app. El de errores va en color lacre para llamar la atención.
+    Debajo, sesiones, eventos y actividades por día. Cada gráfico tiene una vista de tabla, para quien usa lector de pantalla. También vemos las funciones más usadas, las pantallas más visitadas y una tabla de origen por estado: por ejemplo, cuántas actividades de la IA siguen por validar.
+    Los datos vienen de la telemetría que explicamos antes, pasan por la vista materializada y una caché; por eso dice «desde caché».
+    Funciona en claro, oscuro y en el celular. Una aclaración honesta: los números de la captura son datos de demostración, no de un piloto real.
+  </aside>
+</section>
+
+<!-- 15 · RETO: INTEGRACIONES -->
+<section id="reto">
+  <div class="celda" style="--f:var(--resaltador);--ft:var(--sobre-resaltador)"><p class="z">15</p><p class="s">Ia</p><p class="n">reto</p></div>
+  <p class="eyebrow">Reto · integraciones</p>
+  <h2>Pedían 3 integraciones: hicimos 5</h2>
+  <div class="tabla-periodica" style="grid-template-columns:repeat(5, 1fr); margin-top:14px;">
+    <div class="el" style="--f:var(--alct);--ft:var(--alct-t)"><p class="z">1</p><p class="s">Fb</p><p class="n">Firebase Auth</p><p class="d">Entrar con Google; la API verifica el token</p></div>
+    <div class="el" style="--f:var(--gas);--ft:var(--gas-t); border-color:var(--sello);"><p class="z">2</p><p class="s">Gm</p><p class="n">Gemini</p><p class="d">Lee apuntes y propone actividades y planes</p></div>
+    <div class="el" style="--f:var(--tra);--ft:var(--tra-t)"><p class="z">3</p><p class="s">Gc</p><p class="n">Google Calendar</p><p class="d">Solo recibe lo que validaste (RN01)</p></div>
+    <div class="el" style="--f:var(--alc);--ft:var(--alc-t)"><p class="z">4</p><p class="s">Mo</p><p class="n">Moodle UPT</p><p class="d">Trae tareas del aula virtual; nacen por validar</p></div>
+    <div class="el" style="--f:var(--hal);--ft:var(--hal-t)"><p class="z">5</p><p class="s">Mc</p><p class="n">MCP + Claude Code</p><p class="d">Servidor MCP, skill y agente que consultan tus pendientes</p></div>
+  </div>
+  <div class="card ia" style="margin-top:24px;">
+    <p class="chico" style="margin:0;">Ejemplo: en Claude Code preguntas <em>«¿qué entrego esta semana?»</em> y el agente responde con tus pendientes por urgencia, usando la misma API, con una sesión de origen <code>mcp</code>.</p>
+  </div>
+  <p class="criterio"><b>Rúbrica</b> · Reto: integrar con 3 aplicaciones externas · plugin con skills y agente</p>
+  <aside class="notes">
+    (≈80 s) El reto pedía integrar la app con tres aplicaciones externas, o crear un plugin con skills y agente. Hicimos cinco integraciones.
+    Uno, Firebase Authentication: entras con tu cuenta de Google, y la API verifica ese token con las llaves públicas de Google antes de darte el suyo.
+    Dos, Gemini, a través de Firebase AI Logic: lee los apuntes y propone actividades y planes de estudio. Gracias al patrón Abstract Factory, se puede cambiar a otro proveedor compatible.
+    Tres, Google Calendar: solo recibe actividades que el estudiante validó.
+    Cuatro, Moodle de la UPT: la app trae las tareas del aula virtual, y entran como pendientes de validar.
+    Y cinco, el servidor MCP con un skill y un agente de Claude Code. Desde el editor puedes preguntar «¿qué entrego esta semana?» y el agente responde con tus pendientes ordenados por urgencia. Usa la misma API, y su sesión queda registrada con origen mcp, así que también aparece en el dashboard.
+    [Verificar antes de exponer que el servidor MCP y la carpeta .claude estén terminados y publicados en el release.]
+  </aside>
+</section>
+
+<!-- 16 · DEMO -->
+<section id="demo">
+  <div class="celda" style="--f:var(--met);--ft:var(--met-t)"><p class="z">16</p><p class="s">De</p><p class="n">demo</p></div>
+  <p class="eyebrow">Demo en vivo · 4 minutos</p>
+  <h2>Veámoslo funcionar</h2>
+  <div class="grid2" style="margin-top:14px; grid-template-columns:1.4fr 1fr;">
+    <ol>
+      <li class="grande">Entrar con Google en la app</li>
+      <li class="grande">Importar un apunte → <span class="sello">IA · Por validar</span></li>
+      <li class="grande">Validar y enviar a Calendar</li>
+      <li class="grande">Ver el uso en el dashboard</li>
+      <li class="grande">Un workflow en verde en Actions</li>
+    </ol>
+    <div class="card">
+      <h3>Dashboard (demo)</h3>
+      <p class="chico" style="margin-bottom:4px;">admin@demo.tareia.pe</p>
+      <p class="chico">contraseña <code>tareia2026</code></p>
+      <h3 style="margin-top:16px;">Plan B</h3>
+      <p class="chico" style="margin:0;">Video grabado y capturas de esta presentación.</p>
+    </div>
+  </div>
+  <p class="criterio"><b>Rúbrica</b> · Presentación</p>
+  <aside class="notes">
+    (≈60 s de introducción; demo de 4 minutos, ver guion-demo.md) Ahora la demo. Son cinco pasos.
+    Uno: entro a la app con Google. Dos: importo la foto de un apunte; la IA propone la actividad y fíjense en el sello verde, «IA · Por validar». Intento enviarla a Calendar y la app no me deja: primero hay que validar. Tres: la valido, corrijo la fecha si hace falta y la envío a Google Calendar. Cuatro: abro el dashboard con la cuenta de administrador y vemos aparecer la sesión y los eventos. Cinco: abro GitHub Actions y muestro un workflow en verde con su reporte.
+    Si algo falla, por ejemplo si el servidor gratuito está dormido, tenemos un video grabado y las capturas de esta presentación. Y si la API tarda, es el arranque en frío de Render: por eso la calentamos cinco minutos antes.
+  </aside>
+</section>
+
+<!-- 17 · CONCLUSIONES -->
+<section id="conclusiones">
+  <div class="celda" style="--f:var(--nom);--ft:var(--nom-t)"><p class="z">17</p><p class="s">Co</p><p class="n">conclusiones</p></div>
+  <p class="eyebrow">Conclusiones y trabajo futuro</p>
+  <h2>Lo que aprendimos y lo que sigue</h2>
+  <div class="grid2" style="margin-top:14px;">
+    <div class="card">
+      <h3>Conclusiones</h3>
+      <ul class="chico">
+        <li>Las pruebas pagaron: <strong>3 defectos reales</strong> antes de producción.</li>
+        <li>La mutación midió si las pruebas sirven, no solo si existen.</li>
+        <li>«La IA propone, tú decides» se cumple en app, API y BD.</li>
+        <li>Todo automatizado, con <strong>USD 0</strong> al mes.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Trabajo futuro</h3>
+      <ul class="chico">
+        <li>Piloto con estudiantes de la UPT para medir el uso real.</li>
+        <li>Subir Pitest de 68,4 % a 75 % o más.</li>
+        <li>Pruebas Compose en más dispositivos.</li>
+        <li>Recordatorios push y prueba cerrada en Play Store.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="criterio"><b>Rúbrica</b> · Presentación</p>
+  <aside class="notes">
+    (≈75 s) Cerramos con lo que aprendimos.
+    Primero, las pruebas pagaron: encontraron tres defectos reales antes de que llegaran a producción. Segundo, la mutación nos enseñó algo: tener pruebas no significa que sirvan. Al ver los mutantes que sobrevivían, escribimos pruebas mejores. Tercero, la regla principal, «la IA propone y tú decides», no depende de una sola capa: se cumple en la app, en la API y en la base de datos. Y cuarto, todo el ciclo, desde el análisis estático hasta el despliegue, está automatizado y cuesta cero dólares.
+    Lo que sigue: un piloto con estudiantes de la UPT, para medir el objetivo de uso que hoy solo está instrumentado. Subir la mutación en Kotlin de 68 a por lo menos 75 %. Correr las pruebas de Compose en más dispositivos. Y agregar recordatorios push y una prueba cerrada en Play Store.
+  </aside>
+</section>
+
+<!-- 18 · CIERRE -->
+<section id="cierre" class="cierre" data-background-color="#1F2A44">
+  <div class="fondo-tinta">
+    <div style="display:flex; align-items:center; gap:30px; margin-top:40px;">
+      <div class="logo" aria-hidden="true"><p class="z">27</p><p class="s">T<span class="punto">·</span></p><p class="n">TARE·IA</p></div>
+      <div>
+        <h1 style="font-size:60pt; margin:0;">Gracias<span class="punto">·</span></h1>
+        <p style="font-size:26pt; margin:6px 0 0 0;">¿Preguntas?</p>
+      </div>
+    </div>
+    <div style="margin-top:56px; display:grid; grid-template-columns:auto 1fr; gap:10px 26px;">
+      <p class="suave" style="font-size:16pt; margin:0;">Repositorio</p><p style="font-size:17pt; margin:0;">github.com/Laos19/TareaIA</p>
+      <p class="suave" style="font-size:16pt; margin:0;">Documentación</p><p style="font-size:17pt; margin:0;">laos19.github.io/TareaIA</p>
+      <p class="suave" style="font-size:16pt; margin:0;">API · Swagger</p><p style="font-size:17pt; margin:0;">tareia-api.onrender.com/api/docs</p>
+      <p class="suave" style="font-size:16pt; margin:0;">Dashboard</p><p style="font-size:17pt; margin:0;">tareia-dashboard.onrender.com</p>
+    </div>
+    <p class="suave" style="position:absolute; left:72px; bottom:44px; font-size:14pt; margin:0;">Adriana Rafaela Laos González · Antony Piero Solorzano Zegarra · SI-784 · UPT · 2026</p>
+  </div>
+  <aside class="notes">
+    (≈60 s) Eso es TARE·IA. Muchas gracias por su atención.
+    Aquí dejamos los enlaces: el repositorio en GitHub, la documentación en GitHub Pages con cada clase y método, la API con su Swagger y el dashboard.
+    Ahora, con gusto respondemos sus preguntas. Para cada pregunta vamos a repetirla en voz alta, responder en menos de un minuto y, si sirve, abrir el archivo o el reporte en vivo. Si hay algo que no medimos, lo vamos a decir así, y lo anotamos como trabajo futuro. Las respuestas preparadas están en banco-de-preguntas.md.
+  </aside>
+</section>
+
+</div>
+</div>
+
+<script src="vendor/reveal.js-5.1.0/dist/reveal.js"></script>
+<script src="vendor/reveal.js-5.1.0/plugin/notes/notes.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1280,
+    height: 720,
+    margin: 0.02,
+    controls: false,
+    progress: true,
+    slideNumber: 'c/t',
+    hash: true,
+    center: false,
+    transition: 'fade',
+    transitionSpeed: 'fast',
+    pdfSeparateFragments: false,
+    showNotes: false,
+    plugins: [RevealNotes]
+  });
+</script>
+</body>
+</html>

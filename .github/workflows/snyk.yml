@@ -1,0 +1,115 @@
+name: "Calidad: Snyk"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "41 6 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: snyk-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  NODE_VERSION: "22"
+  REPORTS: ${{ github.workspace }}/reports
+
+jobs:
+  snyk:
+    name: Snyk (dependencias, código e IaC)
+    runs-on: ubuntu-latest
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Comprobar secret
+        id: check
+        run: |
+          mkdir -p "$REPORTS"
+          if [ -z "$SNYK_TOKEN" ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            { echo "## 🐺 Snyk"; echo "- omitido: falta el secret SNYK_TOKEN (ver docs/automatizaciones.md)"; } >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@v4
+        if: steps.check.outputs.ready == 'true'
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - uses: actions/setup-java@v4
+        if: steps.check.outputs.ready == 'true'
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Instalar dependencias y Snyk CLI
+        if: steps.check.outputs.ready == 'true'
+        run: |
+          npm ci
+          npm install -g snyk
+      - name: Snyk Open Source (dependencias npm)
+        if: steps.check.outputs.ready == 'true'
+        run: snyk test --all-projects --exclude=android --severity-threshold=low --json-file-output="$REPORTS/snyk-npm.json" || true
+      - name: Snyk Open Source (dependencias Gradle de la app Android)
+        if: steps.check.outputs.ready == 'true'
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          snyk test --file=app/build.gradle --configuration-matching='^releaseRuntimeClasspath$' --json-file-output="$REPORTS/snyk-android.json" || true
+      - name: Snyk Code (SAST)
+        if: steps.check.outputs.ready == 'true'
+        run: snyk code test --json-file-output="$REPORTS/snyk-code.json" || true
+      - name: Snyk IaC (Terraform)
+        if: steps.check.outputs.ready == 'true'
+        run: snyk iac test infra/terraform --json-file-output="$REPORTS/snyk-iac.json" || true
+      - name: Reporte de hallazgos
+        if: steps.check.outputs.ready == 'true'
+        run: |
+          python3 - <<'PY' | tee "$REPORTS/reporte-snyk.md" >> "$GITHUB_STEP_SUMMARY"
+          import json, os, collections
+          R = os.environ["REPORTS"]
+          def cargar(n):
+              p = f"{R}/{n}"
+              if not os.path.exists(p): return None
+              try: return json.load(open(p))
+              except Exception: return None
+          print("## 🐺 Snyk — reporte de hallazgos\n")
+          print("| Análisis | Críticos | Altos | Medios | Bajos |\n|---|---:|---:|---:|---:|")
+          total_altos = 0
+          def fila(nombre, sev):
+              global total_altos
+              total_altos += sev.get("critical", 0) + sev.get("high", 0)
+              print(f"| {nombre} | {sev.get('critical',0)} | {sev.get('high',0)} | {sev.get('medium',0)} | {sev.get('low',0)} |")
+          for nombre, archivo in (("Dependencias npm", "snyk-npm.json"), ("Dependencias Android (Gradle)", "snyk-android.json")):
+              d = cargar(archivo); sev = collections.Counter()
+              for p in (d if isinstance(d, list) else [d] if d else []):
+                  for v in {(v["id"], v.get("severity")) for v in p.get("vulnerabilities", [])}: sev[v[1]] += 1
+              fila(nombre, sev)
+          d = cargar("snyk-code.json"); sev = collections.Counter()
+          if d:
+              for run in d.get("runs", []):
+                  for r in run.get("results", []):
+                      sev[{"error": "high", "warning": "medium", "note": "low"}.get(r.get("level"), "low")] += 1
+          fila("Snyk Code (SAST)", sev)
+          d = cargar("snyk-iac.json"); sev = collections.Counter()
+          for p in (d if isinstance(d, list) else [d] if d else []):
+              for i in p.get("infrastructureAsCodeIssues", []): sev[i.get("severity", "low")] += 1
+          fila("IaC (Terraform)", sev)
+          print()
+          print("✅ Sin hallazgos críticos ni altos: análisis superado." if total_altos == 0 else f"⚠️ {total_altos} hallazgo(s) crítico(s) o alto(s) por corregir.")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reporte-snyk
+          path: reports/
+          retention-days: 30

@@ -304,7 +304,7 @@ function logo(s, x, y) {
   const s = base(15, 'Ia', 'reto', 'res', 'Reto · integraciones', 'Pedían 3 integraciones: hicimos 5', 'Reto: integrar con 3 aplicaciones externas · plugin con skills y agente');
   [['alct', '1', 'Fb', 'Firebase Auth', 'Entrar con Google; la API verifica el token'], ['gas', '2', 'Gm', 'Gemini', 'Lee apuntes y propone actividades y planes'],
     ['tra', '3', 'Gc', 'Google Calendar', 'Solo recibe lo que validaste (RN01)'], ['alc', '4', 'Mo', 'Moodle UPT', 'Trae tareas del aula virtual; nacen por validar'],
-    ['hal', '5', 'Mc', 'MCP + Claude Code', 'Servidor MCP, skill y agente que consultan tus pendientes']].forEach((c, i) => {
+    ['hal', '5', 'Mc', 'MCP + Claude Code', '7 herramientas MCP, skill tareia y agente coach']].forEach((c, i) => {
     const x = 0.67 + i * 2.43; const y = 1.75; const [, fg] = F[c[0]];
     celda(s, x, y, 2.28, 2.65, c[0], c[1], c[2], null, { izq: true, ss: 30, sy: 0.25, line: i === 1 ? K.sello : null });
     txt(s, c[3], { x: x + 0.12, y: y + 0.85, w: 2.05, h: 0.6, fontSize: 16.5, bold: true, color: fg });

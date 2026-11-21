@@ -477,7 +477,7 @@ skills y agente. TARE·IA cubre el reto con:
 
 | N.° | Atributo | Métrica verificable | Prioridad |
 |---|---|---|---|
-| RC-01 | Corrección funcional | 100 % de pruebas en verde: 99 API, 35 JVM, 14 Compose, 16 Playwright, 18 escenarios (76 pasos) | Alta |
+| RC-01 | Corrección funcional | 100 % de pruebas en verde: 99 API, 35 JVM, 16 Compose, 16 Playwright, 18 escenarios (76 pasos) | Alta |
 | RC-02 | Eficacia de las pruebas | Mutación ≥ 60 % en la API (medido 93,8 %) y ≥ 50 % en el dominio (medido 68,4 %) | Alta |
 | RC-03 | Seguridad del código | 0 bugs y 0 vulnerabilidades críticas en SonarQube; quality gate aprobado; 100 % de hotspots revisados; 0 hallazgos críticos o altos sin atender en Semgrep y Snyk | Alta |
 | RC-04 | Validación humana | 0 actividades sincronizadas sin confirmar | Alta |

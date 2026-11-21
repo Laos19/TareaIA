@@ -171,3 +171,8 @@
 .reveal .slide-number a { text-decoration: none; color: inherit; }
 .reveal .slide-number { background: transparent; color: var(--grafito); font-family: var(--mono); font-size: 12pt; right: 48px; bottom: 22px; }
 .reveal .progress { color: var(--resaltador); height: 5px; }
+
+/* En el modo de impresión (?print-pdf) reveal.js reinicia el padding de las diapositivas: se repone aquí. */
+html.reveal-print .reveal .slides section, html.print-pdf .reveal .slides section { padding: 40px 64px 0 64px !important; box-sizing: border-box !important; }
+html.reveal-print .reveal .slides section.portada, html.reveal-print .reveal .slides section.cierre,
+html.print-pdf .reveal .slides section.portada, html.print-pdf .reveal .slides section.cierre { padding: 0 !important; }

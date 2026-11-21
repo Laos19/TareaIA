@@ -80,7 +80,7 @@ estático sin bugs ni vulnerabilidades críticas.
 | OS-6 | Uso recurrente. | Sesiones por usuario activo por semana | Sistema nuevo | ≥ 3 (mediana) | Tabla `sesion`; `v_resumen_sesiones` | S15 |
 | OS-7 | Estabilidad en uso real. | % de sesiones con al menos un log ERROR | Sistema nuevo | ≤ 5 % | Tabla `log_cliente` | S15 |
 | OS-8 | Pruebas que detectan defectos. | Puntaje de mutación | Stryker 93,8 %; Pitest 68,4 % | ≥ 60 % (API) y ≥ 50 % (dominio) | `mutacion.yml` | S6 |
-| OS-9 | Batería de pruebas en verde. | % de pruebas que pasan | 99 API + 35 JVM + 14 Compose + 16 Playwright + 18 escenarios, en verde | 100 % en `main` | `ci.yml`, `android.yml`, reportes | S6–S16 |
+| OS-9 | Batería de pruebas en verde. | % de pruebas que pasan | 99 API + 35 JVM + 16 Compose + 16 Playwright + 18 escenarios, en verde | 100 % en `main` | `ci.yml`, `android.yml`, reportes | S6–S16 |
 | OS-10 | Sin defectos ni vulnerabilidades críticas. | Bugs/vulnerabilidades críticos (SonarQube); hallazgos críticos/altos (Semgrep, Snyk) | Pendiente de la primera ejecución | 0; quality gate aprobado; hotspots revisados | `sonarqube.yml`, `semgrep.yml`, `snyk.yml` | S2 |
 | OS-11 | Operar sin costo en desarrollo y piloto. | Costo mensual de infraestructura | S/ 720/mes (estimación de la versión previa) | USD 0/mes | Reporte de costos de `infra.yml` | S16 |
 
@@ -132,7 +132,7 @@ telemetría, pruebas automatizadas y servicios en capa gratuita.
 | IA y OCR | Gemini mediante Firebase AI Logic; ML Kit Text Recognition en el dispositivo | El OCR no envía la imagen; la IA recibe solo el texto necesario. |
 | Autenticación | Firebase Authentication con Google Sign-In (Credential Manager); Firebase App Check | El estudiante entra con su cuenta Google; la API verifica el ID token (jose + JWKS de Google). |
 | API | Node 22 + Fastify 5 + TypeScript; JWT de 7 días con id de sesión; OpenAPI/Swagger; helmet, CORS restringido, rate limit | Un lenguaje tipado en API y dashboard; bajo consumo de memoria (apto para 512 MB). |
-| Base de datos | PostgreSQL 16 (Neon); Liquibase con 11 changesets SQL con *rollback*; 11 tablas, 6 vistas, 7 funciones, 7 triggers | Reglas críticas (estado, duplicados, historial) también en la BD. |
+| Base de datos | PostgreSQL 16 (Neon); Liquibase con 20 changesets en 11 archivos SQL con *rollback*; 11 tablas, 6 vistas, 7 funciones, 7 triggers | Reglas críticas (estado, duplicados, historial) también en la BD. |
 | Dashboard | React 18 + Vite | Utilización: KPIs, sesiones, eventos, funciones, pantallas, origen × estado. |
 | Infraestructura | Terraform (Neon + Render), estado en HCP Terraform, `terraform test`, Infracost | Reproducible y migrable a AWS o Azure. |
 | CI/CD y calidad | GitHub Actions: `ci`, `android`, `mutacion`, `sonarqube`, `semgrep`, `snyk`, `infra`, `release`, `docs`, `pages` | Cada cambio se prueba y analiza automáticamente. |
@@ -149,7 +149,7 @@ desarrollo en el curso y un piloto con estudiantes de la EPIS-UPT.
 - **Arquitectura comprobada:** la app, la API, la base de datos y el dashboard ya están implementados en el
   repositorio y cuentan con pruebas automatizadas que pasan localmente: **99 pruebas de la API** (66
   unitarias con Vitest, 22 de integración contra PostgreSQL real y 11 de sistema con servidor HTTP real),
-  **35 pruebas JVM** del dominio y la capa remota de Android, **14 pruebas de interfaz Compose** en
+  **35 pruebas JVM** del dominio y la capa remota de Android, **16 pruebas de interfaz Compose** en
   emulador, **16 pruebas Playwright** del dashboard (8 × 2 dispositivos) y **18 escenarios Cucumber
   (76 pasos)** de aceptación.
 - **Calidad de las pruebas:** puntaje de mutación de **93,8 %** con Stryker en la API (umbral 60 %) y de
@@ -298,8 +298,8 @@ lectura de tareas; si no, la importación por PDF, captura o texto compartido cu
     a Google Calendar (OAuth); la IA solo procesa el contenido que el estudiante decide importar.
   - **Telemetría sin datos personales:** los eventos de uso guardan tipo, pantalla y métricas (por ejemplo
     `{"origen":"IA","propuestas":3}`); no guardan títulos, apuntes, correos ni tokens.
-  - **Logs:** la API oculta `authorization`, `password` e `idToken` (pino *redact*); la app enmascara
-    correos y tokens antes de subir logs WARN/ERROR.
+  - **Logs:** la API oculta `authorization`, `password` e `idToken` (pino *redact*); la app sube logs WARN/ERROR
+    por lotes y la API enmascara correos y tokens antes de guardarlos.
   - **Seguridad:** HTTPS, JWT con id de sesión revocable (logout y cierre por 30 min de inactividad),
     tokens cifrados con Android Keystore, rate limit y CORS restringido.
   - **Derechos ARCO:** el estudiante puede borrar actividades, cursos y apuntes (papelera y eliminación
@@ -420,7 +420,7 @@ caso el proyecto se justifica sobre todo por su valor académico y social.
 # 6. Conclusiones
 
 1. TARE·IA es **técnicamente factible**: la app Android, la API, la base de datos y el dashboard están
-   implementados y verificados con 99 pruebas de API, 35 pruebas JVM y 14 de interfaz en Android, 16
+   implementados y verificados con 99 pruebas de API, 35 pruebas JVM y 16 de interfaz en Android, 16
    pruebas Playwright y 18 escenarios de aceptación en verde, y puntajes de mutación de 93,8 % (API) y
    68,4 % (dominio).
 2. El costo de desarrollo es **S/ 5 617,97** (dos integrantes, 320 h, depreciación de equipos) y el costo

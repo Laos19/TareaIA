@@ -877,7 +877,7 @@ dependen de que los *secrets* correspondientes estén configurados en el reposit
 | A06 Componentes vulnerables | Snyk Open Source (npm y Gradle) y SonarQube. | `snyk.yml`, `sonarqube.yml` |
 | A07 Fallas de identificación y autenticación | **Autenticación** con ID token de Firebase verificado por firma JWKS, emisor y audiencia; JWT con `sid` comprobado contra `sesion` en cada petición; cierre por logout y por 30 min de inactividad; **rate limiting** de 300/min global, 10/min en login, 20/min en login con Google, 60/min en eventos y 30/min en logs. | `VerificadorFirebase`, `AuthService.tocarSesion`, `@fastify/rate-limit` |
 | A08 Integridad de software y datos | **Firebase App Check** (Play Integrity en *release*) para los servicios de Firebase; *releases* construidos en GitHub Actions; migraciones versionadas. | `AppCheckInitializer` (variantes debug y release), `release.yml` |
-| A09 Registro y monitoreo | Logs JSON (pino) con `authorization`, `password` e `idToken` ocultos; logs de la app enmascarados; historial antes/después; `/api/health`. | `app.ts`, `TelemetriaService`, `fn_registrar_historial` |
+| A09 Registro y monitoreo | Logs JSON (pino) con `authorization`, `password` e `idToken` ocultos; logs de la app enmascarados al recibirlos (API); historial antes/después; `/api/health`. | `app.ts`, `TelemetriaService`, `fn_registrar_historial` |
 | A10 SSRF | La API no hace peticiones a URL elegidas por el cliente (solo al JWKS fijo de Google). | `VerificadorGoogle.ts` |
 
 **Secretos fuera del repositorio:** `JWT_SECRET`, `DATABASE_URL`, *tokens* de Render, Neon, HCP Terraform, SonarQube y

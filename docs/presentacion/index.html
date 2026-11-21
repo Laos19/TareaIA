@@ -440,7 +440,7 @@
     (≈70 s) Si la documentación se escribe a mano, se desactualiza. Por eso la generamos desde el código.
     El workflow docs.yml lee la base de datos real y produce el diccionario de datos; también genera los diagramas en Mermaid: entidad-relación, clases, componentes y despliegue. Con eso se actualiza el README, que es lo que pide la rúbrica.
     El workflow pages.yml publica en GitHub Pages. Para Kotlin usamos Dokka, que documenta cada clase, método y propiedad de la app. Para TypeScript, TypeDoc, que documenta la API y el dashboard. Además se publican los reportes de pruebas, de mutación, esta presentación y los documentos en PDF.
-    Todo queda en esta dirección: laos19.github.io/TareaIA. Si gustan, al final la abrimos y buscamos cualquier clase.
+    Todo queda en esta dirección: laos19.github.io/TareaIA. Lo importante es que nadie tiene que acordarse de actualizarla: cada vez que se fusiona un cambio en main, los workflows vuelven a generar el diccionario, los diagramas y la referencia de código. Si gustan, al final la abrimos y buscamos cualquier clase, por ejemplo GestorActividades o EstadoActividad.
   </aside>
 </section>
 
@@ -482,7 +482,7 @@
     <div class="el" style="--f:var(--gas);--ft:var(--gas-t); border-color:var(--sello);"><p class="z">2</p><p class="s">Gm</p><p class="n">Gemini</p><p class="d">Lee apuntes y propone actividades y planes</p></div>
     <div class="el" style="--f:var(--tra);--ft:var(--tra-t)"><p class="z">3</p><p class="s">Gc</p><p class="n">Google Calendar</p><p class="d">Solo recibe lo que validaste (RN01)</p></div>
     <div class="el" style="--f:var(--alc);--ft:var(--alc-t)"><p class="z">4</p><p class="s">Mo</p><p class="n">Moodle UPT</p><p class="d">Trae tareas del aula virtual; nacen por validar</p></div>
-    <div class="el" style="--f:var(--hal);--ft:var(--hal-t)"><p class="z">5</p><p class="s">Mc</p><p class="n">MCP + Claude Code</p><p class="d">Servidor MCP, skill y agente que consultan tus pendientes</p></div>
+    <div class="el" style="--f:var(--hal);--ft:var(--hal-t)"><p class="z">5</p><p class="s">Mc</p><p class="n">MCP + Claude Code</p><p class="d">7 herramientas MCP, skill <code>tareia</code> y agente coach</p></div>
   </div>
   <div class="card ia" style="margin-top:36px;">
     <p class="chico" style="margin:0;">Ejemplo: en Claude Code preguntas <em>«¿qué entrego esta semana?»</em> y el agente responde con tus pendientes por urgencia, usando la misma API, con una sesión de origen <code>mcp</code>.</p>
@@ -494,8 +494,8 @@
     Dos, Gemini, a través de Firebase AI Logic: lee los apuntes y propone actividades y planes de estudio. Gracias al patrón Abstract Factory, se puede cambiar a otro proveedor compatible.
     Tres, Google Calendar: solo recibe actividades que el estudiante validó.
     Cuatro, Moodle de la UPT: la app trae las tareas del aula virtual, y entran como pendientes de validar.
-    Y cinco, el servidor MCP con un skill y un agente de Claude Code. Desde el editor puedes preguntar «¿qué entrego esta semana?» y el agente responde con tus pendientes ordenados por urgencia. Usa la misma API, y su sesión queda registrada con origen mcp, así que también aparece en el dashboard.
-    [Verificar antes de exponer que el servidor MCP y la carpeta .claude estén terminados y publicados en el release.]
+    Y cinco, el servidor MCP, con siete herramientas como actividades_pendientes o plan_semanal, más la skill tareia y el agente coach-academico de Claude Code. Desde el editor puedes preguntar «¿qué entrego esta semana?» y el agente responde con tus pendientes ordenados por urgencia. Usa la misma API, y su sesión queda registrada con origen mcp, así que también aparece en el dashboard.
+    [Si hay tiempo, mostrarlo en vivo: guion-demo.md, paso opcional.]
   </aside>
 </section>
 
@@ -582,7 +582,7 @@
   <aside class="notes">
     (≈60 s) Eso es TARE·IA. Muchas gracias por su atención.
     Aquí dejamos los enlaces: el repositorio en GitHub, la documentación en GitHub Pages con cada clase y método, la API con su Swagger y el dashboard.
-    Ahora, con gusto respondemos sus preguntas. Para cada pregunta vamos a repetirla en voz alta, responder en menos de un minuto y, si sirve, abrir el archivo o el reporte en vivo. Si hay algo que no medimos, lo vamos a decir así, y lo anotamos como trabajo futuro. Las respuestas preparadas están en banco-de-preguntas.md.
+    Queremos agradecer al profesor por la rúbrica: nos obligó a automatizar cosas que normalmente se dejan para el final, como los reportes de costos o la documentación de cada clase. Ahora, con gusto respondemos sus preguntas. Para cada pregunta vamos a repetirla en voz alta, responder en menos de un minuto y, si sirve, abrir el archivo o el reporte en vivo. Si hay algo que no medimos, lo vamos a decir así, y lo anotamos como trabajo futuro. Las respuestas preparadas están en banco-de-preguntas.md.
   </aside>
 </section>
 

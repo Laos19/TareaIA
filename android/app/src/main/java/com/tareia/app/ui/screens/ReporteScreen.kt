@@ -26,7 +26,7 @@ internal fun ReportScreen(tasks: List<TaskItem>) {
     var message by remember { mutableStateOf("") }
     val create = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/pdf")) { uri ->
         if (uri != null) runCatching { PdfReport.write(context, uri, pending) }
-            .onSuccess { message = "Reporte guardado." }.onFailure { message = it.message ?: "No se pudo generar el PDF." }
+            .onSuccess { message = "Reporte guardado."; com.tareia.app.remoto.Nube.registrar("reporte_pdf", "Reporte", mapOf("actividades" to pending.size)) }.onFailure { message = it.message ?: "No se pudo generar el PDF." }
     }
     val filtered = tasks.filter { (course.isBlank() || it.course.contains(course, true)) && (status == "Todas" || it.status == status) }
     PageHeading("Reporte de actividades", "Filtra y exporta tareas a PDF")

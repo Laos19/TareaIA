@@ -177,6 +177,7 @@ internal fun TareIAApp(activity: ComponentActivity, incomingShare: IncomingShare
 
 
                 val proposals = dep.gestorAnalisisIA.extraerParametros(contenido)
+                Nube.registrar("importacion_ia", "Importar", mapOf("propuestas" to proposals.size, "proveedor" to nombreProveedorIA))
                 if (importWorkspace.extractedText == textToAnalyze) {
                     updateImport(importWorkspace.copy(
 
@@ -328,6 +329,7 @@ internal fun TareIAApp(activity: ComponentActivity, incomingShare: IncomingShare
                     val email = user.email.orEmpty()
                     val sincronizacion = dep.gestorSincronizacion(token, user.uid, email)
                     sincronizacion.sincronizar(actividad)
+                    Nube.registrar("calendario_sincronizado", "Tareas")
                     refrescar()
                     googleCalendarConnectedEmail = email
                     syncMessage = "Evento sincronizado directamente con Google Calendar ($email)."
@@ -419,6 +421,7 @@ internal fun TareIAApp(activity: ComponentActivity, incomingShare: IncomingShare
                     mensajePlan = "No se pudo proponer sesiones. Revisa la fecha y el horario disponible (Más > Horario)."
                 } else {
                     planPropuesto = p
+                    Nube.registrar("plan_generado", "Plan", mapOf("estrategia" to dep.gestorPlanificacion.estrategiaActual.nombre, "sesiones" to p.sesionesDe(actividad.id).size))
                     idActividadPlan = actividad.id
                     actividadNuevaPlan = nueva
                     mensajePlan = "Propuesta lista (${dep.gestorPlanificacion.estrategiaActual.nombre}); aún no se guardó.$aviso"
@@ -444,6 +447,7 @@ internal fun TareIAApp(activity: ComponentActivity, incomingShare: IncomingShare
             if (creada == null) { mensajePlan = "Ya existe una actividad con esos datos."; return }
         }
         dep.gestorPlanificacion.confirmarPlan(propuesta, dep.gestorPlanificacion.obtenerEstudiante())
+        Nube.registrar("plan_confirmado", "Plan")
         planPropuesto = null
         actividadNuevaPlan = null
         mensajePlan = "Planificación guardada."

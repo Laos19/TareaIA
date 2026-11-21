@@ -4,6 +4,10 @@
 CREATE EXTENSION IF NOT EXISTS unaccent;
 --rollback DROP EXTENSION IF EXISTS unaccent;
 
+--changeset adriana.laos:001-3 comment:pgcrypto para generar hashes bcrypt dentro de la BD (sin hashes en el repositorio)
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+--rollback DROP EXTENSION IF EXISTS pgcrypto;
+
 --changeset adriana.laos:001-2 splitStatements:false comment:Función inmutable para normalizar texto en índices y búsquedas
 CREATE OR REPLACE FUNCTION fn_normalizar(texto text) RETURNS text
 LANGUAGE sql IMMUTABLE PARALLEL SAFE AS $$

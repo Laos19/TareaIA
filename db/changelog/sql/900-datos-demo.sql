@@ -1,9 +1,10 @@
 --liquibase formatted sql
 
 --changeset adriana.laos:900-1 context:demo comment:Cuentas de demostración (contraseña tareia2026)
+-- El hash bcrypt (coste 10) lo calcula PostgreSQL con pgcrypto: no hay hashes escritos en el repositorio.
 INSERT INTO usuario (email, nombre, rol, password_hash) VALUES
-  ('admin@demo.tareia.pe', 'Administración TARE·IA', 'admin', '$2b$10$NnzhHsKikDcwyqW1VT5jjOboEChBZ3tqrbv18rDTumrcSMr.HIRmm'),
-  ('estudiante@demo.tareia.pe', 'Estudiante Demo', 'estudiante', '$2b$10$NnzhHsKikDcwyqW1VT5jjOboEChBZ3tqrbv18rDTumrcSMr.HIRmm');
+  ('admin@demo.tareia.pe', 'Administración TARE·IA', 'admin', crypt('tareia2026', gen_salt('bf', 10))),
+  ('estudiante@demo.tareia.pe', 'Estudiante Demo', 'estudiante', crypt('tareia2026', gen_salt('bf', 10)));
 --rollback DELETE FROM usuario WHERE email IN ('admin@demo.tareia.pe', 'estudiante@demo.tareia.pe');
 
 --changeset adriana.laos:900-2 context:demo comment:Cursos, actividades y horario de la estudiante demo

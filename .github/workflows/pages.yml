@@ -190,7 +190,7 @@ jobs:
         if: always()
         run: |
           icon() { case "$1" in success) echo "✅";; failure) echo "❌";; skipped) echo "⏭️";; *) echo "—";; esac; }
-          base="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          base="https://$GITHUB_REPOSITORY_OWNER.github.io/${GITHUB_REPOSITORY#*/}"
           {
             echo "## 🌐 Documentación técnica — GitHub Pages"
             echo ""
@@ -240,7 +240,7 @@ jobs:
         run: |
           # Solo publica si Pages usa "GitHub Actions" como fuente. Si publica desde una rama
           # (p. ej. gh-pages con la demo), el sitio se construye igual como artefacto pero no se reemplaza.
-          tipo=$(gh api "repos/${{ github.repository }}/pages" --jq .build_type 2>/dev/null || echo "none")
+          tipo=$(gh api "repos/$GITHUB_REPOSITORY/pages" --jq .build_type 2>/dev/null || echo "none")
           if [ "$tipo" = "workflow" ]; then
             echo "enabled=true" >> "$GITHUB_OUTPUT"
           else

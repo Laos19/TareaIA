@@ -135,7 +135,7 @@ jobs:
             done
             echo ""
             if [ -n "$TAG" ]; then
-              echo "Release: ${{ github.server_url }}/${{ github.repository }}/releases/tag/$TAG"
+              echo "Release: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/$TAG"
             else
               echo "_Sin tag nuevo: artefactos disponibles solo como artefacto del workflow._"
             fi
@@ -239,7 +239,7 @@ jobs:
             echo "|---|---|"
             echo "| API | ${API_URL:-_(definir variable API_URL)_} |"
             echo "| Dashboard de uso (Render) | ${WEB_URL:-_(definir variable WEB_URL)_} |"
-            echo "| Documentación técnica (GitHub Pages) | https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/ |"
+            echo "| Documentación técnica (GitHub Pages) | https://$GITHUB_REPOSITORY_OWNER.github.io/${GITHUB_REPOSITORY#*/}/ |"
             echo ""
             echo "Commit desplegado: \`${GITHUB_SHA::7}\` · Migraciones: ${{ steps.migrate.outputs.result || '—' }} · API: ${{ steps.api.outputs.api_status || steps.api.outcome }} · Web: ${{ steps.web.outputs.web_status || steps.web.outcome }} · Smoke: ${{ steps.smoke.outcome }}"
           } >> "$REPORTS/reporte-deploy.md"

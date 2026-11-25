@@ -26,6 +26,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.firebase.auth.FirebaseAuth
 import com.tareia.app.remoto.Nube
+import com.tareia.app.remoto.CalendarioAulaRemoto
+import com.tareia.app.ingesta.CambioFechaAula
+import com.tareia.app.ui.screens.EstadoAulaUi
 import com.tareia.app.*
 import com.tareia.app.aplicacion.Dependencias
 import com.tareia.app.dominio.ActividadAcademica
@@ -76,6 +79,12 @@ internal fun TareIAApp(activity: ComponentActivity, incomingShare: IncomingShare
     }
     var page by rememberSaveable { mutableStateOf(Destino.Inicio) }
     var syncMessage by remember { mutableStateOf("") }
+    // Aula virtual: calendario exportado de Moodle (la URL se guarda cifrada)
+    var aulaConectada by remember { mutableStateOf(CalendarioAulaRemoto.url(context).isNotBlank()) }
+    var aulaOcupada by remember { mutableStateOf(false) }
+    var aulaMensaje by remember { mutableStateOf("") }
+    var aulaCambios by remember { mutableStateOf<List<CambioFechaAula>>(emptyList()) }
+    var aulaUltima by remember { mutableStateOf(CalendarioAulaRemoto.ultimaSincronizacion(context)) }
     var planTaskId by remember { mutableStateOf("") }
     // El estado vive en la raíz: cambiar de pestaña no cancela la importacion
     var importWorkspace by remember(data.profile.email) {
@@ -455,6 +464,43 @@ internal fun TareIAApp(activity: ComponentActivity, incomingShare: IncomingShare
     }
 
     // Telemetría: cada pantalla visitada; al volver a Inicio se respalda en la nube (como mucho cada 2 min)
+    /** Descarga el calendario del aula virtual y crea las entregas nuevas como «Por validar». */
+    fun sincronizarAula(manual: Boolean) {
+        if (aulaOcupada) return
+        val url = CalendarioAulaRemoto.url(context)
+        if (url.isBlank()) { if (manual) aulaMensaje = "Primero pega la URL del calendario del aula virtual."; return }
+        aulaOcupada = true
+        if (manual) aulaMensaje = "Consultando el aula virtual…"
+        authScope.launch {
+            try {
+                val texto = withContext(Dispatchers.IO) { CalendarioAulaRemoto.descargar(url) }
+                val r = dep.gestorAulaVirtual.sincronizar(texto)
+                CalendarioAulaRemoto.marcarSincronizado(context)
+                aulaUltima = CalendarioAulaRemoto.ultimaSincronizacion(context)
+                aulaCambios = r.cambiosDeFecha
+                aulaMensaje = buildString {
+                    append(if (r.nuevas > 0) "${r.nuevas} entrega(s) nueva(s) del aula virtual, por validar en Tareas." else "No hay entregas nuevas.")
+                    if (r.cambiosDeFecha.isNotEmpty()) append(" ${r.cambiosDeFecha.size} entrega(s) cambiaron de fecha.")
+                    append(" Eventos leídos: ${r.leidos}.")
+                }
+                if (r.nuevas > 0 || r.cambiosDeFecha.isNotEmpty()) syncMessage = aulaMensaje
+                refrescar()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                aulaMensaje = e.message ?: "No se pudo leer el calendario del aula virtual."
+                Nube.advertir("AulaVirtual", "Sincronización fallida: ${e.javaClass.simpleName}")
+            } finally {
+                aulaOcupada = false
+            }
+        }
+    }
+
+    // Al entrar, el calendario del aula virtual se revisa solo (como mucho cada 3 horas)
+    LaunchedEffect(authenticated) {
+        if (authenticated && CalendarioAulaRemoto.tocaSincronizar(context)) sincronizarAula(manual = false)
+    }
+
     LaunchedEffect(page, authenticated) {
         if (authenticated) {
             Nube.registrar("pantalla_vista", page.name)
@@ -720,7 +766,30 @@ internal fun TareIAApp(activity: ComponentActivity, incomingShare: IncomingShare
                                     refrescar()
                                 }
                             )
-                            Destino.Integraciones -> IntegrationsScreen(data, onImportMoodle = { imported ->
+                            Destino.Integraciones -> IntegrationsScreen(data,
+                                aula = EstadoAulaUi(aulaConectada, aulaUltima, aulaOcupada, aulaMensaje, aulaCambios),
+                                onGuardarAula = { url ->
+                                    val error = CalendarioAulaRemoto.validar(url)
+                                    if (error != null) aulaMensaje = error
+                                    else {
+                                        CalendarioAulaRemoto.guardar(context, url)
+                                        aulaConectada = true
+                                        sincronizarAula(manual = true)
+                                    }
+                                },
+                                onSincronizarAula = { sincronizarAula(manual = true) },
+                                onAplicarCambio = { c ->
+                                    aulaMensaje = if (dep.gestorAulaVirtual.aplicarCambio(c)) "Fecha de «${c.titulo}» actualizada a ${c.fechaNueva}." else "No se pudo actualizar «${c.titulo}»."
+                                    aulaCambios = aulaCambios - c
+                                    refrescar()
+                                },
+                                onDescartarCambio = { c -> aulaCambios = aulaCambios - c },
+                                onDesvincularAula = {
+                                    CalendarioAulaRemoto.desvincular(context)
+                                    aulaConectada = false; aulaCambios = emptyList(); aulaUltima = 0L
+                                    aulaMensaje = "Aula virtual desvinculada. Las entregas ya importadas se conservan."
+                                },
+                                onImportMoodle = { imported ->
                                 // Moodle entra con el Builder (desdeIntegracion) y queda pendiente de validar.
                                 val builders = imported.mapNotNull { t ->
                                     runCatching {

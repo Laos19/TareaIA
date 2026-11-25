@@ -43,6 +43,8 @@ class Dependencias(context: Context) {
         // OBSERVER: cada acción del estudiante se registra como evento de uso (sin datos personales)
         observador = ObservadorUso { evento, datos -> Nube.registrar(evento, datos = datos) }
     }
+    /** Entregas del aula virtual (Moodle) leídas desde su calendario exportado. */
+    val gestorAulaVirtual = GestorAulaVirtual(gestorActividades)
     val gestorIngesta = GestorIngesta(appContext, contenidoRepo, cursoRepo, ClasificadorContenido())
     var gestorAnalisisIA = GestorAnalisisIA(fabricaIA, cursoRepo)
         private set

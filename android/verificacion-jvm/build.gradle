@@ -18,6 +18,7 @@ sourceSets {
             include 'com/tareia/app/remoto/MapeoNube.kt'
             include 'com/tareia/app/remoto/ColaTelemetria.kt'
             include 'com/tareia/app/aplicacion/ObservadorUso.kt'
+            include 'com/tareia/app/ingesta/CalendarioAula.kt'
         }
     }
     test {
@@ -26,6 +27,7 @@ sourceSets {
             include 'com/tareia/app/remoto/**'
             include 'com/tareia/app/ObservadorUsoTest.kt'
             include 'com/tareia/app/dominio/**'
+            include 'com/tareia/app/ingesta/**'
         }
         kotlin.srcDir 'src/test/kotlin'
     }
@@ -48,7 +50,7 @@ jacocoTestReport {
 pitest {
     pitestVersion = '1.20.0'
     junit5PluginVersion = null
-    targetClasses = ['com.tareia.app.dominio.*', 'com.tareia.app.remoto.*']
+    targetClasses = ['com.tareia.app.dominio.*', 'com.tareia.app.remoto.*', 'com.tareia.app.ingesta.*']
     excludedClasses = ['*Test*']
     threads = 2
     outputFormats = ['HTML', 'XML']

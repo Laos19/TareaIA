@@ -24,7 +24,7 @@ Calendar sin su confirmación.
 - **Validar**: lo que propone la IA o llega de Moodle queda *Pendiente de validar* (RN09); para confirmarlo hace falta título y fecha (RN05).
 - **Planificar**: plan de estudio según prioridad, dificultad y horario libre; con IA o local (patrón Strategy). Cada propuesta es un clon del plan vigente (Prototype).
 - **Sincronizar**: Google Calendar solo recibe actividades validadas (RN01). Recordatorios locales el día anterior.
-- **Aula virtual**: importa tareas de Moodle sin duplicados (RN02).
+- **Aula virtual**: con la URL del calendario exportado de Moodle (se copia una sola vez), la app trae sola las entregas con fecha, «Por validar», sin duplicados (RN02) y avisa si el docente cambia una fecha.
 - **Nube**: respaldo de cursos y actividades, sesiones, historial de cambios, telemetría y logs en PostgreSQL; **dashboard de utilización** para el equipo.
 - **Claude Code**: servidor MCP, skill y agente para consultar y organizar las actividades desde el editor.
 

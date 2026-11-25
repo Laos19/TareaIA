@@ -80,6 +80,19 @@ class GestorActividades(
         return true
     }
 
+    /**
+     * Cambia solo la fecha límite (p. ej. porque el docente la movió en el aula virtual) sin tocar el estado:
+     * una entrega pendiente de validar sigue pendiente. Devuelve false si con la nueva fecha quedaría duplicada.
+     */
+    fun cambiarFecha(a: ActividadAcademica, fecha: FechaLimite): Boolean {
+        val choca = actividades.buscarPor(a.titulo, a.curso, fecha)?.let { it.id != a.id } ?: false
+        if (choca) return false
+        a.editar(a.titulo, fecha, a.curso, a.descripcion)
+        if (!a.estaCompletada()) alertas.reprogramar(a)
+        actividades.guardar(a)
+        return true
+    }
+
     // STATE - solo se confirma si el estado actual lo permite
     fun confirmar(a: ActividadAcademica) {
         a.confirmar()

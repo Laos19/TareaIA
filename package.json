@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "typedoc": "^0.28.20",
-    "typescript": "^5.9.3",
+    "typescript": "^7.0.2",
     "pg": "^8.23.1"
   }
 }

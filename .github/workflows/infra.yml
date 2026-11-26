@@ -41,14 +41,14 @@ jobs:
         shell: bash
         working-directory: infra/terraform
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: ${{ env.TF_VERSION }}
           terraform_wrapper: false
 
-      - uses: terraform-linters/setup-tflint@v4
+      - uses: terraform-linters/setup-tflint@v6
         with:
           tflint_version: latest
 
@@ -152,7 +152,7 @@ jobs:
           cat "$REPORTS/fmt.txt"
           exit 1
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: reporte-terraform-calidad
@@ -188,9 +188,9 @@ jobs:
       LOGIN_MAX_POR_MINUTO: "1000"
       CORS_ORIGIN: http://localhost:4173
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
@@ -248,7 +248,7 @@ jobs:
 
       - name: Anotaciones JUnit
         if: always()
-        uses: mikepenz/action-junit-report@v5
+        uses: mikepenz/action-junit-report@v6
         with:
           report_paths: reports/junit/*.xml
           check_name: Reporte de pruebas superadas
@@ -269,7 +269,7 @@ jobs:
           cp -r dashboard/playwright-report "$REPORTS/playwright-report" 2>/dev/null || true
           cp acceptance/reports/aceptacion.html "$REPORTS/" 2>/dev/null || true
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: reporte-pruebas
@@ -289,7 +289,7 @@ jobs:
     env:
       INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Tabla de costos de la arquitectura gratuita (siempre)
         run: |
@@ -298,7 +298,7 @@ jobs:
 
       - name: Instalar Infracost
         if: env.INFRACOST_API_KEY != ''
-        uses: infracost/actions/setup@v3
+        uses: infracost/actions/setup@v5
         with:
           api-key: ${{ secrets.INFRACOST_API_KEY }}
 
@@ -356,7 +356,7 @@ jobs:
             fi
           } | tee "$REPORTS/reporte-costos.md" >> "$GITHUB_STEP_SUMMARY"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: reporte-costos
@@ -390,7 +390,7 @@ jobs:
       PG_CONN_STR: ${{ secrets.TF_STATE_PG_CONN_STR }}
       ACTION: ${{ github.event_name == 'workflow_dispatch' && inputs.action || 'apply' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Comprobar secrets
         id: check
@@ -425,7 +425,7 @@ jobs:
             echo "ready=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
         if: steps.check.outputs.ready == 'true'
         with:
           terraform_version: ${{ env.TF_VERSION }}
@@ -515,7 +515,7 @@ jobs:
             fi
           } | tee "$REPORTS/terraform-prod.md" >> "$GITHUB_STEP_SUMMARY"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: reporte-terraform-produccion

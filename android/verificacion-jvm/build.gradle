@@ -1,0 +1,59 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '2.3.21'
+    id 'info.solidsoft.pitest' version '1.19.0'
+    id 'jacoco'
+}
+
+kotlin { compilerOptions { jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17 } }
+java { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
+
+def app = file('../app/src')
+
+sourceSets {
+    main {
+        kotlin {
+            srcDir "$app/main/java"
+            // Solo las clases sin dependencias de Android
+            include 'com/tareia/app/dominio/**'
+            include 'com/tareia/app/remoto/MapeoNube.kt'
+            include 'com/tareia/app/remoto/ColaTelemetria.kt'
+            include 'com/tareia/app/aplicacion/ObservadorUso.kt'
+            include 'com/tareia/app/ingesta/CalendarioAula.kt'
+        }
+    }
+    test {
+        kotlin {
+            srcDir "$app/test/java"
+            include 'com/tareia/app/remoto/**'
+            include 'com/tareia/app/ObservadorUsoTest.kt'
+            include 'com/tareia/app/dominio/**'
+            include 'com/tareia/app/ingesta/**'
+        }
+        kotlin.srcDir 'src/test/kotlin'
+    }
+}
+
+dependencies {
+    implementation 'org.json:json:20250517'
+    testImplementation 'junit:junit:4.13.2'
+}
+
+test {
+    testLogging { events 'passed', 'skipped', 'failed' }
+    finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+    reports { xml.required = true; html.required = true }
+}
+
+pitest {
+    pitestVersion = '1.20.0'
+    junit5PluginVersion = null
+    targetClasses = ['com.tareia.app.dominio.*', 'com.tareia.app.remoto.*', 'com.tareia.app.ingesta.*']
+    excludedClasses = ['*Test*']
+    threads = 2
+    outputFormats = ['HTML', 'XML']
+    timestampedReports = false
+    mutationThreshold = 50
+}

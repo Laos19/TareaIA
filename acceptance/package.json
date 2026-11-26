@@ -1,0 +1,13 @@
+{
+  "name": "@tareia/acceptance",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Pruebas de aceptación de usuario de TARE·IA (Cucumber, Gherkin en español)",
+  "type": "module",
+  "scripts": {
+    "test:aceptacion": "cucumber-js"
+  },
+  "devDependencies": {
+    "@cucumber/cucumber": "^13.3.0"
+  }
+}

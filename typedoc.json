@@ -1,0 +1,20 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "TARE·IA — API, dashboard y servidor MCP",
+  "entryPoints": ["backend/src", "dashboard/src", "integrations/mcp/src"],
+  "entryPointStrategy": "expand",
+  "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/scripts/**", "**/node_modules/**", "**/main.tsx"],
+  "tsconfig": "tsconfig.typedoc.json",
+  "out": "site/api",
+  "readme": "docs/api/README-typedoc.md",
+  "excludePrivate": false,
+  "excludeInternal": true,
+  "categorizeByGroup": true,
+  "searchInComments": true,
+  "skipErrorChecking": true,
+  "navigationLinks": {
+    "Repositorio": "https://github.com/Laos19/TareaIA",
+    "App Android (Dokka)": "../kotlin/",
+    "Diagramas": "../diagramas/"
+  }
+}

@@ -1,0 +1,31 @@
+# Configuración de tbls (https://github.com/k1LoW/tbls) — diccionario de datos y diagrama ER.
+# La conexión se pasa con la variable TBLS_DSN, p. ej.
+#   TBLS_DSN="postgres://postgres:postgres@localhost:5432/tareia?sslmode=disable" tbls doc --force
+name: TARE·IA
+desc: Base de datos en la nube del asistente académico TARE·IA (PostgreSQL 16). Respaldo de cursos y actividades, sesiones, historial de cambios, telemetría y logs.
+docPath: docs/database
+
+format:
+  adjust: true
+  hideColumnsWithoutValues:
+    - Parents
+    - Children
+
+er:
+  format: svg
+  comment: true
+  distance: 2
+
+exclude:
+  - databasechangelog
+  - databasechangeloglock
+  - public.databasechangelog
+  - public.databasechangeloglock
+
+lint:
+  requireTableComment:
+    enabled: true
+  requireForeignKeyIndex:
+    enabled: true
+  duplicateRelations:
+    enabled: true

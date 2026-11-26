@@ -1,0 +1,108 @@
+name: "Calidad: SonarQube"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: sonar-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  NODE_VERSION: "22"
+  REPORTS: ${{ github.workspace }}/reports
+  SONAR_HOST_URL: https://sonarcloud.io
+  SONAR_PROJECT: Laos19_TareaIA
+
+jobs:
+  sonarqube:
+    name: Análisis SonarQube (bugs, vulnerabilidades, security hotspots)
+    runs-on: ubuntu-latest
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Sonar necesita el historial para el "código nuevo"
+      - name: Comprobar secret
+        id: check
+        run: |
+          mkdir -p "$REPORTS"
+          if [ -z "$SONAR_TOKEN" ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "## 🔎 SonarQube" >> "$GITHUB_STEP_SUMMARY"
+            echo "- omitido: falta el secret SONAR_TOKEN (ver docs/automatizaciones.md)" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@v4
+        if: steps.check.outputs.ready == 'true'
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - name: Cobertura de pruebas unitarias (lcov)
+        if: steps.check.outputs.ready == 'true'
+        run: |
+          npm ci
+          npm run test:cobertura -w backend
+      - name: SonarQube Scan
+        if: steps.check.outputs.ready == 'true'
+        uses: SonarSource/sonarqube-scan-action@v5
+        with:
+          args: >
+            -Dsonar.qualitygate.wait=true
+            -Dsonar.qualitygate.timeout=300
+        continue-on-error: true
+      - name: Reporte de Bugs, Vulnerabilities y Security Hotspots
+        if: steps.check.outputs.ready == 'true'
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          api() { curl -fsS -u "$SONAR_TOKEN:" "$SONAR_HOST_URL/api/$1"; }
+          rama="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
+          q="component=$SONAR_PROJECT"
+          [ "$GITHUB_EVENT_NAME" = "pull_request" ] && q="$q&pullRequest=$PR_NUMBER" || q="$q&branch=$rama"
+          api "measures/component?$q&metricKeys=bugs,vulnerabilities,security_hotspots,code_smells,coverage,duplicated_lines_density,ncloc,reliability_rating,security_rating,sqale_rating,security_review_rating" > "$REPORTS/sonar-medidas.json"
+          api "qualitygates/project_status?projectKey=$SONAR_PROJECT$( [ "$GITHUB_EVENT_NAME" = "pull_request" ] && echo "&pullRequest=$PR_NUMBER" || echo "&branch=$rama")" > "$REPORTS/sonar-quality-gate.json" || echo '{}' > "$REPORTS/sonar-quality-gate.json"
+          api "issues/search?componentKeys=$SONAR_PROJECT&types=BUG,VULNERABILITY&resolved=false&ps=100" > "$REPORTS/sonar-issues.json" || echo '{"issues":[]}' > "$REPORTS/sonar-issues.json"
+          api "hotspots/search?projectKey=$SONAR_PROJECT&ps=100" > "$REPORTS/sonar-hotspots.json" || echo '{"hotspots":[]}' > "$REPORTS/sonar-hotspots.json"
+          {
+            echo "## 🔎 SonarQube — reporte de calidad"
+            echo ""
+            echo "Quality Gate: **$(jq -r '.projectStatus.status // "—"' "$REPORTS/sonar-quality-gate.json")**"
+            echo ""
+            echo "| Métrica | Valor |"
+            echo "|---|---|"
+            jq -r '.component.measures[] | "| \(.metric) | \(.value // .period.value // "—") |"' "$REPORTS/sonar-medidas.json"
+            echo ""
+            echo "### Bugs y vulnerabilidades abiertas"
+            n=$(jq '.issues | length' "$REPORTS/sonar-issues.json")
+            if [ "$n" = "0" ]; then echo "✅ Ninguna: todos los bugs y vulnerabilidades superados."; else
+              echo "| Tipo | Severidad | Archivo | Mensaje |"; echo "|---|---|---|---|"
+              jq -r '.issues[] | "| \(.type) | \(.severity) | `\(.component | split(":")[1])`:\(.line // "-") | \(.message) |"' "$REPORTS/sonar-issues.json"
+            fi
+            echo ""
+            echo "### Security Hotspots"
+            jq -r '"Revisados: \([.hotspots[] | select(.status=="REVIEWED")] | length) de \(.hotspots | length)"' "$REPORTS/sonar-hotspots.json"
+            echo ""
+            jq -r 'if (.hotspots|length)>0 then "| Estado | Resolución | Categoría | Archivo |\n|---|---|---|---|" else empty end' "$REPORTS/sonar-hotspots.json"
+            jq -r '.hotspots[] | "| \(.status) | \(.resolution // "-") | \(.securityCategory) | `\(.component | split(":")[1])`:\(.line // "-") |"' "$REPORTS/sonar-hotspots.json"
+            echo ""
+            echo "Proyecto: $SONAR_HOST_URL/project/overview?id=$SONAR_PROJECT"
+          } | tee "$REPORTS/reporte-sonarqube.md" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reporte-sonarqube
+          path: reports/
+          retention-days: 30

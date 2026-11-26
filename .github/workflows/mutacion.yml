@@ -1,0 +1,106 @@
+name: "Pruebas de mutación"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mutacion-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  NODE_VERSION: "22"
+  REPORTS: ${{ github.workspace }}/reports
+
+jobs:
+  stryker-api:
+    name: Stryker (API TypeScript)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Stryker
+        id: stryker
+        run: npm run test:mutacion -w backend
+      - name: Reporte de mutación
+        if: always()
+        run: |
+          mkdir -p "$REPORTS"
+          cp -r backend/reports/mutation "$REPORTS/stryker" 2>/dev/null || true
+          node -e '
+            const r=require("./backend/reports/mutation/mutation.json");
+            const filas=[];let tk=0,tt=0;
+            for (const [f,d] of Object.entries(r.files)) {
+              const c={}; for (const m of d.mutants) c[m.status]=(c[m.status]||0)+1;
+              const k=(c.Killed||0)+(c.Timeout||0), t=d.mutants.filter(m=>!["CompileError","RuntimeError","Ignored"].includes(m.status)).length;
+              tk+=k; tt+=t; filas.push(`| \`${f}\` | ${k} | ${c.Survived||0} | ${c.NoCoverage||0} | ${t?(100*k/t).toFixed(1):"—"} % |`);
+            }
+            console.log(["## 🧬 Pruebas de mutación — API (Stryker)","","| Archivo | Eliminados | Sobrevivientes | Sin cobertura | Puntaje |","|---|---:|---:|---:|---:|",...filas,`| **Total** | **${tk}** | | | **${(100*tk/tt).toFixed(1)} %** |`,"","Umbral: alto 85 %, bajo 70 %, mínimo para aprobar 60 %."].join("\n"));
+          ' | tee "$REPORTS/reporte-mutacion-api.md" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reporte-mutacion-api
+          path: reports/
+          retention-days: 30
+
+  pitest-android:
+    name: Pitest (dominio Kotlin de la app Android)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: android/verificacion-jvm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.14.3"
+      - name: Pruebas JVM del dominio + Pitest
+        id: pitest
+        run: gradle --no-daemon test pitest
+      - name: Reporte de mutación
+        if: always()
+        working-directory: .
+        run: |
+          mkdir -p "$REPORTS"
+          cp -r android/verificacion-jvm/build/reports/pitest "$REPORTS/pitest" 2>/dev/null || true
+          python3 - <<'PY' | tee "$REPORTS/reporte-mutacion-android.md" >> "$GITHUB_STEP_SUMMARY"
+          import re, collections, os
+          f = "android/verificacion-jvm/build/reports/pitest/mutations.xml"
+          if not os.path.exists(f):
+              print("Sin reporte de Pitest."); raise SystemExit
+          s = open(f).read()
+          por = collections.defaultdict(collections.Counter)
+          for m in re.finditer(r"<mutation [^>]*status='(\w+)'.*?<mutatedClass>([^<]+)</mutatedClass>", s, re.S):
+              por[m.group(2).split('$')[0].rsplit('.', 1)[0]][m.group(1)] += 1
+          print("## 🧬 Pruebas de mutación — dominio Android (Pitest)\n")
+          print("| Paquete | Eliminados | Sobrevivientes | Sin cobertura | Puntaje |\n|---|---:|---:|---:|---:|")
+          tk = tt = 0
+          for p, c in sorted(por.items()):
+              k = c['KILLED'] + c['TIMED_OUT']; t = sum(c.values()); tk += k; tt += t
+              print(f"| `{p}` | {k} | {c['SURVIVED']} | {c['NO_COVERAGE']} | {100*k/t:.1f} % |")
+          print(f"| **Total** | **{tk}** | | | **{100*tk/max(tt,1):.1f} %** |\n\nUmbral mínimo: 50 %.")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reporte-mutacion-android
+          path: reports/
+          retention-days: 30

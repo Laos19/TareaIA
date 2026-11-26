@@ -1,0 +1,45 @@
+{
+  "name": "@tareia/backend",
+  "version": "2.0.0",
+  "private": true,
+  "description": "API REST de TARE·IA (Fastify + TypeScript + PostgreSQL)",
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "tsc --noEmit",
+    "test": "vitest run",
+    "test:unit": "vitest run test/unit",
+    "test:integracion": "vitest run test/integracion",
+    "test:sistema": "vitest run test/sistema",
+    "test:cobertura": "vitest run test/unit --coverage",
+    "test:mutacion": "stryker run",
+    "openapi": "tsx src/scripts/export-openapi.ts"
+  },
+  "dependencies": {
+    "@fastify/cors": "^11.4.1",
+    "@fastify/helmet": "^13.0.2",
+    "@fastify/jwt": "^10.2.7",
+    "@fastify/rate-limit": "^11.2.2",
+    "@fastify/swagger": "^9.9.3",
+    "@fastify/swagger-ui": "^6.1.3",
+    "bcryptjs": "^3.0.3",
+    "fastify": "^5.12.8",
+    "jose": "^6.2.18",
+    "pg": "^8.23.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@stryker-mutator/core": "^10.1.1",
+    "@stryker-mutator/vitest-runner": "^10.1.1",
+    "@types/node": "^22.15.0",
+    "@types/pg": "^8.15.4",
+    "@vitest/coverage-v8": "^5.1.1",
+    "tsx": "^4.20.3",
+    "typescript": "^5.9.3",
+    "vitest": "^5.1.1"
+  }
+}

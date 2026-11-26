@@ -1,0 +1,178 @@
+/* TARE·IA — estilos de la exposición (SI-784 Calidad y Pruebas de Software).
+   Identidad «Tablero periódico» (docs/MARCA.md): tinta, papel, resaltador, sello (IA) y lacre.
+   Cada diapositiva lleva una celda de tabla periódica con su número y símbolo. */
+@import url('vendor/fonts/tareia-fonts.css');
+
+:root {
+  --tinta: #1F2A44;
+  --papel: #F6F3EC;
+  --hoja: #FFFFFF;
+  --grafito: #5B6170;
+  --linea: #E2DED3;
+  --resaltador: #FFD84D;
+  --sobre-resaltador: #2B2100;
+  --sello: #1E7A6D;
+  --lacre: #B93A0B;
+  --ambar: #8A5A00;
+  --exito: #2E7D32;
+  --noche: #12161F;
+
+  /* Familias de la tabla (fondo / texto), iguales a ui/theme/Color.kt */
+  --alc: #F3C9C0;   --alc-t: #5C1E12;
+  --alct: #F5D9B0;  --alct-t: #5A3600;
+  --tra: #C4DAF0;   --tra-t: #12355B;
+  --met: #C6E5D2;   --met-t: #134A2C;
+  --nom: #F1E7A8;   --nom-t: #4A4000;
+  --hal: #DCD0F0;   --hal-t: #33215C;
+  --gas: #C0E6E6;   --gas-t: #0E4545;
+  --lan: #F1CADA;   --lan-t: #5A1530;
+
+  --titulo: "Archivo", system-ui, "Segoe UI", Arial, sans-serif;
+  --texto: "Atkinson Hyperlegible", system-ui, "Segoe UI", Verdana, sans-serif;
+  --mono: "Atkinson Hyperlegible Mono", ui-monospace, "Courier New", monospace;
+}
+
+.reveal-viewport { background: var(--papel); }
+.reveal { font-family: var(--texto); color: var(--tinta); font-size: 32px; }
+.reveal .slides section { text-align: left; padding: 40px 64px 0 64px; box-sizing: border-box; height: 100%; }
+.reveal .slides section.portada, .reveal .slides section.cierre { padding: 0; }
+.reveal .slides section div { min-width: 0; }
+
+.reveal h1, .reveal h2, .reveal h3 {
+  font-family: var(--titulo); color: var(--tinta); text-transform: none; letter-spacing: -0.01em;
+  line-height: 1.08; margin: 0 0 16px 0; font-weight: 800;
+}
+.reveal h1 { font-size: 72pt; }
+.reveal h2 { font-size: 32pt; max-width: 1020px; }
+.reveal h3 { font-size: 20pt; font-weight: 700; margin-bottom: 10px; }
+.reveal p, .reveal li, .reveal td, .reveal th { font-size: 18pt; line-height: 1.35; color: var(--tinta); }
+.reveal p { margin: 0 0 10px 0; }
+.reveal ul, .reveal ol { margin: 0 0 0 1.1em; padding: 0; }
+.reveal li { margin-bottom: 8px; }
+.reveal code, .reveal .mono { font-family: var(--mono); font-size: 0.88em; }
+.reveal a { color: var(--tinta); text-decoration-color: var(--resaltador); text-decoration-thickness: 3px; }
+
+.chico { font-size: 19pt !important; }
+.mini { font-size: 14.5pt !important; }
+.grande { font-size: 24pt !important; }
+.suave { color: var(--grafito) !important; }
+
+/* Resaltador: el énfasis de la marca */
+.res { background: linear-gradient(transparent 55%, var(--resaltador) 55%, var(--resaltador) 92%, transparent 92%); padding: 0 2px; }
+.punto { color: var(--resaltador); }
+.reveal .eyebrow { font-family: var(--mono); font-size: 13pt; color: var(--grafito); margin-bottom: 4px !important; letter-spacing: 0.02em; }
+
+/* Celda de elemento (motivo de toda la exposición) */
+.celda {
+  position: absolute; top: 30px; right: 48px; width: 88px; height: 96px; box-sizing: border-box;
+  border-radius: 10px; background: var(--f, var(--tra)); color: var(--ft, var(--tra-t));
+  border: 2px solid var(--tinta);
+}
+.celda p { margin: 0; color: inherit; }
+.celda .z { position: absolute; top: 5px; left: 9px; font-family: var(--mono); font-size: 11pt; }
+.celda .s { position: absolute; top: 22px; width: 100%; text-align: center; font-family: var(--titulo); font-weight: 800; font-size: 28pt; line-height: 1; }
+.celda .n { position: absolute; bottom: 6px; width: 100%; text-align: center; font-size: 9pt; font-weight: 700; }
+
+/* Criterio de la rúbrica al pie */
+.criterio {
+  position: absolute; left: 64px; bottom: 20px; font-family: var(--mono); font-size: 11.5pt !important;
+  color: var(--tinta); background: var(--hoja); border: 1.5px solid var(--linea); border-radius: 999px; padding: 3px 14px; margin: 0 !important;
+}
+.criterio b { color: var(--tinta); }
+
+/* Tarjetas */
+.card { background: var(--hoja); border: 1.5px solid var(--linea); border-radius: 16px; padding: 18px 22px; box-sizing: border-box; }
+.card h3 { margin-top: 0; }
+.card.ia { border: 2px solid var(--sello); }
+.card.alerta { border-left: 8px solid var(--lacre); }
+.card.marca { background: var(--tinta); border-color: var(--tinta); }
+.card.marca p, .card.marca h3 { color: var(--papel); }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+/* Cifras */
+.reveal .cifra { font-family: var(--titulo); font-weight: 800; font-size: 44pt; line-height: 1; margin: 0 0 4px 0 !important; }
+.reveal .cifra small { font-size: 18pt; font-weight: 700; }
+
+/* Sello IA */
+.sello { display: inline-block; border: 2px solid var(--sello); color: var(--sello); border-radius: 999px; padding: 0 12px; font-weight: 700; font-size: 0.8em; }
+.sello::before { content: "● "; }
+
+/* Etiquetas */
+.tag { display: inline-block; background: var(--hoja); border: 1.5px solid var(--tinta); border-radius: 999px; padding: 3px 14px; font-size: 15pt; font-weight: 700; margin: 0 6px 6px 0; }
+
+/* Tablas */
+.reveal table { border-collapse: collapse; width: 100%; margin: 0; }
+.reveal th { font-family: var(--titulo); font-size: 16pt; font-weight: 700; text-align: left; border-bottom: 2.5px solid var(--tinta); padding: 6px 10px; }
+.reveal td { font-size: 18.5pt; padding: 10px 10px; border-bottom: 1px solid var(--linea); vertical-align: top; line-height: 1.3; }
+.reveal td:first-child { font-weight: 700; white-space: nowrap; }
+.reveal td code { font-size: 15pt; }
+
+/* Capturas */
+.captura { display: block; max-width: 100%; border-radius: 14px; border: 2px solid var(--tinta); box-shadow: 0 6px 0 var(--linea); }
+.pie { font-size: 15pt !important; text-align: center; margin-top: 10px !important; }
+
+/* Flujo horizontal de pasos */
+.flujo { display: flex; align-items: stretch; gap: 0; }
+.flujo .paso { flex: 1; background: var(--hoja); border: 1.5px solid var(--linea); border-radius: 12px; padding: 10px 12px; position: relative; }
+.flujo .paso p { margin: 0; font-size: 16.5pt; line-height: 1.25; }
+.flujo .paso p.t { white-space: nowrap; font-family: var(--titulo); font-weight: 800; font-size: 16pt; margin-bottom: 4px; }
+.flujo .flecha { align-self: center; font-family: var(--titulo); font-weight: 800; font-size: 20pt; padding: 0 4px; color: var(--grafito); }
+
+/* Tablero de celdas (patrones, integraciones) */
+.tabla-periodica { display: grid; gap: 14px; }
+.el { position: relative; border-radius: 10px; background: var(--f); color: var(--ft); padding: 12px 14px; box-sizing: border-box; border: 2px solid transparent; }
+.el p { color: inherit; margin: 0; }
+.el .z { font-family: var(--mono); font-size: 11pt; }
+.el .s { font-family: var(--titulo); font-weight: 800; font-size: 30pt; line-height: 1; margin: 2px 0 4px 0; }
+.el .n { font-weight: 700; font-size: 16.5pt; line-height:1.15; }
+.el .d { font-size: 15pt; line-height: 1.25; margin-top: 4px; }
+
+/* Pirámide de pruebas */
+.piramide { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.piramide .nivel { padding: 9px 12px !important; }
+.piramide .nivel { box-sizing: border-box; border-radius: 8px; padding: 6px 12px; text-align: center; color: var(--tinta); }
+.piramide .nivel p { margin: 0; font-size: 17.5pt; line-height: 1.2; }
+.piramide .nivel p b { font-family: var(--titulo); font-size: 18.5pt; }
+
+/* Estados (patrón State) */
+.estados { display: flex; align-items: center; flex-wrap: nowrap; gap: 6px; }
+.estado { border-radius: 999px; padding: 5px 14px; font-weight: 700; font-size: 16pt; border: 2px solid var(--tinta); background: var(--hoja); white-space: nowrap; }
+.estado.ia { border-color: var(--sello); color: var(--sello); }
+.estados .f { font-weight: 800; color: var(--grafito); }
+
+/* Diagrama de arquitectura */
+.capa { border-radius: 10px; padding: 9px 14px; margin-bottom: 8px; font-size: 17pt; line-height: 1.25; background: var(--f, var(--hoja)); color: var(--ft, var(--tinta)); }
+.capa b { font-family: var(--titulo); }
+.col-arq { background: var(--hoja); border: 1.5px solid var(--linea); border-radius: 16px; padding: 14px 16px; }
+.col-arq h3 { font-size: 19pt; }
+
+/* Portada y cierre */
+.fondo-tinta { background: var(--tinta); height: 100%; width: 100%; position: relative; padding: 56px 72px; box-sizing: border-box; overflow: hidden; }
+.fondo-tinta h1, .fondo-tinta h2, .fondo-tinta p, .fondo-tinta li { color: var(--papel); }
+.fondo-tinta .suave { color: #C9CDD6 !important; }
+.logo {
+  width: 150px; height: 160px; border: 4px solid var(--papel); border-radius: 16px; position: relative; box-sizing: border-box; background: var(--tinta);
+}
+.logo p { margin: 0; color: var(--papel); }
+.logo .z { position: absolute; top: 8px; left: 12px; font-family: var(--mono); font-size: 15pt; }
+.logo .s { position: absolute; top: 30px; width: 100%; text-align: center; font-family: var(--titulo); font-weight: 800; font-size: 60pt; line-height: 1; }
+.logo .n { position: absolute; bottom: 12px; width: 100%; text-align: center; font-family: var(--titulo); font-weight: 700; font-size: 12pt; letter-spacing: 0.08em; }
+.tablero { position: absolute; right: 64px; top: 64px; display: grid; grid-template-columns: repeat(3, 96px); gap: 12px; }
+.tablero .t { width: 96px; height: 104px; border-radius: 10px; position: relative; box-sizing: border-box; background: var(--f); color: var(--ft); }
+.tablero .t p { position: absolute; margin: 0; color: inherit; }
+.tablero .t .z { top: 6px; left: 9px; font-family: var(--mono); font-size: 11pt; }
+.tablero .t .s { top: 26px; width: 100%; text-align: center; font-family: var(--titulo); font-weight: 800; font-size: 30pt; line-height: 1; }
+.tablero .t .n { bottom: 7px; width: 100%; text-align: center; font-size: 9pt; font-weight: 700; }
+.tablero .t.vacia { background: transparent; border: 2px dashed #46506A; }
+
+/* Número de diapositiva */
+.reveal .slide-number a { text-decoration: none; color: inherit; }
+.reveal .slide-number { background: transparent; color: var(--grafito); font-family: var(--mono); font-size: 12pt; right: 48px; bottom: 22px; }
+.reveal .progress { color: var(--resaltador); height: 5px; }
+
+/* En el modo de impresión (?print-pdf) reveal.js reinicia el padding de las diapositivas: se repone aquí. */
+html.reveal-print .reveal .slides section, html.print-pdf .reveal .slides section { padding: 40px 64px 0 64px !important; box-sizing: border-box !important; }
+html.reveal-print .reveal .slides section.portada, html.reveal-print .reveal .slides section.cierre,
+html.print-pdf .reveal .slides section.portada, html.print-pdf .reveal .slides section.cierre { padding: 0 !important; }

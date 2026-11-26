@@ -1,0 +1,39 @@
+{
+  "name": "tareia",
+  "version": "2.0.0",
+  "private": true,
+  "description": "TARE·IA — asistente académico Android con API, base de datos PostgreSQL y dashboard de utilización (UPT · SI-784 Calidad y Pruebas de Software)",
+  "author": "Adriana Rafaela Laos González y Antony Piero Solorzano Zegarra",
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    "backend",
+    "dashboard",
+    "acceptance",
+    "integrations/mcp"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "docs:readme": "node scripts/docs/build-readme.mjs",
+    "docs:diagrams": "node scripts/docs/build-diagrams.mjs",
+    "docs:api": "typedoc",
+    "dev:api": "npm run dev -w backend",
+    "dev:dashboard": "npm run dev -w dashboard",
+    "docs:diccionario": "node scripts/docs/build-diccionario.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Laos19/TareaIA.git"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "typedoc": "^0.28.20",
+    "typescript": "^5.9.3",
+    "pg": "^8.23.1"
+  }
+}

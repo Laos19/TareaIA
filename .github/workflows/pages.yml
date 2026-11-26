@@ -1,0 +1,257 @@
+name: "Documentación técnica (GitHub Pages)"
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  workflow_run:
+    # Republica cuando terminan los workflows que producen reportes.
+    workflows:
+      - "Infraestructura (Terraform) + pruebas + costos"
+      - "Pruebas de mutación"
+      - "Calidad: SonarQube"
+      - "Calidad: Semgrep"
+      - "Calidad: Snyk"
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  NODE_VERSION: "22"
+
+jobs:
+  build:
+    name: Construir sitio (Dokka + TypeDoc + diccionario + diagramas + reportes)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read # descargar artefactos de otros workflows
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: tareia
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      LIQUIBASE_COMMAND_URL: jdbc:postgresql://localhost:5432/tareia
+      LIQUIBASE_COMMAND_USERNAME: postgres
+      LIQUIBASE_COMMAND_PASSWORD: postgres
+      TBLS_DSN: postgres://postgres:postgres@localhost:5432/tareia?sslmode=disable
+      SITE: ${{ github.workspace }}/site
+      RAW: ${{ github.workspace }}/.site-raw
+      SITE_DEPTH: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - run: npm ci
+
+      - name: Instalar renderizador Markdown (fuera del árbol de workspaces)
+        run: |
+          npm install --prefix "$RUNNER_TEMP/md" --no-audit --no-fund marked@15
+          echo "MARKED_MODULE=$RUNNER_TEMP/md/node_modules/marked/lib/marked.esm.js" >> "$GITHUB_ENV"
+          mkdir -p "$SITE" "$RAW"
+
+      - name: API (TypeDoc → site/api)
+        id: typedoc
+        continue-on-error: true
+        run: npm run docs:api
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: App Android (Dokka → site/kotlin)
+        id: dokka
+        continue-on-error: true
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon -Pdocs :app:dokkaGeneratePublicationHtml
+          mkdir -p "$SITE/kotlin"
+          cp -r app/build/dokka/html/. "$SITE/kotlin/"
+
+      - name: Base de datos (Liquibase + tbls → site/db)
+        id: tbls
+        continue-on-error: true
+        run: .github/scripts/liquibase.sh update
+
+      - uses: k1low/setup-tbls@v1
+        if: steps.tbls.outcome == 'success'
+
+      - name: tbls doc
+        id: tblsdoc
+        if: steps.tbls.outcome == 'success'
+        continue-on-error: true
+        run: |
+          tbls doc --force "$TBLS_DSN" "$RAW/db"
+          tbls out -t mermaid -o "$RAW/db/er.mmd"
+          { echo '# Diagrama ER (Mermaid)'; echo; echo '```mermaid'; cat "$RAW/db/er.mmd"; echo '```'; } > "$RAW/db/er-mermaid.md"
+
+      - name: Diccionario de datos en Markdown (catálogo de PostgreSQL)
+        if: steps.tbls.outcome == 'success'
+        continue-on-error: true
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/tareia
+        run: |
+          npm run docs:diccionario
+          mkdir -p "$RAW/db" && cp docs/database/diccionario-de-datos.md "$RAW/db/"
+
+      - name: Usar docs/database del repositorio si tbls falló
+        if: steps.tblsdoc.outcome != 'success'
+        run: |
+          [ -d docs/database ] && cp -r docs/database/. "$RAW/db/" || true
+
+      - name: Reportes de la última ejecución de cada workflow
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RAW/reportes"
+          fetch() { # workflow artefacto carpeta
+            local id
+            id=$(gh run list -R "$GITHUB_REPOSITORY" -w "$1" -b main -s success -L 1 --json databaseId --jq '.[0].databaseId' 2>/dev/null || true)
+            if [ -n "$id" ] && gh run download "$id" -R "$GITHUB_REPOSITORY" -n "$2" -D "$RAW/reportes/$3" 2>/dev/null; then
+              echo "✔ $3 (run $id)"
+            else
+              echo "– $3 no disponible todavía"
+            fi
+          }
+          fetch infra.yml reporte-pruebas pruebas
+          fetch infra.yml reporte-costos costos
+          fetch infra.yml reporte-terraform-calidad terraform
+          fetch mutacion.yml reporte-mutacion-api mutacion-api
+          fetch mutacion.yml reporte-mutacion-android mutacion-android
+          fetch sonarqube.yml reporte-sonarqube sonarqube
+          fetch semgrep.yml reporte-semgrep semgrep
+          fetch snyk.yml reporte-snyk snyk
+          fetch android.yml android-apk-y-reportes android
+          fetch android.yml reporte-android-interfaz android-interfaz
+          fetch docs.yml reporte-documentacion documentacion
+          find "$RAW/reportes" -type f -name '*.apk' -delete
+          find "$RAW/reportes" -type f \( -name '*.dump' -o -name '*.gpg' -o -name '*.log' -o -name '*.csv' \) -delete
+          find "$RAW/reportes" -type d -empty -delete
+          # Si no hay reportes aún, deja la tabla de costos de referencia.
+          if [ ! -d "$RAW/reportes/costos" ]; then
+            mkdir -p "$RAW/reportes/costos"
+            cp infra/terraform/cost-reference/README.md "$RAW/reportes/costos/README.md"
+          fi
+
+      - name: Renderizar Markdown → HTML
+        run: |
+          node scripts/pages/render-markdown.mjs "$RAW/db" "$SITE/db" "Base de datos"
+          node scripts/pages/render-markdown.mjs docs/diagramas "$SITE/diagramas" "Diagramas"
+          node scripts/pages/render-markdown.mjs "$RAW/reportes" "$SITE/reportes" "Reportes de automatizaciones"
+          # Documentos Markdown del proyecto (sin las carpetas ya publicadas aparte).
+          mkdir -p "$RAW/docs"
+          rsync -a --exclude 'database/' --exclude 'diagramas/' --include '*/' --include '*.md' --include '*.svg' --include '*.png' --exclude '*' docs/ "$RAW/docs/" 2>/dev/null || true
+          cp infra/README.md "$RAW/docs/infraestructura.md" 2>/dev/null || true
+          node scripts/pages/render-markdown.mjs "$RAW/docs" "$SITE/docs" "Documentos del proyecto"
+          # Reporte HTML de Playwright, si vino en el artefacto.
+          if [ -d "$SITE/reportes/pruebas/playwright-report" ]; then echo "Playwright report incluido"; fi
+
+      - name: Presentación y documentos PDF (→ site/presentacion, site/documentos)
+        run: |
+          mkdir -p "$SITE/presentacion" "$SITE/documentos"
+          cp -r docs/presentacion/index.html docs/presentacion/styles.css docs/presentacion/vendor docs/presentacion/img "$SITE/presentacion/" 2>/dev/null || true
+          cp docs/presentacion/*.pdf "$SITE/presentacion/" 2>/dev/null || true
+          for f in docs/entrega/*.pdf docs/fd/*.pdf docs/investigacion/*.pdf docs/database/*.pdf; do
+            [ -f "$f" ] && cp "$f" "$SITE/documentos/"
+          done
+          node scripts/pages/build-documentos.mjs "$SITE/documentos"
+
+      - name: Portada (scripts/pages/build-index.mjs)
+        run: node scripts/pages/build-index.mjs "$SITE"
+
+      - name: Reporte del sitio
+        if: always()
+        run: |
+          icon() { case "$1" in success) echo "✅";; failure) echo "❌";; skipped) echo "⏭️";; *) echo "—";; esac; }
+          base="https://$GITHUB_REPOSITORY_OWNER.github.io/${GITHUB_REPOSITORY#*/}"
+          {
+            echo "## 🌐 Documentación técnica — GitHub Pages"
+            echo ""
+            echo "| Sección | Estado | Enlace |"
+            echo "|---|---|---|"
+            echo "| Portada | ✅ | $base/ |"
+            echo "| App Android (Dokka) | $(icon '${{ steps.dokka.outcome }}') | $base/kotlin/ |"
+            echo "| API (TypeDoc) | $(icon '${{ steps.typedoc.outcome }}') | $base/api/ |"
+            echo "| Base de datos (tbls) | $(icon '${{ steps.tblsdoc.outcome }}') | $base/db/ |"
+            echo "| Diagramas | $([ -d "$SITE/diagramas" ] && echo ✅ || echo —) | $base/diagramas/ |"
+            echo "| Reportes | $([ -d "$SITE/reportes" ] && echo ✅ || echo —) | $base/reportes/ |"
+            echo ""
+            echo "Archivos en el sitio: $(find "$SITE" -type f | wc -l) · Tamaño: $(du -sh "$SITE" | cut -f1)"
+          } | tee "$RUNNER_TEMP/reporte-pages.md" >> "$GITHUB_STEP_SUMMARY"
+          mkdir -p "$SITE/reportes" && cp "$RUNNER_TEMP/reporte-pages.md" "$SITE/reportes/reporte-pages.md"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reporte-pages
+          path: ${{ runner.temp }}/reporte-pages.md
+          retention-days: 30
+
+      - uses: actions/configure-pages@v5
+        id: pages
+        continue-on-error: true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    name: Publicar en GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Comprobar que Pages está habilitado
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # Solo publica si Pages usa "GitHub Actions" como fuente. Si publica desde una rama
+          # (p. ej. gh-pages con la demo), el sitio se construye igual como artefacto pero no se reemplaza.
+          tipo=$(gh api "repos/$GITHUB_REPOSITORY/pages" --jq .build_type 2>/dev/null || echo "none")
+          if [ "$tipo" = "workflow" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "- omitido: GitHub Pages publica desde una rama (build_type=$tipo); el sitio quedó como artefacto. Para publicarlo con Actions: Settings → Pages → Source: GitHub Actions" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - uses: actions/deploy-pages@v4
+        id: deployment
+        if: steps.check.outputs.enabled == 'true'
+
+      - name: URL publicada
+        if: steps.check.outputs.enabled == 'true'
+        run: echo "🌐 Publicado en ${{ steps.deployment.outputs.page_url }}" >> "$GITHUB_STEP_SUMMARY"

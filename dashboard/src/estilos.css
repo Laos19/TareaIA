@@ -1,0 +1,127 @@
+/* Identidad «Tablero periódico» (ver docs/MARCA.md). */
+:root {
+  --tinta: #1f2a44;
+  --papel: #f6f3ec;
+  --hoja: #ffffff;
+  --grafito: #5b6170;
+  --linea: #e2ded3;
+  --resaltador: #ffd84d;
+  --lacre: #b93a0b;
+  --barra: #1f2a44;
+  --barra-activa: #3d4c74;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --tinta: #f1ede3;
+    --papel: #12161f;
+    --hoja: #1b2130;
+    --grafito: #a3aab8;
+    --linea: #2c3446;
+    --lacre: #ff8a5b;
+    --barra: #c9d3ea;
+    --barra-activa: #f1ede3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme='dark'] {
+  --tinta: #f1ede3;
+  --papel: #12161f;
+  --hoja: #1b2130;
+  --grafito: #a3aab8;
+  --linea: #2c3446;
+  --lacre: #ff8a5b;
+  --barra: #c9d3ea;
+  --barra-activa: #f1ede3;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--papel);
+  color: var(--tinta);
+  font-family: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+h1, h2 { font-family: 'Archivo', system-ui, sans-serif; margin: 0; }
+h2 { font-size: 1.05rem; }
+button { font: inherit; cursor: pointer; min-height: 44px; border-radius: 10px; }
+button:disabled { opacity: 0.6; cursor: progress; }
+button:focus-visible, input:focus-visible, .zona-hover:focus-visible { outline: 3px solid var(--resaltador); outline-offset: 2px; }
+
+.tarjeta { background: var(--hoja); border: 1px solid var(--linea); border-radius: 16px; padding: 16px; }
+.secundario { color: var(--grafito); }
+.muted { color: var(--grafito); }
+.pequeno { font-size: 0.85rem; }
+.error { color: var(--lacre); font-weight: 600; }
+.punto { color: var(--resaltador); }
+
+/* Login */
+.login { min-height: 100vh; display: grid; place-items: center; padding: 16px; }
+.login-form { width: min(380px, 100%); display: grid; gap: 12px; }
+.login-form label { display: grid; gap: 4px; font-weight: 600; }
+.login-form input { font: inherit; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--linea); background: var(--papel); color: var(--tinta); min-height: 44px; }
+.login-form button[type='submit'] { background: var(--tinta); color: var(--papel); border: 0; font-weight: 700; }
+.logo { position: relative; width: 72px; height: 72px; border: 2px solid var(--tinta); border-radius: 10px; display: grid; place-items: center; font: 800 2rem 'Archivo', sans-serif; }
+.logo-num { position: absolute; top: 4px; left: 6px; font-size: 0.65rem; font-weight: 600; }
+
+/* Página */
+.pagina { max-width: 1120px; margin: 0 auto; padding: 0 16px 32px; }
+.barra { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding: 16px 0; }
+.marca { font: 700 1.15rem 'Archivo', sans-serif; display: flex; align-items: center; gap: 8px; }
+.logo-mini { display: inline-grid; place-items: center; width: 32px; height: 32px; border-radius: 8px; background: var(--tinta); color: var(--papel); }
+.acciones { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.secundario-btn { background: transparent; color: var(--tinta); border: 1px solid var(--linea); padding: 0 14px; }
+.enlace { background: none; border: 0; color: var(--tinta); text-decoration: underline; min-height: 32px; }
+
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 12px 0 20px; }
+.kpi { display: grid; gap: 2px; }
+.kpi-etiqueta { color: var(--grafito); font-size: 0.85rem; font-weight: 600; }
+.kpi-valor { font: 700 1.9rem 'Atkinson Hyperlegible Mono', ui-monospace, monospace; }
+.kpi-detalle { color: var(--grafito); font-size: 0.85rem; }
+.kpi-alerta .kpi-valor { color: var(--lacre); }
+.kpi-alerta .kpi-etiqueta::before { content: '⚠ '; }
+
+.filtros { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.chip { background: var(--hoja); color: var(--tinta); border: 1px solid var(--linea); padding: 0 14px; border-radius: 999px; }
+.chip-activo { background: var(--tinta); color: var(--papel); border-color: var(--tinta); }
+
+.grafico { margin-bottom: 16px; position: relative; }
+.grafico-cabecera { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; }
+.svg-contenedor { position: relative; }
+svg { width: 100%; height: auto; display: block; overflow: visible; }
+.rejilla { stroke: var(--linea); stroke-width: 1; }
+.base { stroke: var(--grafito); stroke-width: 1; }
+.eje { fill: var(--grafito); font-size: 11px; font-family: 'Atkinson Hyperlegible Mono', ui-monospace, monospace; }
+.barra { fill: var(--barra); }
+.barra-activa { fill: var(--barra-activa); }
+.zona-hover { fill: transparent; }
+.tooltip {
+  position: absolute; top: 0; transform: translate(-50%, -4px); pointer-events: none;
+  background: var(--tinta); color: var(--papel); border-radius: 8px; padding: 6px 10px;
+  display: grid; font-size: 0.85rem; white-space: nowrap;
+}
+
+.rejilla-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.ranking { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.ranking li { display: grid; grid-template-columns: minmax(110px, 40%) 1fr auto; gap: 8px; align-items: center; }
+.ranking-etiqueta { font-size: 0.9rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ranking-pista { height: 12px; }
+.ranking-barra { display: block; height: 100%; background: var(--barra); border-radius: 0 4px 4px 0; min-width: 2px; }
+.ranking-valor { font-family: 'Atkinson Hyperlegible Mono', ui-monospace, monospace; font-size: 0.9rem; min-width: 3ch; text-align: right; }
+
+.tabla-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th, td { padding: 8px; border-bottom: 1px solid var(--linea); text-align: left; }
+th { color: var(--grafito); font-weight: 600; }
+.num { text-align: right; font-family: 'Atkinson Hyperlegible Mono', ui-monospace, monospace; }
+.pie { margin-top: 24px; text-align: center; }
+
+@media (max-width: 600px) {
+  .svg-contenedor { overflow-x: auto; }
+  .svg-contenedor svg { min-width: 560px; }
+  .kpi-valor { font-size: 1.5rem; }
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

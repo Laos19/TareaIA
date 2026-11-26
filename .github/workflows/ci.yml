@@ -1,0 +1,132 @@
+name: "CI"
+
+on:
+  pull_request:
+  push:
+    branches-ignore: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  NODE_VERSION: "22"
+  REPORTS: ${{ github.workspace }}/reports
+
+jobs:
+  estatico:
+    name: Lint + typecheck + workflows
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Typecheck (API y dashboard)
+        id: typecheck
+        run: npm run typecheck
+      - name: Validar workflows (actionlint)
+        id: actionlint
+        run: |
+          bash <(curl -fsSL https://raw.githubusercontent.com/rhysd/actionlint/main/scripts/download-actionlint.bash) latest "$RUNNER_TEMP"
+          "$RUNNER_TEMP/actionlint" -color -shellcheck= -pyflakes=
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
+      - name: terraform fmt -check
+        id: tffmt
+        run: terraform fmt -check -recursive infra/terraform
+      - name: Resumen
+        if: always()
+        run: |
+          icon() { case "$1" in success) echo "✅";; failure) echo "❌";; skipped) echo "⏭️";; *) echo "—";; esac; }
+          {
+            echo "## 🔍 CI — verificación estática"
+            echo ""
+            echo "| Verificación | Resultado |"
+            echo "|---|---|"
+            echo "| TypeScript (tsc --noEmit) | $(icon '${{ steps.typecheck.outcome }}') |"
+            echo "| actionlint (workflows) | $(icon '${{ steps.actionlint.outcome }}') |"
+            echo "| terraform fmt | $(icon '${{ steps.tffmt.outcome }}') |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  pruebas:
+    name: Unitarias + integración + sistema (API) y unitarias (dashboard)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: tareia
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      LIQUIBASE_COMMAND_URL: jdbc:postgresql://localhost:5432/tareia
+      LIQUIBASE_COMMAND_USERNAME: postgres
+      LIQUIBASE_COMMAND_PASSWORD: postgres
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/tareia
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Migrar BD efímera con Liquibase
+        run: |
+          mkdir -p "$REPORTS/junit"
+          .github/scripts/liquibase.sh update
+      - name: API — unitarias (con cobertura)
+        id: unit
+        continue-on-error: true
+        run: npm run test:cobertura -w backend -- --reporter=default --reporter=junit --outputFile.junit="$REPORTS/junit/unitarias.xml"
+      - name: API — integración
+        id: integracion
+        continue-on-error: true
+        run: npm run test:integracion -w backend -- --reporter=default --reporter=junit --outputFile.junit="$REPORTS/junit/integracion.xml"
+      - name: API — sistema (servidor HTTP real)
+        id: sistema
+        continue-on-error: true
+        run: npm run test:sistema -w backend -- --reporter=default --reporter=junit --outputFile.junit="$REPORTS/junit/sistema.xml"
+      - name: Dashboard — unitarias
+        id: dashboard
+        continue-on-error: true
+        run: npm run test -w dashboard -- --reporter=default --reporter=junit --outputFile.junit="$REPORTS/junit/dashboard.xml"
+      - name: Reporte de pruebas
+        if: always()
+        run: |
+          node .github/scripts/junit-summary.mjs "$REPORTS/reporte-pruebas.md" \
+            "Unitarias API=$REPORTS/junit/unitarias.xml" \
+            "Integración API + PostgreSQL=$REPORTS/junit/integracion.xml" \
+            "Sistema (HTTP real)=$REPORTS/junit/sistema.xml" \
+            "Unitarias dashboard=$REPORTS/junit/dashboard.xml" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f backend/coverage/coverage-summary.json ]; then
+            node -e "const t=require('./backend/coverage/coverage-summary.json').total;console.log('\n### Cobertura de las pruebas unitarias (API)\n\n| Métrica | % |\n|---|---:|\n'+['lines','statements','functions','branches'].map(k=>'| '+k+' | '+t[k].pct+' |').join('\n'))" >> "$GITHUB_STEP_SUMMARY"
+            cp -r backend/coverage "$REPORTS/cobertura-api"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reporte-ci-pruebas
+          path: reports/
+          retention-days: 14
+      - name: Resultado
+        if: steps.unit.outcome == 'failure' || steps.integracion.outcome == 'failure' || steps.sistema.outcome == 'failure' || steps.dashboard.outcome == 'failure'
+        run: |
+          echo "::error::Pruebas fallidas"
+          exit 1

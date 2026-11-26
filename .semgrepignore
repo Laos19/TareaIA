@@ -1,0 +1,9 @@
+node_modules/
+dist/
+build/
+coverage/
+reports/
+docs/historico/
+**/*.test.ts
+**/*Test.kt
+acceptance/

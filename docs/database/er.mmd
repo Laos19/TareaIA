@@ -1,0 +1,198 @@
+erDiagram
+
+"public.sesion" }o--o| "public.usuario" : "FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE"
+"public.curso" }o--|| "public.usuario" : "FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE"
+"public.actividad" }o--|| "public.usuario" : "FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE"
+"public.actividad" }o--o| "public.curso" : "FOREIGN KEY (curso_id) REFERENCES curso(id) ON DELETE SET NULL"
+"public.apunte" }o--|| "public.usuario" : "FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE"
+"public.apunte" }o--o| "public.curso" : "FOREIGN KEY (curso_id) REFERENCES curso(id) ON DELETE SET NULL"
+"public.franja_horaria" }o--|| "public.usuario" : "FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE"
+"public.plan_estudio" }o--|| "public.usuario" : "FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE"
+"public.plan_estudio" }o--o| "public.plan_estudio" : "FOREIGN KEY (origen_id) REFERENCES plan_estudio(id) ON DELETE SET NULL"
+"public.sesion_estudio" }o--|| "public.actividad" : "FOREIGN KEY (actividad_id) REFERENCES actividad(id) ON DELETE CASCADE"
+"public.sesion_estudio" }o--|| "public.plan_estudio" : "FOREIGN KEY (plan_id) REFERENCES plan_estudio(id) ON DELETE CASCADE"
+"public.historial_cambio" }o--o| "public.usuario" : "FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE CASCADE"
+"public.evento" }o--o| "public.usuario" : "FOREIGN KEY (usuario_id) REFERENCES usuario(id) ON DELETE SET NULL"
+"public.evento" }o--o| "public.sesion" : "FOREIGN KEY (sesion_id) REFERENCES sesion(id) ON DELETE CASCADE"
+"public.log_cliente" }o--o| "public.sesion" : "FOREIGN KEY (sesion_id) REFERENCES sesion(id) ON DELETE CASCADE"
+
+"public.databasechangelog" {
+  varchar_255_ id
+  varchar_255_ author
+  varchar_255_ filename
+  timestamp_without_time_zone dateexecuted
+  integer orderexecuted
+  varchar_10_ exectype
+  varchar_35_ md5sum
+  varchar_255_ description
+  varchar_255_ comments
+  varchar_255_ tag
+  varchar_20_ liquibase
+  varchar_255_ contexts
+  varchar_255_ labels
+  varchar_10_ deployment_id
+}
+"public.databasechangeloglock" {
+  integer id
+  boolean locked
+  timestamp_without_time_zone lockgranted
+  varchar_255_ lockedby
+}
+"public.usuario" {
+  bigint id
+  varchar_128_ firebase_uid
+  varchar_254_ email
+  varchar_120_ nombre
+  varchar_12_ rol
+  varchar_100_ password_hash
+  boolean activo
+  timestamp_with_time_zone creado_en
+  timestamp_with_time_zone ultimo_acceso
+}
+"public.sesion" {
+  uuid id
+  bigint usuario_id
+  varchar_10_ origen
+  varchar_80_ dispositivo
+  varchar_20_ version_app
+  timestamp_with_time_zone iniciada_en
+  timestamp_with_time_zone ultima_actividad
+  timestamp_with_time_zone cerrada_en
+  varchar_20_ motivo_cierre
+}
+"public.curso" {
+  uuid id
+  bigint usuario_id
+  varchar_120_ nombre
+  varchar_12_ abreviatura
+  smallint prioridad
+  smallint dificultad
+  timestamp_with_time_zone eliminado_en
+  integer version
+  timestamp_with_time_zone creado_en
+  timestamp_with_time_zone actualizado_en
+}
+"public.actividad" {
+  uuid id
+  bigint usuario_id
+  uuid curso_id
+  varchar_200_ titulo
+  text descripcion
+  varchar_12_ tipo
+  varchar_12_ origen
+  varchar_20_ estado
+  date fecha_limite
+  varchar_120_ id_externo
+  varchar_200_ evento_calendario_id
+  timestamp_with_time_zone completada_en
+  timestamp_with_time_zone eliminado_en
+  integer version
+  timestamp_with_time_zone creado_en
+  timestamp_with_time_zone actualizado_en
+}
+"public.apunte" {
+  uuid id
+  bigint usuario_id
+  uuid curso_id
+  varchar_80_ carpeta
+  varchar_200_ titulo
+  varchar_8_ tipo
+  text contenido
+  timestamp_with_time_zone eliminado_en
+  integer version
+  timestamp_with_time_zone creado_en
+  timestamp_with_time_zone actualizado_en
+}
+"public.franja_horaria" {
+  bigint id
+  bigint usuario_id
+  smallint dia_semana
+  time_without_time_zone hora_inicio
+  time_without_time_zone hora_fin
+  varchar_20_ tipo
+}
+"public.plan_estudio" {
+  uuid id
+  bigint usuario_id
+  varchar_12_ estado
+  varchar_20_ estrategia
+  uuid origen_id
+  timestamp_with_time_zone creado_en
+}
+"public.sesion_estudio" {
+  bigint id
+  uuid plan_id
+  uuid actividad_id
+  date fecha
+  smallint minuto_inicio
+  smallint duracion_min
+}
+"public.historial_cambio" {
+  bigint id
+  varchar_30_ tabla
+  text registro_id
+  bigint usuario_id
+  character_1_ operacion
+  jsonb antes
+  jsonb despues
+  timestamp_with_time_zone cambiado_en
+}
+"public.evento" {
+  bigint id
+  uuid sesion_id
+  bigint usuario_id
+  varchar_30_ tipo
+  varchar_30_ pantalla
+  jsonb datos
+  timestamp_with_time_zone creado_en
+}
+"public.log_cliente" {
+  bigint id
+  uuid sesion_id
+  varchar_5_ nivel
+  varchar_40_ etiqueta
+  varchar_500_ mensaje
+  varchar_20_ version_app
+  timestamp_with_time_zone creado_en
+}
+"public.v_actividad_pendiente" {
+  uuid id
+  bigint usuario_id
+  varchar_200_ titulo
+  varchar_12_ tipo
+  varchar_20_ estado
+  varchar_12_ origen
+  date fecha_limite
+  varchar_120_ curso
+  integer dias_restantes
+  text urgencia
+}
+"public.mv_uso_diario" {
+  date dia
+  bigint sesiones
+  bigint usuarios_activos
+  bigint eventos
+  bigint actividades_creadas
+  bigint actividades_completadas
+}
+"public.v_uso_por_funcion" {
+  varchar_30_ tipo
+  bigint total
+  bigint usuarios
+  timestamp_with_time_zone ultimo_uso
+}
+"public.v_uso_por_pantalla" {
+  varchar_30_ pantalla
+  bigint vistas
+  bigint sesiones
+}
+"public.v_origen_actividades" {
+  varchar_12_ origen
+  varchar_20_ estado
+  bigint total
+}
+"public.v_resumen_sesiones" {
+  bigint abiertas
+  bigint ultimos_7_dias
+  numeric duracion_media_min
+}

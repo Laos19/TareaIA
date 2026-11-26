@@ -62,13 +62,13 @@ Patrones de diseño: **State** (`EstadoActividad` y trigger `tg_actividad_transi
 <!-- AUTO:metricas:inicio -->
 | Métrica | Valor |
 |---|---|
-| Archivos Kotlin de la app / líneas | 86 / 7394 |
+| Archivos Kotlin de la app / líneas | 89 / 7864 |
 | Tablas PostgreSQL | 11 |
 | Vistas / vistas materializadas | 5 / 1 |
 | Funciones / triggers | 7 / 7 |
-| Changesets de Liquibase | 20 |
+| Changesets de Liquibase | 21 |
 | Endpoints REST | 18 |
-| Pruebas unitarias declaradas (API · app Android) | 47 · 69 |
+| Pruebas unitarias declaradas (API · app Android) | 47 · 81 |
 | Pruebas de integración / sistema (API) | 22 / 11 |
 | Pruebas de interfaz (dashboard Playwright · Compose) | 8 × 2 dispositivos · 16 |
 | Escenarios de aceptación (Gherkin) | 18 |
@@ -513,9 +513,9 @@ classDiagram
       +registrarPropuestas()
       +importarDeIntegracion()
       +editar()
+      +cambiarFecha()
       +confirmar()
       +marcarCompletada()
-      +reabrir()
     }
     class GestorAlertas {
       -programador : ProgramadorNotificaciones
@@ -531,6 +531,22 @@ classDiagram
       +procesarOCR()
       +extraerParametros()
       +sugerirSinIA()
+    }
+    class ResultadoAula {
+      +leidos : Int
+      +nuevas : Int
+      +cambiosDeFecha : List~CambioFechaAula~
+      +pasados : Int
+      -actividades : GestorActividades
+      +sincronizar()
+      -aBuilder()
+      +aplicarCambio()
+    }
+    class GestorAulaVirtual {
+      -actividades : GestorActividades
+      +sincronizar()
+      -aBuilder()
+      +aplicarCambio()
     }
     class GestorCursos {
       -cursos : CursoRepository
@@ -810,6 +826,17 @@ classDiagram
       +enviarEventos()
       +enviarLogs()
     }
+    class CalendarioAulaRemoto {
+      <<object>>
+      +validar()
+      +url()
+      +guardar()
+      +desvincular()
+      +ultimaSincronizacion()
+      +marcarSincronizado()
+      +tocaSincronizar()
+      +descargar()
+    }
     class ColaTelemetria {
       -capacidad : Int
       -tamanoLote : Int
@@ -867,6 +894,8 @@ classDiagram
   CursoRepository <|-- GestorAnalisisIA
   GestorAnalisisIA --> FabricaServiciosIA
   GestorAnalisisIA --> ExtractorLocal
+  ResultadoAula --> GestorActividades
+  GestorAulaVirtual --> GestorActividades
   GestorCursos --> CursoRepository
   ClasificadorContenido <|-- GestorIngesta
   GestorIngesta --> ContenidoRepository
@@ -1107,7 +1136,7 @@ flowchart TB
 <!-- AUTO:despliegue:fin -->
 
 <!-- AUTO:fecha:inicio -->
-_Secciones generadas automáticamente el 2026-11-21 por `scripts/docs/build-readme.mjs`._
+_Secciones generadas automáticamente el 2026-11-26 por `scripts/docs/build-readme.mjs`._
 <!-- AUTO:fecha:fin -->
 
 ## Ejecutar en local

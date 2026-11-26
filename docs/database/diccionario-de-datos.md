@@ -1,6 +1,6 @@
 # Diccionario de datos — TARE·IA
 
-> Generado automáticamente desde PostgreSQL por `scripts/docs/build-diccionario.mjs` el 2026-11-21. No editar a mano.
+> Generado automáticamente desde PostgreSQL por `scripts/docs/build-diccionario.mjs` el 2026-11-26. No editar a mano.
 
 Motor: PostgreSQL 16 · Esquema: `public` · Migraciones: Liquibase (`db/changelog`).
 

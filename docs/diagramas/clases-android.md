@@ -7,10 +7,10 @@ Clases Kotlin de la app organizadas por capa (arquitectura en capas + DDD). Patr
 | Capa | Clases |
 |---|---|
 | `dominio` | `ActividadAcademica`, `Recordatorio`, `EventoCalendario`, `ActividadBuilder`, `Carpeta`, `ContenidoAcademico`, `Apunte`, `Anotacion`, `Curso`, `Eliminable`, `TipoContenido`, `TipoActividad`, `OrigenActividad`, `EstadoPlan`, `TipoFranja`, `EstadoActividad`, `PendienteValidar`, `Confirmada`, `Sincronizada`, `Completada`, `Estudiante`, `Abreviatura`, `Prioridad`, `FechaLimite`, `FranjaHoraria`, `PlanEstudio`, `SesionEstudio`, `ActividadRepository`, `CursoRepository`, `ContenidoRepository`, `PlanRepository`, `EstudianteRepository`, `DetectorDuplicados`, `ClasificadorContenido` |
-| `aplicacion` | `Dependencias`, `GestorActividades`, `GestorAlertas`, `GestorAnalisisIA`, `GestorCursos`, `GestorIngesta`, `GestorPapelera`, `GestorPlanificacion`, `GestorSincronizacion`, `MigracionDatos`, `ObservadorUso` |
+| `aplicacion` | `Dependencias`, `GestorActividades`, `GestorAlertas`, `GestorAnalisisIA`, `ResultadoAula`, `GestorAulaVirtual`, `GestorCursos`, `GestorIngesta`, `GestorPapelera`, `GestorPlanificacion`, `GestorSincronizacion`, `MigracionDatos`, `ObservadorUso` |
 | `ia` | `ComunIA`, `AiConfig`, `AiSettings`, `ClienteCompatibleOpenAI`, `EstrategiaPlanificacion`, `PlanificacionConIA`, `PlanificacionLocalPorPrioridad`, `ExtractorLocal`, `FabricaProveedorA`, `ExtractorParametrosGemini`, `GeneradorPlanGemini`, `FabricaProveedorB`, `ExtractorParametrosCompatibleOpenAI`, `GeneradorPlanCompatibleOpenAI`, `FabricaServiciosIA`, `ReconocedorOCRMLKit`, `ReconocedorOCR`, `ExtractorParametros`, `GeneradorPlanIA` |
 | `infraestructura` | `AppDatabase`, `CalendarioGateway`, `GoogleCalendarAdapter`, `ProgramadorNotificaciones`, `AlarmManagerNotificaciones`, `LocalCursoRepository`, `LocalContenidoRepository`, `LocalActividadRepository`, `LocalPlanRepository`, `LocalEstudianteRepository` |
-| `remoto` | `ErrorApi`, `ApiTareia`, `ColaTelemetria`, `MapeoNube`, `Nube` |
+| `remoto` | `ErrorApi`, `ApiTareia`, `CalendarioAulaRemoto`, `ColaTelemetria`, `MapeoNube`, `Nube` |
 
 ```mermaid
 classDiagram
@@ -267,9 +267,9 @@ classDiagram
       +registrarPropuestas()
       +importarDeIntegracion()
       +editar()
+      +cambiarFecha()
       +confirmar()
       +marcarCompletada()
-      +reabrir()
     }
     class GestorAlertas {
       -programador : ProgramadorNotificaciones
@@ -285,6 +285,22 @@ classDiagram
       +procesarOCR()
       +extraerParametros()
       +sugerirSinIA()
+    }
+    class ResultadoAula {
+      +leidos : Int
+      +nuevas : Int
+      +cambiosDeFecha : List~CambioFechaAula~
+      +pasados : Int
+      -actividades : GestorActividades
+      +sincronizar()
+      -aBuilder()
+      +aplicarCambio()
+    }
+    class GestorAulaVirtual {
+      -actividades : GestorActividades
+      +sincronizar()
+      -aBuilder()
+      +aplicarCambio()
     }
     class GestorCursos {
       -cursos : CursoRepository
@@ -564,6 +580,17 @@ classDiagram
       +enviarEventos()
       +enviarLogs()
     }
+    class CalendarioAulaRemoto {
+      <<object>>
+      +validar()
+      +url()
+      +guardar()
+      +desvincular()
+      +ultimaSincronizacion()
+      +marcarSincronizado()
+      +tocaSincronizar()
+      +descargar()
+    }
     class ColaTelemetria {
       -capacidad : Int
       -tamanoLote : Int
@@ -621,6 +648,8 @@ classDiagram
   CursoRepository <|-- GestorAnalisisIA
   GestorAnalisisIA --> FabricaServiciosIA
   GestorAnalisisIA --> ExtractorLocal
+  ResultadoAula --> GestorActividades
+  GestorAulaVirtual --> GestorActividades
   GestorCursos --> CursoRepository
   ClasificadorContenido <|-- GestorIngesta
   GestorIngesta --> ContenidoRepository

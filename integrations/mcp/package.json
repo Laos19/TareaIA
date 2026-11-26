@@ -1,6 +1,6 @@
 {
   "name": "@tareia/mcp",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "description": "Servidor MCP (stdio) que conecta Claude Code con la API de TARE·IA: actividades pendientes, validación, historial, plan semanal y dashboard",
   "author": "Adriana Rafaela Laos González y Antony Piero Solorzano Zegarra",
@@ -10,7 +10,10 @@
   "bin": {
     "tareia-mcp": "dist/index.js"
   },
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "start": "node dist/index.js",

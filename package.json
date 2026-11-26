@@ -1,6 +1,6 @@
 {
   "name": "tareia",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
   "description": "TARE·IA — asistente académico Android con API, base de datos PostgreSQL y dashboard de utilización (UPT · SI-784 Calidad y Pruebas de Software)",
   "author": "Adriana Rafaela Laos González y Antony Piero Solorzano Zegarra",

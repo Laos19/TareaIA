@@ -31,7 +31,7 @@ jobs:
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # Sonar necesita el historial para el "código nuevo"
       - name: Comprobar secret
@@ -45,7 +45,7 @@ jobs:
           else
             echo "ready=true" >> "$GITHUB_OUTPUT"
           fi
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         if: steps.check.outputs.ready == 'true'
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -57,7 +57,7 @@ jobs:
           npm run test:cobertura -w backend
       - name: SonarQube Scan
         if: steps.check.outputs.ready == 'true'
-        uses: SonarSource/sonarqube-scan-action@v5
+        uses: SonarSource/sonarqube-scan-action@v7
         with:
           args: >
             -Dsonar.qualitygate.wait=true
@@ -100,7 +100,7 @@ jobs:
             echo ""
             echo "Proyecto: $SONAR_HOST_URL/project/overview?id=$SONAR_PROJECT"
           } | tee "$REPORTS/reporte-sonarqube.md" >> "$GITHUB_STEP_SUMMARY"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: reporte-sonarqube

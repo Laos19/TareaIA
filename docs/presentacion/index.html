@@ -477,23 +477,30 @@
   <div class="celda" style="--f:var(--resaltador);--ft:var(--sobre-resaltador)"><p class="z">15</p><p class="s">Ia</p><p class="n">reto</p></div>
   <p class="eyebrow">Reto · integraciones</p>
   <h2>Pedían 3 integraciones: hicimos 5</h2>
-  <div class="tabla-periodica" style="grid-template-columns:repeat(5, 1fr); margin-top:28px; grid-auto-rows:minmax(250px, auto);">
+  <div class="tabla-periodica" style="grid-template-columns:repeat(5, 1fr); margin-top:22px; grid-auto-rows:minmax(215px, auto);">
     <div class="el" style="--f:var(--alct);--ft:var(--alct-t)"><p class="z">1</p><p class="s">Fb</p><p class="n">Firebase Auth</p><p class="d">Entrar con Google; la API verifica el token</p></div>
     <div class="el" style="--f:var(--gas);--ft:var(--gas-t); border-color:var(--sello);"><p class="z">2</p><p class="s">Gm</p><p class="n">Gemini</p><p class="d">Lee apuntes y propone actividades y planes</p></div>
     <div class="el" style="--f:var(--tra);--ft:var(--tra-t)"><p class="z">3</p><p class="s">Gc</p><p class="n">Google Calendar</p><p class="d">Solo recibe lo que validaste (RN01)</p></div>
-    <div class="el" style="--f:var(--alc);--ft:var(--alc-t)"><p class="z">4</p><p class="s">Mo</p><p class="n">Moodle UPT</p><p class="d">Trae tareas del aula virtual; nacen por validar</p></div>
+    <div class="el" style="--f:var(--alc);--ft:var(--alc-t)"><p class="z">4</p><p class="s">Av</p><p class="n">Aula Virtual UPT</p><p class="d">Sincroniza las entregas del calendario de Moodle cada 3 h</p></div>
     <div class="el" style="--f:var(--hal);--ft:var(--hal-t)"><p class="z">5</p><p class="s">Mc</p><p class="n">MCP + Claude Code</p><p class="d">7 herramientas MCP, skill <code>tareia</code> y agente coach</p></div>
   </div>
-  <div class="card ia" style="margin-top:36px;">
-    <p class="chico" style="margin:0;">Ejemplo: en Claude Code preguntas <em>«¿qué entrego esta semana?»</em> y el agente responde con tus pendientes por urgencia, usando la misma API, con una sesión de origen <code>mcp</code>.</p>
+  <div class="grid2" style="margin-top:22px; grid-template-columns:1.25fr 1fr; gap:18px;">
+    <div class="card" style="border-left:8px solid var(--alc);">
+      <h3 style="margin-bottom:6px;">Aula Virtual, sin apps extra · probado en un Redmi Note 14</h3>
+      <p class="chico" style="margin:0;">Pegas una vez la URL de <b>Exportar calendario</b> de Moodle (se guarda cifrada con Android Keystore). La app lee el ICS: las entregas nuevas nacen <span class="sello">Por validar</span>, detecta si el docente <b>cambió una fecha</b> y no duplica lo ya importado.</p>
+    </div>
+    <div class="card ia">
+      <h3 style="margin-bottom:6px;">MCP en Claude Code</h3>
+      <p class="chico" style="margin:0;">Preguntas <em>«¿qué entrego esta semana?»</em> y el agente responde con tus pendientes por urgencia, usando la misma API con una sesión de origen <code>mcp</code>.</p>
+    </div>
   </div>
   <p class="criterio"><b>Rúbrica</b> · Reto: integrar con 3 aplicaciones externas · plugin con skills y agente</p>
   <aside class="notes">
-    (≈80 s) El reto pedía integrar la app con tres aplicaciones externas, o crear un plugin con skills y agente. Hicimos cinco integraciones.
+    (≈90 s) El reto pedía integrar la app con tres aplicaciones externas, o crear un plugin con skills y agente. Hicimos cinco integraciones.
     Uno, Firebase Authentication: entras con tu cuenta de Google, y la API verifica ese token con las llaves públicas de Google antes de darte el suyo.
     Dos, Gemini, a través de Firebase AI Logic: lee los apuntes y propone actividades y planes de estudio. Gracias al patrón Abstract Factory, se puede cambiar a otro proveedor compatible.
     Tres, Google Calendar: solo recibe actividades que el estudiante validó.
-    Cuatro, Moodle de la UPT: la app trae las tareas del aula virtual, y entran como pendientes de validar.
+    Cuatro, el Aula Virtual de la UPT, que es Moodle. La universidad no nos da acceso a su API, así que usamos algo que cualquier estudiante tiene: en el aula virtual, Calendario, Exportar calendario, se copia una URL. Se pega una sola vez en Integraciones, y la app la guarda cifrada con el Android Keystore, porque esa URL funciona como una contraseña. Desde ahí, cada tres horas, la app lee el calendario: las entregas nuevas entran como Pendientes de validar, nunca directo a Calendar; si el docente movió una fecha, la app avisa y deja aplicar el cambio; y no duplica lo que ya se importó. Tiene doce pruebas automatizadas y lo probamos en un teléfono real, un Redmi Note 14, con nuestras propias entregas.
     Y cinco, el servidor MCP, con siete herramientas como actividades_pendientes o plan_semanal, más la skill tareia y el agente coach-academico de Claude Code. Desde el editor puedes preguntar «¿qué entrego esta semana?» y el agente responde con tus pendientes ordenados por urgencia. Usa la misma API, y su sesión queda registrada con origen mcp, así que también aparece en el dashboard. El servidor MCP tiene sus propias 14 pruebas automatizadas.
     [Si hay tiempo, mostrarlo en vivo: guion-demo.md, paso opcional.]
   </aside>

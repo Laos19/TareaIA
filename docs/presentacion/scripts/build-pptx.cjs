@@ -304,15 +304,17 @@ function logo(s, x, y) {
 {
   const s = base(15, 'Ia', 'reto', 'res', 'Reto · integraciones', 'Pedían 3 integraciones: hicimos 5', 'Reto: integrar con 3 aplicaciones externas · plugin con skills y agente');
   [['alct', '1', 'Fb', 'Firebase Auth', 'Entrar con Google; la API verifica el token'], ['gas', '2', 'Gm', 'Gemini', 'Lee apuntes y propone actividades y planes'],
-    ['tra', '3', 'Gc', 'Google Calendar', 'Solo recibe lo que validaste (RN01)'], ['alc', '4', 'Mo', 'Moodle UPT', 'Trae tareas del aula virtual; nacen por validar'],
+    ['tra', '3', 'Gc', 'Google Calendar', 'Solo recibe lo que validaste (RN01)'], ['alc', '4', 'Av', 'Aula Virtual UPT', 'Sincroniza las entregas del calendario de Moodle cada 3 h'],
     ['hal', '5', 'Mc', 'MCP + Claude Code', '7 herramientas MCP, skill tareia y agente coach']].forEach((c, i) => {
     const x = 0.67 + i * 2.43; const y = 1.75; const [, fg] = F[c[0]];
     celda(s, x, y, 2.28, 2.65, c[0], c[1], c[2], null, { izq: true, ss: 30, sy: 0.25, line: i === 1 ? K.sello : null });
     txt(s, c[3], { x: x + 0.12, y: y + 0.85, w: 2.05, h: 0.6, fontSize: 16.5, bold: true, color: fg });
     txt(s, c[4], { x: x + 0.12, y: y + 1.45, w: 2.05, h: 1.15, fontSize: 15, color: fg });
   });
-  card(s, 0.67, 4.8, 12.0, 1.1, { line: K.sello, lw: 2 });
-  txt(s, 'Ejemplo: en Claude Code preguntas «¿qué entrego esta semana?» y el agente responde con tus pendientes por urgencia, usando la misma API, con una sesión de origen mcp.', { x: 0.9, y: 4.8, w: 11.6, h: 1.1, fontSize: 18, valign: 'middle' });
+  card(s, 0.67, 4.6, 6.75, 1.65, {});
+  txt(s, [{ text: 'Aula Virtual, sin apps extra (probado en un Redmi Note 14). ', options: { bold: true } }, { text: 'Pegas una vez la URL de Exportar calendario de Moodle (cifrada con Android Keystore). Las entregas nuevas nacen Por validar, detecta cambios de fecha y no duplica.' }], { x: 0.85, y: 4.6, w: 6.4, h: 1.65, fontSize: 14.5, valign: 'middle' });
+  card(s, 7.6, 4.6, 5.07, 1.65, { line: K.sello, lw: 2 });
+  txt(s, [{ text: 'MCP en Claude Code. ', options: { bold: true } }, { text: 'Preguntas «¿qué entrego esta semana?» y el agente responde con tus pendientes por urgencia, con una sesión de origen mcp.' }], { x: 7.78, y: 4.6, w: 4.75, h: 1.65, fontSize: 14.5, valign: 'middle' });
 }
 
 /* 16 · Demo */

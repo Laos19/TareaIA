@@ -13,6 +13,7 @@ del orador de 60 a 90 segundos.
 | `styles.css` | Identidad «Tablero periódico» de `docs/MARCA.md`: tinta, papel, resaltador, sello (solo IA) y lacre; Archivo + Atkinson Hyperlegible. Cada diapositiva lleva una celda de tabla periódica y, al pie, el criterio de la rúbrica que cubre. |
 | `TAREIA-presentacion.pdf` | Exportación a PDF (18 páginas, 16:9). Respaldo si falla el navegador. |
 | `TAREIA-presentacion.pptx` | Versión PowerPoint simplificada y fiel, con las mismas notas del orador. Usa Arial y Calibri para no depender de fuentes instaladas. |
+| `guion-exposicion.md` | Guion repartido entre Adriana y Antony: qué dice cada uno en cada diapositiva y quién responde cada tema. |
 | `guion-demo.md` | Guion minuto a minuto de la demo, plan B para cada falla y checklist previa. |
 | `banco-de-preguntas.md` | Preguntas probables del docente con respuesta corta, agrupadas por criterio de la rúbrica. |
 | `img/` | Capturas de la app (de `docs/marca/`, recortadas) y del dashboard de utilización. |
@@ -56,22 +57,22 @@ La URL cambia con cada diapositiva (`index.html#/8`), así que puedes abrir una 
 | 2 | El problema (3 datos con fuente) | Problemática con fuentes | Adriana |
 | 3 | Objetivos SMART | Objetivos medibles | Adriana |
 | 4 | La app (capturas) | Código fuente · Presentación | Adriana |
-| 5 | Arquitectura por capas | FD04 · README (componentes, despliegue) | Antony |
-| 6 | Patrones de diseño (9) | FD04 · diagrama de clases | Antony |
+| 5 | Arquitectura por capas | FD04 · README (componentes, despliegue) | Adriana |
+| 6 | Patrones de diseño (9) | FD04 · diagrama de clases | Adriana |
 | 7 | Base de datos y nube | Código y BD en GitHub · diccionario y ER | Antony |
 | 8 | Requisitos no funcionales | Sesiones, historial, caché, logs, telemetría | Antony |
-| 9 | Pirámide de pruebas y 3 defectos reales | Pruebas unitarias, mutación, integración, sistema, UI, aceptación | Adriana |
-| 10 | Análisis estático | SonarQube · Semgrep + Snyk | Adriana |
+| 9 | Pirámide de pruebas y 3 defectos reales | Pruebas unitarias, mutación, integración, sistema, UI, aceptación | Antony |
+| 10 | Análisis estático | SonarQube · Semgrep + Snyk | Antony |
 | 11 | Terraform y costos | Terraform con reporte de tests y costos | Antony |
 | 12 | Release y despliegue | Release + despliegue · contribuciones | Antony |
 | 13 | Documentación automática | README · GitHub Pages | Antony |
-| 14 | Dashboard de utilización | Dashboard | Adriana |
-| 15 | Reto: 5 integraciones | Reto | Adriana |
+| 14 | Dashboard de utilización | Dashboard | Antony |
+| 15 | Reto: 5 integraciones (aula virtual por calendario ICS) | Reto | Adriana |
 | 16 | Demo en vivo (ver `guion-demo.md`) | Presentación | Ambos |
-| 17 | Conclusiones y trabajo futuro | Presentación | Antony |
+| 17 | Conclusiones y trabajo futuro | Presentación | Ambos |
 | 18 | Cierre y preguntas | Presentación | Ambos |
 
-La columna «Quién» es una propuesta: ajústenla según lo que ensayen.
+La columna «Quién» sigue `guion-exposicion.md`, que tiene el texto de cada uno.
 
 ## Regenerar el PDF y el PPTX
 
